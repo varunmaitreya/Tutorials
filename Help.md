@@ -1,4 +1,4 @@
-﻿ User interface help for PADrend (2012-05-18)
+ User interface help for PADrend (2012-05-18)
 --------------------------------------------------
 
 Keyboard navigation:
