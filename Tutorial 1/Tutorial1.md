@@ -1,9 +1,8 @@
-<!--------------------------------------------------------------------------------------------------------------
-This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
-To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/.
---------------------------------------------------------------------------------------------------------------->
+<!------------------------------------------------------------------------------------------------
+This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
+ To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.
+------------------------------------------------------------------------------------------------->
 
-<!--TODO screenshots screenshots screenshots ... -->
 # Goal of this tutorial
 In this tutorial you will learn some basics techniques for working with PADrend.
 In the first part we will load the first scene. 
@@ -14,8 +13,6 @@ You will learn to move through a scene in three different ways, namely by keyboa
 # Assumption
 To finish this tutorial you need a working installation of PADrend. 
 For installation hints follow the [Building PADrend from Source](https://macabeo.cs.upb.de/trac/AlgoCG/wiki/BuildingFromSource "Building PADrend from Source") guide.
-
-# PADrend menu overview
 
 # Setting up PADrend
 Lets start PADrend.
@@ -30,23 +27,36 @@ Open PADrend and go to the _config_ menu.
 Choose _System Window_ and use the _Size_ drop-down menu to alter the window size.
 To apply the changes you need to save the configuration.
 Open the _config_ menu and choose _Save Configuration_. 
+
+![Alter window size](figures/alter_window_size.png)
+
 Restart PADrend by using the _Restart_ button in the file menu PADrend and it should open with correct size.
 
+![Restart PADrend](figures/restart.png)
+
 # Import and load a scene
-<!---TODO where to download the scene?, replace NAME)-->
 Now that PADrend is running with a proper window size we can go on and load the first scene.
 Before we can do so it has first to be imported.
-In this tutorial we will use the NAME scene.   
+In this tutorial we will use the szene_1 scene.   
 To import the scene it has to be located at the correct folder.
-Open the NAME.minsg file in a text-editor.
-You can extract the path to place the scene of one of the _filename_ attributes.
+Open the szene_1.minsg file in a text-editor.
+You can extract the path to place the scene of one of the _filesname_ attributes.
+
+![Extract file location from minsg file](figures/editor_minsg_file.png)
+
 The path (normally it should be _/data/scene_)is relative to the PADrend working directory.
 Check whether it exists and if not created it.
-Copy both, the .minsg and the .zip file, to the directory.   
+Copy both, the .minsg and the .zip file, to the directory.
+ 
+![Scene file location](figures/content_data_folder.png)
+
 Lets load the scene. Open PADrend.
 Go to the _file_ menu and choose _Load Scene..._.
-Select NAME.minsg and hit _Confirm_.
+Select szene_1.minsg and hit _Confirm_.
 The scene will be loaded.
+
+![Load scene dialog](figures/load_scene.png)
+
 This may take some seconds.
 After loading a scene for the first time you can also load it via main menu using _Recent Scenes_.
 Press space to reset the camera.
@@ -63,13 +73,25 @@ You may have noticed the white triangle on the left beside each entry.
 Clicking on it will provide you with the meta information of the scene.
 This are for example the title of the scene and the author who created it. 
 
-![Load scene dialog](figures/load_scene.png)
+![Switch between loaded scenes](figures/currently_loaded_scenes.png)
+
+##Enable infinite ground and dynamic sky.
+You may have noticed that the scene has no ground.
+To activate the ground go to the _Effects_ and check _Enable_ checkbox under _Infinite Ground_.
+Underneath the checkbox you can find a menu item _Options_.
+It offers you some setting for the ground such as six different ground types.
+You can activate the dynamic sky in a similar way in the _Effects _menu.
+Again you can use _Otions_ to customize it.
+Experiment with the setting for the ground and the sky if you like to.
+
+![Enable dynamic sky and infinite ground](figures/enable_sky_ground.png)
 
 # Navigation
 After we have loaded the scene let us start moving around a bit.
 Navigation in PADrend can be done in three different ways.
 You can use the keyboard, the mouse, a gamepad or a combination. 
 There is a complete keybindings overview in your PADrend directory under _PADrend/doc/Help.txt_.
+<!--TODO: add PADrend help here, when it has been developed-->
 
 ## Keyboard navigation
 * Use the keys [w], [a], [s] and [d] for moving forward, left, backward and right.
@@ -96,12 +118,13 @@ To exit the mouse navigation mode use again the [m] key or the middle mouse butt
 Using a gamepad results in a smooth movement.
 Before you can use it for the first time you have to activate it.
 Go to _Config_ and enable _Joystick support_ under the entry _Navigation_.
-Save the configuration and restart PADrend. 
+Save the configuration and restart PADrend.
+
+![Enable gamepad support](figures/enable_gamepad.png)
+
 Use the left analog stick for moving backward, forwards, left and right.
 If you press and hold the gamepad's [5] key while using the left analog stick you will move up and down instead of backwards and forwards.
 With the right analog stick you can rotate the camera left, right, up and down.
 
 ## Up to you
-<!-- add some point within the scene that should be reached-->
-Now that you know how to navigate try to reach...
- 
+Now that you know how to navigate try to find and reach the pig.
