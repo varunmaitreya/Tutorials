@@ -18,15 +18,25 @@ Infinite ground and dynamic sky are enabled.
 # Adding toy blocks to the scene
 Before we start, first activate the toolbar by pressing [F2].
 Navigate to a position a bit above the ground, looking down in a slight angle.
-Activate the _Scene Editor_ by either using the rightmost entry of the toolbar or by pressing [F2] again.
+Activate the _Scene Editor Window_  by either using the _Scene Editor Window_ entry of the toolbar or by pressing [F2] again.
 
 ![Ready to go](figures/initial.png)
 
 You are faced with a window containing of two the two tabs _Object explorer_ and _ObjectPlacer_. 
 Right now we are only interested in the _ObjectPlacer_.
-Open it and you will see a list of nodes you can add to the scene.
+Before we can add objects to the scene, we need to add them to the _ObjectPlacer_.
 
 ![The object placer](figures/obj_placer.png)
+
+Make sure the toy blocks files are located in PADrend's data folder.
+In the _ObjectPlacer_ click on add library.
+In the dialog choose the location of the toy blocks and hit _Confirm_.
+
+![Load library](figures/load_library.png)
+
+You should now find the toy blocks in the _ObjectPlacer_.
+
+![Object library](figures/op_library_loaded.png)
 
 You can add a new toy block via drag and drop.
 Click on _toyblock1_ and hold down the left mouse button.
@@ -35,7 +45,6 @@ Add some more toy blocks to the scene (e.g. one of each kind) and close the _Sce
 
 ![Toy blocks placed on the ground](figures/toy_blocks.png)
 
-<!--TODO add right click and option of tool-->
 # Node selection 
 In PADrend parts of the geometry (e.g. a single tree) are seen to be nodes within a hierarchical scene-graph. 
 Nodes can be manipulated in different ways (e.g moving them or resizing them).
@@ -50,9 +59,6 @@ It provides you with information about the node.
 In our case you should see the instance of the node, the node type (here GeometryNode) and the number of triangles it consists of.
 If you want to select more than one node also hold down the shift key and click on another node.
 To unselect perform a right click on the scene and choose _Unselect all_ from the _Select Node_ context menu. 
-
-<!--screenshot unselect-->
-
 Another way of selecting nodes via mouse is by using the selection tool.
 You can find the selection tool in the toolbar.
 
@@ -77,7 +83,7 @@ First of all we need to clean up the scene.
 Select all toy blocks and delete them by pressing [del].
 Notice: this operation can not be undone by [ctrl] + [z].
 Let's start with the baseplate.
-Open the _Scene Editor_ and add two instances of _toyblock3_ to the scene.
+Open the _Scene Editor_ and add two instances of _toyblock4_ to the scene.
 
 ## Snap moving tool
 To move nodes snapped to the ground you can use the snap moving tool. 
@@ -113,7 +119,7 @@ You may need to need to view the blocks from different viewpoints.
 ![The baseplate](figures/base_plate.png)
 
 Next up we need to cylinders for the right and left side.
-Drag two instances of _toyblock4_ into the scene.
+Drag two instances of _toyblock3_ into the scene.
 Again use the snap moving tool to place them.
 The image below shows you how the cylinders should be placed.
 
@@ -152,7 +158,7 @@ Place it between the cylinders by using the snap moving tool.
 
 ![Middle block placed](figures/middle.png)
 
-Next up we again need two instances of _toyblock3_.
+Next up we again need two instances of _toyblock4_.
 Use the snap moving tool to place them on top of the cylinders.
 You do not have to care about the alignment right now.
 
@@ -204,7 +210,37 @@ Type in a filename you like and hit confirm.
 
 ![Save dialog](figures/save_dialog.png)
 
+## Duplicating the house
+Assume you want to have several houses.
+One way to do it would be building them one by one.
+But we have already build one and it was quiet some work.
+So it is better to take the one that we have and duplicate it.
+First we need to put all toy blocks together in a common subtree of the scene graph.
+Select all toy blocks and open the context menu.
+Go to _Node tools_ and open the _Tree tools_ menu.
+Choose _Group nodes in common subtree_.
 
+![Group toy blocks](figures/group_node.png)
 
+In stead of having a bounding box around each single toy block there should now be a bounding box around the whole house.
 
+![Common node](figures/common_node.png)
 
+But you are still able to select the single toy blocks within the house.
+Select one of them.
+You can use [pgUp] and [pgDown] to traverse through the scene graph level wise.
+Use [pgUp] to traverse one level up and you will reach the houses node we have just created.
+Use [pgDown] to traverse one level down so that each child node gets selected.
+In case of the house that means that all the toy blocks get selected.
+Traverse back to the common node.
+To duplicate the house press [ctrl] + [d].
+Now you have a duplicate stored in the main memory.
+To add it to the scene press [ctrl] + [v].
+The duplicate will be added at the position of the original house.
+To separate both use one of the translation tools.
+Create some houses.
+
+![Duplicated houses](figures/duplicated.png)
+
+If you want to copy a house from one scene to another select the house and press [ctrl] + [c].
+Change the scene and use [ctrl] + [v] to paste it.
