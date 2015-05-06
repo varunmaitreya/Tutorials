@@ -22,12 +22,12 @@ Locate the fabric hall in move inside.
 ![Empty fabric hall](figures/fabric_empty.png)
 
 # Nodes vs semantic objects
-PADrend divides between nodes and semantic objects.
+PADrend differentiates between nodes and semantic objects.
 A node is simply a node of the scene graph.
-As you have seen in Tutorial 2, we can also group a bunch of nodes in a common subtree.
 In contrast, a semantic object contains a group of nodes that together form a semantic unit.
 Think about a car, modeled by a body and four wheels, so that in total the car is build form five parts.
 Each single part is a node in the scene graph, where car itself is a semantic object.  
+As you have seen in Tutorial 2, we can also group a bunch of nodes in a common subtree.
 If you want to select nodes you can use the techniques described in Tutorial 2.
 For object selection the techniques must be slightly changed.
 For the mouse selection you also have to hold down [ctrl], but instead of using the left mouse button you have to use the right one.
@@ -38,9 +38,9 @@ Now you can use the selection tool to select objects.
 ![Configuring selection tool](figures/sem_obj_selection.png)
 
 If you select something, the description box above the selection shows you whether you have selected a node or a semantic object.
-For nodes there is a black description box, for semantic objects there is a green one.
+For ordinary nodes there is a black description box, for semantic objects there is a green one.
 
-## Create your own semantic objects
+## Marking nodes as semantic objects
 The fabric hall is empty till now.
 Lets fill it with a small production line.
 Place two instances of _Rollen\_Gerade\_Lang2_ in the hall.
@@ -50,7 +50,7 @@ In the end it should look like in the image below.
 
 ![Production line](figures/production_line.png)
 
-Now that we have build our production line we want it to become a semantic object.
+Now that we have build our production line, we want it to become a semantic object.
 Select the four parts of the production line by using one of the object selection techniques.
 Group the selected objects in a common subtree as you did in the last tutorial. 
 You may notice that the newly established node has a black description field on it.
@@ -89,12 +89,12 @@ Its orientation should be similar to the one you can see in the image below (e.g
 
 # Traits: Get the forklift move
 Traits are used to add abilities to semantic objects.
-A trait is a enclosed unit that serves one specific task.
-The name of a trait should describe what its task is.
+An object trait is a enclosed unit that serves one specific task.
+The name of an object trait should describe what its task is.
 PADrend offers predefined traits for different tasks.
 For example: There are some traits for different animations.
 Beside the predefined traits you can also write your own traits.  
-To get the forklift moving we have to add a key frame animation to it.
+To get the forklift moving, we have to add a key frame animation to it.
 In key frame animation several position (key frames) of the object that should be animated are stored.
 The user transforms the object between two positions (e.g translations, rotations and scalings).
 The animation interpolates form the one position to the other.
@@ -116,7 +116,7 @@ Open the _Object explorer_ and locate the forklift object.
 Expand the object via a click on the _+_.
 Click on _Add object trait_ and choose _Animation/KeyFrameAnimation_ from the list.
 
-![Adding a trait](figures/add_trait.png)
+![Adding an object trait](figures/add_trait.png)
 
 You will notice that now there are some two entries at the forklift object.
 The _KeyFrameAnimation_ trait it self and a _NodeLink_ trait where added.
@@ -135,6 +135,15 @@ You may have noticed the three buttons underneath each key frame.
 	* Update: Sets the position stored in the corresponding key frame to the actual position of the object.
 	* Apply: Moves the object to the position stored in the key frame.
 	* Delete: Removes the key frame from the animation.
+You may have also noticed the text field at each key frame.
+Till now it seems to number the key frames, but it is actually used for timing.
+In our case the first key frame has the time 0, the second has the time 1. 
+This means that the first key frame is executed before the second and the animation between the two key frames lasts one unit of time.
+The length of a time unit can be influenced by the speed sliders of the key frame animation and the animator described later.
+If you set both to one, one time unit is equal to one second.
+If you set one to two, one time unit takes two seconds.
+With help of the text field you can change the timing and the order of the key frames.
+You can make the first key frame start after some time and alter the time that is spend to animate between two key frames.  
 We want to let the forklift drive one time around the production line.
 So now we need to alter the orientation of the forklift.
 Turn it by 90 degrees to the left or right (depending on if you want to drive clockwise or counterclockwise).
@@ -146,8 +155,11 @@ But till now the forklift is not moving.
 We have to add something that drives the animation.
 We will use a _SimpleMotor_ for this purpose.
 We have to activate a plugin in order to add it to the object placer.
+<!--TODO change this when the new version is avaiable-->
 Go to _Config_ and open _Plugins_.
 Search for the _QP\_MMI_ plugin and activate it.
+<!--#################################################-->
+
 The plugin provides predefined objects that already have some traits attached to them.
 The objects are thought to serve recurrent tasks to make your life easier.
 Save the configuration and restart PADrend.
@@ -159,8 +171,6 @@ Open your saved scene.
 Now open the object placer and drag an instance of _SimpleMotor_ (you can find it under the item _Funtional objects_) into the scene.
 
 ![Activating QP_MMI plugin](figures/simple_motor_added.png)
-
-<!--TODO something about meta objects here?-->
 
 ## Node links
 To get the animation running we need to connect the motor to it.
@@ -180,6 +190,11 @@ Choose _Update from selected_ to establish the link.
 
 ![Change the links target](figures/update_link_target.png)
 
+The text field underneath the role name shows you the target of the link.
+It is formalized by a XPath query.
+The query is used to find the target node in the scene graph.
+It is always relative to the source node of the link.
+
 ## Starting the animation
 Now expand the motors object in the object explorer.
 It has three traits:
@@ -197,8 +212,8 @@ You can alter the speed of the animation by using speed slider in either the _Co
 Notice that several animations can be connected to one motor.
 Altering the speed at the motor will effect all connected animations.  
 You can use the _smoothness_ slider of the animation to get the animation begin slowly, then increase the speed, and decrease the speed at the end of a key frame again.
-
-<!--TODO do we really want to have this?
+Activate _loop animation_ to get the key frame animation run in a loop.
+In this way you can get the forklift move continuously around the production line.
 
 ## Starting the animation by clicking on the forklift
 The forklift is moving, but starting the animation by clicking on the start button is a bit annoying.
@@ -206,4 +221,7 @@ We want the forklift to start moving when we click on it.
 Add an _Animation/Button_ trait to the forklift.
 The button trait has a text field _linkRole_.
 Create a link to the motor by using the role name of the text field.
--->
+You can now start and pause the animation by clicking on the forklift.
+If you want to stop the animation instead of pausing it, type in _animationStop_ into the _fn2_ text field.
+
+![Button trait](figures/animation_button_trait.png)
