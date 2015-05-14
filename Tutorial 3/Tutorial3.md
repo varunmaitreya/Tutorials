@@ -4,7 +4,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 ------------------------------------------------------------------------------------------------->
 
 # Goal of this tutorial
-In this tutorial we will build a small fabric hall.
+In this tutorial we will build a small factory hall.
 In the first part you will learn about the difference between scene graph nodes and semantic objects.
 In the second part we will put a forklift into the scene and use an animation to move it around.
 
@@ -14,12 +14,12 @@ PADrend is opened and an empty scene is loaded.
 Infinite ground and dynamic sky are enabled. 
 
 # Preparing the scene
-Before we can start, we need to have an empty fabric hall in our scene.
+Before we can start, we need to have an empty factory hall in our scene.
 Add library ... to the object placer just like you did it in Tutorial 2.
 Open the object placer and position an instance of _HalleBackstein_ on the ground.
-Locate the fabric hall in move inside.
+Locate the factory hall in move inside.
 
-![Empty fabric hall](figures/fabric_empty.png)
+![Empty factory hall](figures/factory_empty.png)
 
 # Nodes vs semantic objects
 PADrend differentiates between nodes and semantic objects.
@@ -41,7 +41,7 @@ If you select something, the description box above the selection shows you wheth
 For ordinary nodes there is a black description box, for semantic objects there is a green one.
 
 ## Marking nodes as semantic objects
-The fabric hall is empty till now.
+The factory hall is empty till now.
 Lets fill it with a small production line.
 Place two instances of _Rollen\_Gerade\_Lang2_ in the hall.
 Use two instances of _Rollen\_Kurve\_180_ to connect them (one of them needs to be rotated by 180 degrees).
@@ -70,13 +70,13 @@ You can turn a semantic object into a node in the same way.
 If you perform an object selection on one of the parts of the production line, the whole production line will be selected.
 You can use [pgDown] to traverse to the sub objects.  
 Since we want the forklift to drive around the production line, place it about in the middle.
-Feel free to place other objects so that it look more like a fabric.
+Feel free to place other objects so that it look more like a factory.
 The image below shows an example, but you can use other objects if you like.
 Just keep in mind that we need some space for the forklift to drive.
 
-![Fabric hall finished](figures/fabric_hall.png)
+![Factory hall finished](figures/factory_hall.png)
 
-Do not forget to place a forklift in your fabric hall.
+Do not forget to place a forklift in your factory hall.
 It is called _Gabelstapler_ in the object placer.
 Also give the semantic object an identifier.
 Select it, open the _Main window_ by pressing [F1] or using the menu bar item and type in forklift in the text field _NodeId_.
@@ -127,7 +127,7 @@ But for now we do not care about it and create the key frames for the animation.
 
 The first key frame is the initial position of the forklift.
 Press the _Add Keyframe_ button to add it.
-Now move the forklift forward into the next corner of the fabric hall and add another key frame.
+Now move the forklift forward into the next corner of the factory hall and add another key frame.
 
 ![First key frames added](figures/key_frames_added.png)
 
