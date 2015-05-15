@@ -155,22 +155,20 @@ But till now the forklift is not moving.
 We have to add something that drives the animation.
 We will use a _SimpleMotor_ for this purpose.
 We have to activate a plugin in order to add it to the object placer.
-<!--TODO change this when the new version is avaiable-->
 Go to _Config_ and open _Plugins_.
-Search for the _QP\_MMI_ plugin and activate it.
-<!--#################################################-->
+Search for the _ObjectFactories_ plugin and activate it.
 
 The plugin provides predefined objects that already have some traits attached to them.
 The objects are thought to serve recurrent tasks to make your life easier.
 Save the configuration and restart PADrend.
 Make sure you have saved your scene before restarting.
 
-![Activating QP_MMI plugin](figures/qp_mmi_plugin.png)
+![Activating ObjectFactories plugin](figures/object_factories_plugin.png)
 
 Open your saved scene.
-Now open the object placer and drag an instance of _SimpleMotor_ (you can find it under the item _Funtional objects_) into the scene.
+Now open the object placer and drag an instance of _SimpleMotor_ (you can find it under the item _Basic object factories_) into the scene.
 
-![Activating QP_MMI plugin](figures/simple_motor_added.png)
+![Adding a simple motor to the scene](figures/simple_motor_added.png)
 
 ## Node links
 To get the animation running we need to connect the motor to it.
