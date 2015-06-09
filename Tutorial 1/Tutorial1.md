@@ -25,7 +25,6 @@ Lets start PADrend.
 First of all you should choose a window size that fits to the screen resolution of your computer.
 Open PADrend and go to the _config_ menu.
 Choose _System Window_ and use the _Size_ drop-down menu to alter the window size.
-To apply the changes you need to save the configuration.
 
 ![Alter window size](figures/alter_window_size.png)
 
@@ -117,7 +116,6 @@ To exit the mouse navigation mode use again the [m] key or the middle mouse butt
 Using a gamepad results in a smooth movement.
 Before you can use it for the first time you have to activate it.
 Go to _Config_ and enable _Joystick support_ under the entry _Navigation_.
-Save the configuration and restart PADrend.
 
 ![Enable gamepad support](figures/enable_gamepad.png)
 

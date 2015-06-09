@@ -157,10 +157,9 @@ We will use a _SimpleMotor_ for this purpose.
 We have to activate a plugin in order to add it to the object placer.
 Go to _Config_ and open _Plugins_.
 Search for the _ObjectFactories_ plugin and activate it.
-
 The plugin provides predefined objects that already have some traits attached to them.
 The objects are thought to serve recurrent tasks to make your life easier.
-Save the configuration and restart PADrend.
+Restart PADrend to apply the changes.
 Make sure you have saved your scene before restarting.
 
 ![Activating ObjectFactories plugin](figures/object_factories_plugin.png)
