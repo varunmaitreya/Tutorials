@@ -26,7 +26,6 @@ First of all you should choose a window size that fits to the screen resolution 
 Open PADrend and go to the _config_ menu.
 Choose _System Window_ and use the _Size_ drop-down menu to alter the window size.
 To apply the changes you need to save the configuration.
-Open the _config_ menu and choose _Save Configuration_. 
 
 ![Alter window size](figures/alter_window_size.png)
 
