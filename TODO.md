@@ -1,5 +1,17 @@
-#TODO Liste
+# TODO
+## Henriks list:
+* 70% PADrend extensions
+* 90% EScript traits
+* 70% C++ example project
 
-* Szenen manipulation (Knoten selektiere, verschieben, drehen ...)
-* Szene aufbauen (etst einfach, dann komplexer)
-* Objekte bewegbar machen
+* Observer
+ * NodeTransformed
+ * NodeRemoved
+ * etc.
+* TextureProcessor
+* Texturing
+* Shader
+* EScript Plugin GUI
+* ScriptedStates
+* Input (Mouse, Keyboard, Joystick)
+* bigger C++ example project
