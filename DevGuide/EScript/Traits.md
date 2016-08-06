@@ -14,17 +14,17 @@ Adding such members manually could easily end up in a mess of spaghetti code. Th
 ## Trait example
 Imagine we already have a trait called `TestTrait` with a method called `print`. Then we could add this trait to any EScript object by simply doing this:
 ```
-Std.Traits.addTrait(someObject, TestTrait);
+Traits.addTrait(someObject, TestTrait);
 someObject.print(); // call to the print function of the TestTrait
 ```
-Furthermore it is possible to check if a given object has a specific trait: `Std.Traits.queryTrait(someObject, TestTrait)`
+Furthermore it is possible to check if a given object has a specific trait: `Traits.queryTrait(someObject, TestTrait)`
 
 ## Trait definition
-Each trait is an instance of the `Std.Trait` class. In most cases it is desirable to use the `Std.GenericTrait` class instead of its base class, because the `GenericTrait` allows you to actually add new attributes, including proeprties like `@(private)`, to an object.
+Each trait is an instance of the `Std.Trait` class. In most cases it is desirable to use the `Traits.GenericTrait` class instead of its base class, because the `GenericTrait` allows you to actually add new attributes, including properties like `@(private)`, to an object.
 
 First of all you have to create a new instance:
 ```
-var TestTrait = new Std.GenericTrait;
+var TestTrait = new Traits.GenericTrait;
 ```
 then you can add new attributes:
 ```
@@ -35,7 +35,7 @@ TestTrait.attributes.print ::= fn() {
 ```
 The `attributes` member is an actual `Type` object, therefore you can use the `:=` operator as well as the `::=` operator. If you want to execute some code when the trait is added to an object, you can add a function to the `onInit` function:
 ```
-// onInit is a MultiProcedure, therefore to add another function to it, don't override it!
+// onInit is a MultiProcedure, therefore you add another function to it, don't override it!
 TestTrait.onInit += fn(obj) {
   outln("Trait is added to ", obj);
   // Here you can modify the object as you like:
@@ -51,3 +51,56 @@ TestTrait.onInit += fn(MyType obj, secret) {
   obj._secret @(private) := secret;
 };
 ```
+
+### Multiple Uses
+By default a trait can only be added once to an object. If one tries to add a trait twice, an exception is thrown. In most cases this behavior is desired, but sometimes it is useful to add a trait multiple times to the same object. In order to do so, one must explicitly allow this behavior:
+```
+var MyTrait = new Traits.GenericTrait;
+MyTrait.allowMultipleUses();
+```
+
+### Removal
+By default it is not possible to remove a trait and an exception is thrown if one tries to remove it. In order to allow removal it is necessary to explicitly allow this behavior:
+```
+var MyTrait = new Traits.GenericTrait;
+MyTrait.onRemove := fn() {
+  // implement some logic here
+};
+MyTrait.allowRemoval();
+```
+It is necessary to implement an `onRemove` function. If this function is missing, an exception is thrown on removal.
+Now it is possible to remove this trait with: `Traits.removeTrait(obj, MyTrait)`
+This will call the `onRemove` function and it will afterwards remove the trait from the internal list of traits for the given object. It is also possible to add additional arguments to the `removeTrait` function. These arguments will be forwarded to the `onRemove` function:
+```
+var MyTrait = new Traits.GenericTrait;
+MyTrait.onRemove := fn(a, b, c) {
+  // implement some logic here
+};
+MyTrait.allowRemoval();
+// ...
+Traits.removeTrait(obj, MyTrait, 1, 2, 3);
+```
+Unfortunately it is not possible to completely remove an attribute from an object. Therefore it is a good idea to set those attributes to `void`.
+
+
+## Traits API
+Short overview of the full Traits API
+
+* `Traits.addTrait(obj, Trait trait, params...)`
+ * adds the given `trait` to `obj` and passes all extra parameters to the `onInit` function
+* `Traits.addTraitByName(obj, String traitName, params...)`
+ * Add a trait to the given object. The trait is identified by its name. The trait's name must correspond to the EScript attribute structure beginning with GLOBALS. (e.g. `"Std.Traits.SingletonTrait"`)
+* `Traits.assureTrait(obj, trait)`
+ * Adds the given trait if it has not already been added.
+* `Traits.getTraitByName(String name)`
+ * Finds the trait identified by its name. The traits name must correspond to the EScript attribute structure beginning with GLOBALS. (e.g. `"Std.Traits.SingletonTrait"`)
+* `Traits.queryLocalTrait(obj, traitOrTraitName)`
+ * Checks if the given object has a trait stored locally (and not by inheritance).
+* `Traits.queryTrait(obj, traitOrTraitName)`
+ * Checks if the given object has a trait (the trait may be inherited).
+* `Traits.queryTraits(obj)`
+ * Collects all traits of an object (including inherited traits).
+* `Traits.removeTrait(obj, Trait trait, params...)`
+ * Remove a trait from the given object. If the trait is not designed for removal, an exception is thrown.
+* `Traits.requireTrait(obj, traitOrTraitName)`
+ * Throws an exception if the given object does not have the given trait.

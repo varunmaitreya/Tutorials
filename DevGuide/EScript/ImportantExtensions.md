@@ -17,11 +17,11 @@ Can be executed by a call to `PADrend.message`. PADrend has registered itself as
 
 ### EventLoop Extensions
 #### `PADrend_KeyPressed` (chained) with parameter: `Util.UI.Event event`
-The extensions are executed for key presses on the keyboard. The event describing the key press is given as parameter. This is a chained extensions, if `true` or `Util.EXTENSION_BREAK` is returned the event is not processed by further handlers.
-> Extensions for this extension point are not executed for key releases.
+The extensions are executed for key presses on the keyboard. The event (see [Util.UI.Event](UI.Event.md)) describing the key press is given as parameter. This is a chained extensions, if `true` or `Util.EXTENSION_BREAK` is returned the event is not processed by further handlers.
+> Extensions for this extension point are not executed for key releases!
 
 #### `PADrend_UIEvent` (chained) with parameter: `Util.UI.Event event`
-The extensions are executed for user interface events. The event description is given as parameter.
+The extensions are executed for user interface events. The event (see [Util.UI.Event](UI.Event.md)) description is given as parameter.
 For example, the events can be caused by a mouse move, mouse button, keyboard, or joystick.
 
 #### `PADrend_BeforeRendering` with parameter: `RenderingPass passes...`

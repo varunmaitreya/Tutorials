@@ -1,8 +1,9 @@
 # TODO
 ## Henriks list:
-* 70% PADrend extensions
-* 90% EScript traits
+* ~~100% PADrend extensions~~
+* ~~100% EScript traits~~
 * 70% C++ example project
+
 
 * Observer
  * NodeTransformed
