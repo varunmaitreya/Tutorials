@@ -83,4 +83,4 @@ Unfortunatelly PADrend uses only DirectInput and not XInput, therefore the left 
 | 8 | LS |
 | 9 | RS |
 
-The XBox360 gamepad only have one hat-switch, which is numbered as `0`.
+The XBox360 gamepad only has one hat-switch, which is numbered as `0`.
