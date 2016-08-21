@@ -15,24 +15,25 @@ These bindings are special classes for EScript and they must follow the followin
 * It must have a static function, which returns an `EScript::Type*` describing the class object
 * It must have a static `init` function, which is used to initialize the binding (and this init function must be called from MinSG)
 * It should have a constructor that takes a pointer or reference to your actual object (this is not a *must*, but it makes some things easier)
-* It must provide some macros used to convert between the binding class and the actual class
+* It should provide some macros used to convert between the binding class and the actual class
 * Your wrapped class must provide the == operator (and therefore it is often a good idea to also provide the != operator).
 
 This was just an abstract overview, we will now look at a little example.
 
 ### Simple classes
-If your class is a small one, like `Vec3` or `Matrix4x4`. You typically let your binding inherit from `EScript::ReferenceObject<T>`, where T is your actual class. In this example we will implement a small class called `BoundingBox2D`
+If your class is a small one, like `Vec3` or `Matrix4x4`. You typically let your binding inherit from `EScript::ReferenceObject<T>`, where T is your actual class. A small example class called `BoundingBox2D` can be found in: [SimpleExample](SimpleExample/SimpleExample.md)
 
-<!---INCLUDE src=BoundingBox2D.h--->
+<!---INCLUDE src=SimpleExample/MinSG/MyExtension/BoundingBox2D.h--->
 
 > This is just a very small and simple class, therefore I put everything in the header file.
 > If your class is bigger, it is better to split it into a header and a source file
 
-As you can the, this is just a simple class without anything special in it. In order to make it accessible from EScript, we now have to implement the binding class.
+As you can see, this is just a simple class without anything special in it. In order to make it accessible from EScript, we now have to implement the binding class.
 
 First of all the header file:
-<!---INCLUDE src=E_BoundingBox2D.h--->
-The conversion macros will always convert from/to the specified *real* type to/from a pointer of the wrapper type, although you don't write the asteriks symbol after your wrapper type. There are two types of conversion macros:
+<!---INCLUDE src=SimpleExample/E_MinSG/MyExtension/E_BoundingBox2D.h--->
+
+The conversion macros will always convert from/to the specified *real* type to/from a *pointer* of the wrapper type, although you don't write the asteriks symbol after your wrapper type. There are two types of conversion macros:
 ```
 // This will convert an E_MyType* to a MyType by using the conversionCode
 ES_CONV_EOBJ_TO_OBJ(E_MyType, MyType, conversionCode)
@@ -42,7 +43,8 @@ ES_CONV_OBJ_TO_EOBJ(MyType, E_MyType, conversionCode)
 ```
 
 Now the source file:
-<!---INCLUDE src=E_BoundingBox2D.cpp--->
+<!---INCLUDE src=SimpleExample/E_MinSG/MyExtension/E_BoundingBox2D.cpp--->
+
 First of all you should implement the `getTypeObject` function. This function is used to get an EScript `Type` object for your wrapper class. (see [EScript OOP](EScript_OOP.md))
 It is important to *always* return the same instance! Therefore it is a good idea to declare it as a local static variable inside the function:
 ```
@@ -57,4 +59,17 @@ After that you should implement your `init` function. In there you first have to
 ```
 declareConstant(&lib, getClassName(), typeObject);
 ```
-After that you can add a constructor, methods or constants to your typeObject.
+After that you can add a constructor, methods or constants to your typeObject. This is done by using the corresponding EScript [Macros](Macros.md).
+
+A simple example could look like this:
+```
+EScript::Type* typeObject = E_MyType::getTypeObject();
+//! Vec2 getXZ(Vec3) this function will extract the x and z value of the given Vec3
+ES_FUNCTION(typeObject, "getXZ", 1, 1, {
+  Vec3 vec = parameter[0].to<Vec3>(rt);
+  return EScript::create( new Vec2(vec.x(), vec.z()) );
+})
+```
+
+### Compile
+Before you compile your classes, you have to make sure that your compile tool knows them. For example if you're using `CodeBlocks`, you have to run the `PADrend\PADrend\PADrend.ekki` script, which will add all source files to the project file. After this step, you can actually compile PADrend.

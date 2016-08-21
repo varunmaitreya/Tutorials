@@ -31,7 +31,7 @@ Convert an parameter to:
  * e.g. `Vec3* value = parameter[i].to<Vec3*>(rt)`
  * or `Vec3 value = parameter[i].to<Vec3>(rt)`
 
-> `parameter[i].to<TargetType>(rt)` will try to convert the wrapper objetc to the real object. Make sure to use the correct types, not every wrapper can be converted a pointer, reference, etc.
+> `parameter[i].to<TargetType>(rt)` will try to convert the wrapper objetc to the real object. Make sure to use the correct types, not every wrapper can be converted to a pointer, reference, etc.
 
 If you want to test if a parameter is of a specific type, you have to convert it to a pointer type and check if it is not a `nullptr`. This can be done by using `toType<E_Type>()` or by using `to<Type*>(rt)`. Example:
 ```
