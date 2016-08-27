@@ -7,11 +7,11 @@
  * ~~NodeRemoved~~
  * ~~NodeAdded~~
 * ~~Input (Mouse, Keyboard, Joystick)~~
+* ~~Texturing~~
 * 70% C++ example project
 
 
 * TextureProcessor
-* Texturing
 * Shader
 * EScript Plugin GUI
 * ScriptedStates
