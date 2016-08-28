@@ -8,10 +8,11 @@
  * ~~NodeAdded~~
 * ~~Input (Mouse, Keyboard, Joystick)~~
 * ~~Texturing~~
+* ~~ShaderState~~
+* 70% TextureProcessor
 * 70% C++ example project
 
 
-* TextureProcessor
 * Shader
 * EScript Plugin GUI
 * ScriptedStates
