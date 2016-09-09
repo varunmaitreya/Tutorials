@@ -9,7 +9,7 @@
 * ~~Input (Mouse, Keyboard, Joystick)~~
 * ~~Texturing~~
 * ~~ShaderState~~
-* 70% TextureProcessor
+* ~~TextureProcessor~~
 * 70% C++ example project
 
 

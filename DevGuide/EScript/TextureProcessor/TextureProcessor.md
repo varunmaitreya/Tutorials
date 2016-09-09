@@ -1,7 +1,7 @@
 # TextureProcessor
 A `TextureProcessor` converts some input textures into some output textures using a shader. It is just a wrapper for some simple `FBO` handling, but can simplify your code. The basic idea is that you only specify the input/output textures and the shader. The `TextureProcessor` will then take care of the rest.
 
-This class is implemented as module: `LibRenderingExt/TextureProcessor`
+This class is implemented as a module: `LibRenderingExt/TextureProcessor`
 
 So in order to use it, it might be a good idea to place the following line onto the start of your EScript file:
 ```
@@ -17,7 +17,7 @@ The basic usage is as follows:
   .setShader(myShader)
   .execute();
 ```
-Here just create an instance of the `TextureProcessor`, set some settings and finally call execute. Now a simple quad is rendered using the given shader and textures. The resulting color texture is rendered onto the `myColorTexture` and the depth texture onto `myDepthTexture`. The depth texture and the input textures are optional, but you must specify at least one output texture and one shader.
+Here we just create an instance of the `TextureProcessor`, set some settings and finally call execute. Now a simple quad is rendered using the given shader and textures. The resulting color texture is rendered onto the `myColorTexture` and the depth texture onto `myDepthTexture`. The depth texture and the input textures are optional, but you must specify at least one output texture and one shader.
 
 ## Advanced usage
 If you want to render not only a fullscreen quad, but more complex things, you could do so by using `begin` and `end` instead of only `execute`.
@@ -109,3 +109,89 @@ The input texture is a noise texture and looks like the left image. Our shader w
 ![Output texture](output.png)
 
 The complete code can be found here: [TextureProcessorExample.escript](TextureProcessorExample.escript)
+
+## Blur example
+Blurring a picture might be useful, therefore this section will show a simple blurring example.
+The vertex shader is still the same, but the fragment shader is now a bit more complex:
+```
+// 3 * 3 Kernel
+#define KERNEL_SIZE 9
+
+// input texture
+uniform sampler2D uImage;
+// dimensions of input
+uniform float uWidth;
+uniform float uHeight;
+
+// used to convert from bitmap space [0..size-1] to texture space [0..1]
+const float step_w = 1.0/uWidth;
+const float step_h = 1.0/uHeight;
+
+// Gaussian kernel
+// 1 2 1
+// 2 4 2
+// 1 2 1
+// sum = 16
+const float kernel[KERNEL_SIZE] = {
+	1.0/16.0, 2.0/16.0, 1.0/16.0,
+	2.0/16.0, 4.0/16.0, 2.0/16.0,
+	1.0/16.0, 2.0/16.0, 1.0/16.0
+};
+
+const vec2 offset[KERNEL_SIZE] = {
+	vec2(-step_w, -step_h), vec2(0.0, -step_h), vec2(step_w, -step_h),
+	vec2(-step_w, 0.0), vec2(0.0, 0.0), vec2(step_w, 0.0),
+	vec2(-step_w, step_h), vec2(0.0, step_h), vec2(step_w, step_h)
+};
+
+void main(void) {
+	vec2 uv = gl_TexCoord[0].st;
+	vec4 sum = vec4(0.0);
+	for(int i = 0; i < KERNEL_SIZE; i++) {
+		vec4 tmp = texture2D(uImage, uv + offset[i]);
+		sum += tmp * kernel[i];
+	}
+	gl_FragColor = sum;
+}
+```
+This is a simple convolution filter. We define a 3*3 kernel, which values can be summed up to one. Furthermore we define an offset matrix, which defines the offset for each of the kernel entries. In the main function we then just iterate over the kernel and sum up all values.
+With the given kernel we achieve a gaussian blur.
+
+In our EScript code we now have to load a texture and set some shader uniforms:
+```
+// create input and output textures
+var input = Rendering.createTextureFromFile("presets/PADrendIcon.png");
+static width = input.getWidth();
+static height = input.getHeight();
+var output = Rendering.createStdTexture(width, height, true);
+
+// create shader
+var shader = Rendering.Shader.createShader(vertexShaderCode, fragmentShaderCode);
+shader.setUniform(renderingContext, new Rendering.Uniform('uWidth', Rendering.Uniform.FLOAT, [width]), false);
+shader.setUniform(renderingContext, new Rendering.Uniform('uHeight', Rendering.Uniform.FLOAT, [height]), false);
+```
+Afterwards we can just execute the TextureProcessor and save the result. The complete code can be found in [Blur.escript](Blur.escript)
+
+The following images show the input and output:
+
+![PADrend Icon](PADrendIcon.png)
+![Output texture](blurredOutput.png)
+
+### Edge detection
+This convolution filter could be also used for edge detection. To do so, we just have to change the kernel to this:
+```
+const float kernel[KERNEL_SIZE] = {
+	-1.0/16.0, -1.0/16.0, -1.0/16.0,
+	-1.0/16.0, 8.0/16.0, -1.0/16.0,
+	-1.0/16.0, -1.0/16.0, -1.0/16.0
+};
+```
+Depending on your image, you may need to light it up:
+```
+// just before gl_FragColor = sum;
+sum *= 4;
+```
+And now you get:
+
+![PADrend Icon](PADrendIcon.png)
+![Output texture](edgeDetection.png)
