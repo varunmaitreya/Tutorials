@@ -10,10 +10,10 @@
 * ~~Texturing~~
 * ~~ShaderState~~
 * ~~TextureProcessor~~
-* 70% C++ example project
+* ~~C++ example project~~
+* ~~ScriptedStates~~
 
 
 * Shader
 * EScript Plugin GUI
-* ScriptedStates
 * bigger C++ example project
