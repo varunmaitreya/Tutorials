@@ -12,6 +12,8 @@
 * ~~TextureProcessor~~
 * ~~C++ example project~~
 * ~~ScriptedStates~~
+* ~~Operator overloading~~
+* ~~Operator precendence~~
 
 
 * Shader
