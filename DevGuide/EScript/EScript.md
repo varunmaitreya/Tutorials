@@ -48,6 +48,7 @@ outln( "12" + 3 ); // Output: 123
 outln( "10" == 10 ); // Output: true
 outln( "10.0" == 10 ); // Output: false
 ```
+EScript supports many different operators. The precedence is given by the table in [OperatorPrecedence.md](OperatorPrecedence.md)
 ### Equality
 EScript supports different equality operators. One with automatic conversion (`==`) and one without(`===`).
 ```javascript
