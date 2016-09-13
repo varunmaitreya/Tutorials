@@ -14,8 +14,8 @@
 * ~~ScriptedStates~~
 * ~~Operator overloading~~
 * ~~Operator precendence~~
+* ~~Shader Example~~
 
 
-* Shader
 * EScript Plugin GUI
 * bigger C++ example project
