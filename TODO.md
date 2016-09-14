@@ -17,5 +17,12 @@
 * ~~Shader Example~~
 
 
+* Libary descriptions
+  * Geometry
+    * ~~Vector types~~
+    * ~~Matrix types~~
+    * Box, Quaternion, ...
+
+
 * EScript Plugin GUI
 * bigger C++ example project
