@@ -21,7 +21,9 @@
   * Geometry
     * ~~Vector types~~
     * ~~Matrix types~~
-    * Box, Quaternion, ...
+    * ~~Box, Quaternion, ...~~
+  * Util
+    * ~~Networking~~
 
 
 * EScript Plugin GUI
