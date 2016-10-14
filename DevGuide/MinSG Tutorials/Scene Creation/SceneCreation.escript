@@ -11,12 +11,25 @@
  * http://mozilla.org/MPL/2.0/.
  */
 
+//building nodes
 var rootNode = new MinSG.ListNode();
 var listNode = new MinSG.ListNode();
 
-var geometryNode1 = new MinSG.GeometryNode();
-var geometryNode2 = new MinSG.GeometryNode();
-var geometryNode3 = new MinSG.GeometryNode();
+var mesh1 = Rendering.MeshBuilder.createBox(new Geometry.Box(-2, 0, 0, 1, 1, 1));
+var mesh2 = Rendering.MeshBuilder.createBox(new Geometry.Box(2, 0, 0, 1, 1, 1));
+var mesh3 = Rendering.MeshBuilder.createBox(new Geometry.Box(0, 0, -2, 1, 1, 1));
+
+var geometryNode1 = new MinSG.GeometryNode(mesh1);
+var geometryNode2 = new MinSG.GeometryNode(mesh2);
+var geometryNode3 = new MinSG.GeometryNode(mesh3);
+
+//giving nodes a unique id
+PADrend.getSceneManager().registerNode("root", rootNode);
+PADrend.getSceneManager().registerNode("some_list_node", listNode);
+
+PADrend.getSceneManager().registerNode("geometry_node_1", geometryNode1);
+PADrend.getSceneManager().registerNode("geometry_node_2", geometryNode2);
+PADrend.getSceneManager().registerNode("geometry_node_3", geometryNode3);
 
 //Building the scene graph
 rootNode.addChild(geometryNode1);

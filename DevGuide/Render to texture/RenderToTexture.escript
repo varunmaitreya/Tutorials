@@ -14,82 +14,69 @@
 var T = new Type(ExtObject);
 
 T._constructor := fn(){
-	var _resolution = 512; //TODO
 	
+	//Creating a frame buffer object and binding a texture to it. The texture serves as rendering target for the frame buffer object.
 	this.fbo := new Rendering.FBO();
+	this.mirrorTexture := Rendering.createStdTexture(renderingContext.getWindowWidth(), 
+													renderingContext.getWindowHeight(),
+													true);
 	renderingContext.pushAndSetFBO(this.fbo);
-	this.mirrorTexture := Rendering.createStdTexture(_resolution, _resolution, true);
 	this.fbo.attachColorTexture(renderingContext, this.mirrorTexture);
 	renderingContext.popFBO();
 	Rendering.checkGLError();
 	
+	//Creating the test scene
 	this.createScene();
 	
+	//before each frame render the mirrored scene to a texture
 	this.beforeFrame := [this] => fn(thisObj, x){
 		//mirror the scene
 		var nodeMatrix = thisObj.rootNode.getWorldTransformationMatrix();
-		var scaleMatrix = new Geometry.Matrix4x4([1,0,0,0,
-													0, 1,0,0,
-													0,0,-1,0,
-													0,0,0,1]);
+		var scaleMatrix = new Geometry.Matrix4x4([1, 0, 0, 0,
+												  0, 1, 0, 0,
+												  0, 0,-1, 0,
+												  0, 0, 0, 1]);
 		var newNodeMatrix = nodeMatrix * scaleMatrix;
 		thisObj.rootNode.setWorldTransformation(newNodeMatrix.toSRT());
 	
-		//render scene to texture
+		//deactivate the mirror mesh, so that it is not part of the mirrored scene
 		thisObj.mirrorNode.deactivate();
 		
 		//set rendering target
-		frameContext.getRenderingContext().pushAndSetFBO(thisObj.fbo);
-		/*frameContext.getRenderingContext().clearScreen(new Util.Color4f(0,0,0,1));
+		renderingContext.pushAndSetFBO(thisObj.fbo);
 		
-		var params = (new MinSG.RenderParam)
-					.setFlags(MinSG.USE_WORLD_MATRIX|MinSG.FRUSTUM_CULLING) //|MinSG.NO_STATES);
-					.setRenderingLayers( 0 );
-		thisObj.rootNode.display(frameContext, params);*/
-		
-		frameContext.getRenderingContext().clearScreen(PADrend.getBGColor());
+		//clear the texture and draw the scene to it
+		renderingContext.clearScreen(PADrend.getBGColor());
 		PADrend.getRootNode().display(frameContext, PADrend.getRenderingFlags());
 		
-		frameContext.getRenderingContext().popFBO();
+		//restore the previouse state (e.g. pop the frame buffer object, restore the old transformation and activate the mirror mesh)
+		renderingContext.popFBO();
 		thisObj.rootNode.setWorldTransformation(nodeMatrix.toSRT());
 		thisObj.mirrorNode.activate();
-		
-		//TODO add current texturecoordinates
-		thisObj.updateMirrorMesh();
 	};
 	
+	//register the beforeFrame function so that it is called before each frame
 	Util.registerExtension('PADrend_BeforeRendering', this.beforeFrame);
 };
 
-T.updateMirrorMesh := fn(){
-	var width = 1600;
-	var height = 900;
-	
-	var meshBuilder = new Rendering.MeshBuilder();
-	
-	var textureCoordinate = frameContext.convertWorldPosToScreenPos(new Geometry.Vec3(-2,0,0));
-	meshBuilder.addVertex(new Geometry.Vec3(-2,0,0), new Geometry.Vec3(0,0,1), 1, 1, 1, 1, textureCoordinate.getX()/width, textureCoordinate.getY()/height);//0
-	textureCoordinate = frameContext.convertWorldPosToScreenPos(new Geometry.Vec3(2,0,0));
-	meshBuilder.addVertex(new Geometry.Vec3( 2,0,0), new Geometry.Vec3(0,0,1), 1, 1, 1, 1, textureCoordinate.getX()/width, textureCoordinate.getY()/height);//1
-	textureCoordinate = frameContext.convertWorldPosToScreenPos(new Geometry.Vec3(2,2,0));
-	meshBuilder.addVertex(new Geometry.Vec3( 2,2,0), new Geometry.Vec3(0,0,1), 1, 1, 1, 1, textureCoordinate.getX()/width, textureCoordinate.getY()/height);//2
-	textureCoordinate = frameContext.convertWorldPosToScreenPos(new Geometry.Vec3(-2,2,0));
-	meshBuilder.addVertex(new Geometry.Vec3(-2,2,0), new Geometry.Vec3(0,0,1), 1, 1, 1, 1, textureCoordinate.getX()/width, textureCoordinate.getY()/height);//3
-	
-	meshBuilder.addQuad(0, 1, 2, 3);
-	
-	var mirrorMesh = meshBuilder.buildMesh();
-
-	this.mirrorNode.setMesh(mirrorMesh);
-};
 
 T.createScene := fn(){
 	this.rootNode := new MinSG.ListNode();
 	
+	//Building a GeometryNode for the mirror. Its mesh is a simple rectangle. A texture state is added to the node, so that the mirror texture is drawn to the rect.
 	this.mirrorNode := new MinSG.GeometryNode();
 	this.mirrorNode.addState(new MinSG.TextureState(this.mirrorTexture));
-	this.updateMirrorMesh();
 	
+	var meshBuilder = new Rendering.MeshBuilder();
+	meshBuilder.addVertex(new Geometry.Vec3(-2,0,0), new Geometry.Vec3(0,0,1), 1, 1, 1, 1, 0, 0);//0
+	meshBuilder.addVertex(new Geometry.Vec3( 2,0,0), new Geometry.Vec3(0,0,1), 1, 1, 1, 1, 1, 0);//1
+	meshBuilder.addVertex(new Geometry.Vec3( 2,2,0), new Geometry.Vec3(0,0,1), 1, 1, 1, 1, 1, 1);//2
+	meshBuilder.addVertex(new Geometry.Vec3(-2,2,0), new Geometry.Vec3(0,0,1), 1, 1, 1, 1, 0, 1);//3
+	meshBuilder.addQuad(0, 1, 2, 3);
+
+	this.mirrorNode.setMesh(meshBuilder.buildMesh(););
+	
+	//create the test scene form some objects
 	var mesh1 = Rendering.MeshBuilder.createBox(new Geometry.Box(0, 0, 0, 2, 2, 2));
 	Rendering.setColor(mesh1, new Util.Color4f(1,0,0,1));
 	var mesh2 = Rendering.MeshBuilder.createCone(1.0, 2.0, 100); 
@@ -106,6 +93,7 @@ T.createScene := fn(){
 	node2.setRelPosition(new Geometry.Vec3(0, 0, 12));
 	node3.setRelPosition(new Geometry.Vec3(3, 0, 12));
 	
+	//build the scene graph
 	rootNode += node1;
 	rootNode += node2;
 	rootNode += node3;
@@ -115,10 +103,8 @@ T.createScene := fn(){
 	this.rootNode := rootNode;
 };
 
-
+//register the scene to PADrend
 var t = new T();
-t.createScene();
-
 var sceneNode = t.rootNode;
 
 PADrend.registerScene(sceneNode);
