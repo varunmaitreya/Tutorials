@@ -1,3 +1,10 @@
+<!------------------------------------------------------------------------------------------------
+This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
+ To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.
+ Author: Henrik Heine (hheine@mail.uni-paderborn.de)
+ PADrend Version 1.0.0
+------------------------------------------------------------------------------------------------->
+
 # Simple C++ example plugin
 This chapter will show you a simple example C++ plugin.
 We will basically just add a very simple C++ class to PADrend. For the sake of simplicity we will just add a two dimensional bounding box, which will be described by two `Vec2` instances.
@@ -15,7 +22,7 @@ Typically you will then continue with adding empty files to your project. If you
 
 ## MinSG part
 For now we only want to add a simple class called `BoundingBox2D`. Typically you would therefore add a header and a source file for this class, but because it is an extremly simple example, we just put everything in the header file. So we just create a file called `BoundingBox2D.h` inside of the `PADrend/modules/MinSG/Ext/MyExtension` folder. This file will hold the actual logic of our simple bounding box:
-<!---INCLUDE src=MinSG/MyExtension/BoundingBox2D.h--->
+<!---INCLUDE src=MinSG/MyExtension/BoundingBox2D.h, start=14, end=90--->
 
 As you see, nothing fancy here. Just a plain, simple class. In order to make it accessible from EScript, we now have to create a corresponding wrapper class.
 
@@ -25,13 +32,13 @@ Next we add the following two files to the `PADrend/modules/E_MinSG/Ext/MyExtens
 * `E_BoundingBox2D.cpp`
 
 The header file is always very similar. You provide a type name, a constructor and a destructor. Furthermore you declare the `getTypeObject` and `init` functions, which will be implemented in the source file.
-<!---INCLUDE src=E_MinSG/MyExtension/E_BoundingBox2D.h--->
+<!---INCLUDE src=E_MinSG/MyExtension/E_BoundingBox2D.h, start=14, end=56--->
 
 A very important part of the header file can be found at the end: The conversion macros.
 Those macros are used to convert between an EScript object and the real object back and forth.
 
 The source file of this header will now look like this:
-<!---INCLUDE src=E_MinSG/MyExtension/E_BoundingBox2D.cpp--->
+<!---INCLUDE src=E_MinSG/MyExtension/E_BoundingBox2D.cpp, start=14, end=101--->
 
 It only consists of two functions, the `getTypeObject` and `init` functions.
 
@@ -49,7 +56,7 @@ Of course you could call each init function from there, but it is recommended to
 * `PADrend/modules/E_MinSG/Ext/MyExtension/E_MyExtension.cpp`
 
 These two files will be used as the main entry point for our whole plugin. The header file only declares the init function, which will be implemented in the source file.
-<!---INCLUDE src=E_MinSG/MyExtension/E_MyExtension.h--->
+<!---INCLUDE src=E_MinSG/MyExtension/E_MyExtension.h, start=14, end=26--->
 
 The init function will get the MinSG namespace as the parameter. Inside of your actual init function, you should first define your own namespace. This is advised, because it prevents the MinSG namespace from being polluted. Afterwards you will initialize all of your wrapper classes, by just calling their init functions, with your own namespace as a parameter.
 ```

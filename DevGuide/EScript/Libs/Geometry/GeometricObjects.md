@@ -1,3 +1,10 @@
+<!------------------------------------------------------------------------------------------------
+This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
+ To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.
+ Author: Henrik Heine (hheine@mail.uni-paderborn.de)
+ PADrend Version 1.0.0
+------------------------------------------------------------------------------------------------->
+
 # Geometric Objects
 The Geometry library already provides us with many different geometric objects, which are described in this chapter. If not stated otherwise a method that returns an object of the same type, returns the `this` object.
 

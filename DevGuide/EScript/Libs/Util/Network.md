@@ -1,3 +1,10 @@
+<!------------------------------------------------------------------------------------------------
+This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
+ To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.
+ Author: Henrik Heine (hheine@mail.uni-paderborn.de)
+ PADrend Version 1.0.0
+------------------------------------------------------------------------------------------------->
+
 # Networking with PADrend
 
 ## TCP
@@ -30,10 +37,10 @@ In order to receive data, you have to call the `receiveString` method. It has an
 The following simple example just demonstrates the basic usage of the TCPConnection. In order to run it, you have to start two PADrend instances. One of them will run the server and the other one the client.
 
 Server side:
-<!---INCLUDE src=TCPServer.escript--->
+<!---INCLUDE src=TCPServer.escript, start=14 ,end=46--->
 
 Client side:
-<!---INCLUDE src=TCPClient.escript--->
+<!---INCLUDE src=TCPClient.escript, start=14 ,end=29--->
 
 ## UDP
 The UDP communication is handled via the `UDPNetworkSocket` type. In contrast to most other types, this type doesn't have a constructor. Furthermore it is not created by a static method of itself.
@@ -55,7 +62,7 @@ If you want to receive a message, you use the `receive()` method. This method re
 The following simple example just demonstrates the basic usage of the UDPNetworkSocket. In order to run it, you have to start two PADrend instances. One of them will run the server and the other one the client.
 
 Server side:
-<!---INCLUDE src=UDPServer.escript--->
+<!---INCLUDE src=UDPServer.escript, start=14 ,end=36--->
 
 Client side:
-<!---INCLUDE src=UDPClient.escript--->
+<!---INCLUDE src=UDPClient.escript, start=14 ,end=34--->

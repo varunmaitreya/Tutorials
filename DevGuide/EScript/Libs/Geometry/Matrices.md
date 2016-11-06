@@ -1,3 +1,10 @@
+<!------------------------------------------------------------------------------------------------
+This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
+ To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.
+ Author: Henrik Heine (hheine@mail.uni-paderborn.de)
+ PADrend Version 1.0.0
+------------------------------------------------------------------------------------------------->
+
 ## Matrix types
 The geometry library suppots 3*3 and 4*4 matrices (`Matrix3x3` and `Matrix4x4`).
 In contrast to the vector types, these two classes differ heavily, therefore they are completely described separately.
