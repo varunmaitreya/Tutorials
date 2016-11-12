@@ -69,3 +69,5 @@ Called when a new scene is registered (e.g. after loading). The parameter is the
 ### SceneEditor/ObjectPlacer
 #### `ObjectPlacer_OnObjectInserted` with parameter: `MinSG.Node node`
 Called whenever an object (=node) has been inserted
+
+

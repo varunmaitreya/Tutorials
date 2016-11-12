@@ -212,3 +212,5 @@ The function clips all triangles lying on the opposite of the direction vector.
     	Rendering.eliminateTrianglesBehindPlane(mesh, new Geometry.Vec3(0.0, 0.0, 0.0), new Geometry.Vec3(-1.0, 0.0, 0.0));
 <!---END_CODESECTION--->
 
+
+

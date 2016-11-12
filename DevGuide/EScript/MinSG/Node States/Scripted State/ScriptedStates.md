@@ -66,6 +66,31 @@ Typically you implement such a state by creating a new type that inherits from i
 The following example simply skips rendering if the node is more than 20 units away from the camera. This is done by just calculating the difference between the given node and the camera node. If this distance is more than 20, the function returns `STATE_SKIP_RENDERING`, otherwise it just returns `STATE_OK` and everything continues as normal.
 
 <!---INCLUDE src=ScriptedState.escript, start=14, end=35--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    var sceneNode = new MinSG.ListNode();
+    
+    // Define new ScriptedState
+    var MyState = new Type(MinSG.ScriptedState);
+    MyState.doEnableState @(override) ::= fn(node, rp) {
+    	var camPos = frameContext.getCamera().getWorldOrigin();
+    	var nodePos = node.getWorldPosition();
+    	var diff = (camPos - nodePos).length();
+    	if(diff > 20) return MinSG.STATE_SKIP_RENDERING;
+    	return MinSG.STATE_OK;
+    };
+    
+    // create simple cube
+    var cube = new MinSG.GeometryNode(Rendering.MeshBuilder.createBox(new Geometry.Box(0,0,0,1,1,1)));
+    // add state to cube
+    cube += new MyState();
+    // add cube to scene
+    sceneNode += cube;
+    
+    // activate scene
+    PADrend.registerScene(sceneNode);
+    PADrend.selectScene(sceneNode);
+<!---END_CODESECTION--->
 
 ## Implementing a State in C++
 We're going to implement our own state in C++ with the same functionality as the scripted state. Everything should be straight forward after the scripted state. Let's take a look at the header:
@@ -101,4 +126,5 @@ In the header we have to override `doEnableState` and `doDisableState`. In the s
 ```
 
 In this example we don't have to do anything in the `doDisableState`, so we could also omit it since this method is not pure virtual in the **State** class and contains an empty program block.
+
 

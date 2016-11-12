@@ -72,3 +72,5 @@ module.on('MyModules/SomeGUI', fn(gui) {
   gui.addMenu("Do Something");
 });
 ```
+
+

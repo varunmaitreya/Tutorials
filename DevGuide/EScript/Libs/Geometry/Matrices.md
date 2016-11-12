@@ -55,3 +55,5 @@ The functions provided by the `Matrix4x4` type are described in the following li
 * `Bool convertsSafelyToSRT()`: Can be used to check whether it is (relatively) safe to convert a matrix to an SRT without loss of information
 * `SRT toSRT()`: creates a SRT instance from this matrix
 * `Matrix4x4 translate(Vec3 | x,y,z)`: Translates this matrix by the given vector
+
+

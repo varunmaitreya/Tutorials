@@ -53,3 +53,5 @@ The following functions are special for the `Vec3` type.
 The following functions are special for the `Vec4` type.
 * `Vec2 setValue(Number x, Number y, Number z, Number w | Array | Vec2)`: Sets the values of each component and returns itself
 * `Vec3 xyz()`: Returns a new vector, which only consists of the x, y and z components
+
+

@@ -67,18 +67,60 @@ You could also create textures by using some other PADrend functions. The `alpha
 This example will use the `execute` function to simply render a quad using the given shader. Therefore the vertex shader is only forwarding the position and texture coordinates:
 
 <!---INCLUDE src=TextureProcessorExample.escript, start=20, end=24--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    var vertexShaderCode = "
+    void main(void){
+    	gl_TexCoord[0] = gl_MultiTexCoord0;
+    	gl_Position = ftransform();
+    }";
+<!---END_CODESECTION--->
 
 The fragment shader is of course more complex and depends on your goal. In this simple example we just modify the given input texture:
 
 <!---INCLUDE src=TextureProcessorExample.escript, start=26, end=35--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    var fragmentShaderCode = "
+    #version 120
+    uniform sampler2D uTexture;
+    void main(void) {
+    	vec2 uv = gl_TexCoord[0].st;
+    	vec4 color = texture2D(uTexture, uv);
+    	color.rgb = 1 - abs(2 * color.rgb - 1);
+    	gl_FragColor = color;
+    }
+    ";
+<!---END_CODESECTION--->
 
 Now we can create the corresponding shader and textures:
 
 <!---INCLUDE src=TextureProcessorExample.escript, start=36, end=41--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    // create shader
+    var shader = Rendering.Shader.createShader(vertexShaderCode, fragmentShaderCode);
+    
+    // create input and output textures
+    var input = Rendering.createNoiseTexture(256, 256, false, 0.01);
+    var output = Rendering.createStdTexture(256, 256, true);
+<!---END_CODESECTION--->
 
 Afterwards we just execute the `TextureProcessor` and save the result:
 
 <!---INCLUDE src=TextureProcessorExample.escript, start=43, end=51--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    // create and execute TextureProcessor
+    (new TextureProcessor)
+    	.setInputTextures([input])
+    	.setOutputTexture(output)
+    	.setShader(shader)
+    	.execute();
+    
+    // just save the result to the filesystem
+    Rendering.saveTexture(renderingContext, output, "presets/output.png");
+<!---END_CODESECTION--->
 
 The input texture is a noise texture and looks like the left image. Our shader will now convert this input texture to the right image:
 
@@ -92,6 +134,50 @@ Blurring a picture might be useful, therefore this section will show a simple bl
 The vertex shader is still the same, but the fragment shader is now a bit more complex:
 
 <!---INCLUDE src=Blur.escript, start=24, end=64--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    var fragmentShaderCode = "
+    // 3 * 3 Kernel
+    #define KERNEL_SIZE 9
+    
+    // input texture
+    uniform sampler2D uImage;
+    // dimensions of input
+    uniform float uWidth;
+    uniform float uHeight;
+    
+    // used to convert from bitmap space [0..size-1] to texture space [0..1]
+    const float step_w = 1.0/uWidth;
+    const float step_h = 1.0/uHeight;
+    
+    // Gaussian kernel
+    // 1 2 1
+    // 2 4 2
+    // 1 2 1	
+    // sum = 16
+    const float kernel[KERNEL_SIZE] = { 
+    	1.0/16.0, 2.0/16.0, 1.0/16.0,
+    	2.0/16.0, 4.0/16.0, 2.0/16.0,
+    	1.0/16.0, 2.0/16.0, 1.0/16.0 
+    };
+    
+    const vec2 offset[KERNEL_SIZE] = { 
+    	vec2(-step_w, -step_h), vec2(0.0, -step_h), vec2(step_w, -step_h), 
+    	vec2(-step_w, 0.0), vec2(0.0, 0.0), vec2(step_w, 0.0), 
+    	vec2(-step_w, step_h), vec2(0.0, step_h), vec2(step_w, step_h) 
+    };
+    
+    void main(void) {
+    	vec2 uv = gl_TexCoord[0].st;
+    	vec4 sum = vec4(0.0);
+    	for(int i = 0; i < KERNEL_SIZE; i++) {
+    		vec4 tmp = texture2D(uImage, uv + offset[i]);
+    		sum += tmp * kernel[i];
+    	}
+    	gl_FragColor = sum;
+    }
+    ";
+<!---END_CODESECTION--->
 
 This is a simple convolution filter. We define a 3*3 kernel, which values can be summed up to one. Furthermore we define an offset matrix, which defines the offset for each of the kernel entries. In the main function we then just iterate over the kernel and sum up all values.
 With the given kernel we achieve a gaussian blur.
@@ -99,6 +185,19 @@ With the given kernel we achieve a gaussian blur.
 In our EScript code we now have to load a texture and set some shader uniforms:
 
 <!---INCLUDE src=Blur.escript, start=66, end=75--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    // create input and output textures
+    var input = Rendering.createTextureFromFile("presets/PADrendIcon.png");
+    static width = input.getWidth();
+    static height = input.getHeight();
+    var output = Rendering.createStdTexture(width, height, true);
+    
+    // create shader
+    var shader = Rendering.Shader.createShader(vertexShaderCode, fragmentShaderCode);
+    shader.setUniform(renderingContext, new Rendering.Uniform('uWidth', Rendering.Uniform.FLOAT, [width]), false);
+    shader.setUniform(renderingContext, new Rendering.Uniform('uHeight', Rendering.Uniform.FLOAT, [height]), false);
+<!---END_CODESECTION--->
 
 Afterwards we can just execute the TextureProcessor and save the result. The complete code can be found in [Blur.escript](Blur.escript)
 
@@ -125,3 +224,5 @@ And now you get:
 
 ![PADrend Icon](PADrendIcon.png)
 ![Output texture](edgeDetection.png)
+
+

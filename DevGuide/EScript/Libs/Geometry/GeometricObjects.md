@@ -92,3 +92,5 @@ Operators:
 * `-= Vec2` basically syntactic sugar for `moveRel(-vec2)`
 * `- Vec2` Create rect by moving this by a given vector
 * `+ Vec2` Create rect by moving this by a given vector
+
+

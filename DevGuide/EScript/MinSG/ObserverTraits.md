@@ -42,3 +42,5 @@ Traits.addTrait(node, MinSG.TransformationObserverTrait, fn(transformedNode) {
     outln(transformedNode, " was transformed");
   });
 ```
+
+

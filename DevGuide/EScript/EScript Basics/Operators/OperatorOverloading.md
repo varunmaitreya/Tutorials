@@ -143,3 +143,5 @@ var obj = new ExtObject();
 obj.myType := new MyType();
 obj.myType(); // Output: caller = #ExtObject:ExtObject:0x...
 ```
+
+

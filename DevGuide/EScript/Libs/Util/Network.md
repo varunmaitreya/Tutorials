@@ -38,9 +38,64 @@ The following simple example just demonstrates the basic usage of the TCPConnect
 
 Server side:
 <!---INCLUDE src=TCPServer.escript, start=14 ,end=46--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    static TCPServer = Util.Network.TCPServer;
+    static TCPConnection = Util.Network.TCPConnection;
+    
+    var server = TCPServer.create(8080);
+    if(!server) {
+    	outln("Failed to start server");
+    	return;
+    }
+    
+    var count = 0;
+    var client;
+    while(!client) {
+    	outln("Waiting for client");
+    	Util.sleep(1000); // wait one second
+    	client = server.getIncomingConnection();
+    	if(count++ == 10) {
+    		outln("Timeout!");
+    		server.close(); // never forget to close!
+    		return;
+    	}
+    }
+    
+    // client is connected, now we just respond
+    var data;
+    while(!data) {
+    	data = client.receiveString();
+    }
+    outln("Received: ", data);
+    client.sendString("Pong");
+    
+    Util.sleep(1000);
+    server.close();
+    client.close();
+<!---END_CODESECTION--->
 
 Client side:
 <!---INCLUDE src=TCPClient.escript, start=14 ,end=29--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    static TCPConnection = Util.Network.TCPConnection;
+    
+    var client = TCPConnection.connect("127.0.0.1", 8080);
+    if(!client) {
+    	outln("Failed to connect!");
+    	return;
+    }
+    
+    client.sendString("Ping");
+    var data;
+    while(!data) {
+    	data = client.receiveString();
+    }
+    outln("Received: ", data);
+    
+    client.close();
+<!---END_CODESECTION--->
 
 ## UDP
 The UDP communication is handled via the `UDPNetworkSocket` type. In contrast to most other types, this type doesn't have a constructor. Furthermore it is not created by a static method of itself.
@@ -63,6 +118,58 @@ The following simple example just demonstrates the basic usage of the UDPNetwork
 
 Server side:
 <!---INCLUDE src=UDPServer.escript, start=14 ,end=36--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    var socket = Util.Network.createUDPNetworkSocket(8080);
+    socket.open();
+    
+    // wait to receive a message
+    
+    var count = 0;
+    while(true) {
+    	outln("Waiting for a message");
+    	Util.sleep(1000); // wait one second
+    	var msg = socket.receive();
+    	if(msg) {
+    		outln("Received: ", msg.data);
+    		outln("From: ", msg.host, ":", msg.port);
+    		// In this simple example we don't want to remember the sender
+    		// Therefore we just add it as a target, send the message and then we remove the target
+    		socket.addTarget(msg.host, msg.port).sendString("Pong");
+    		socket.removeTarget(msg.host, msg.port);
+    		return;
+    	} else if(count++ == 10) {
+    		outln("Timeout!");
+    		return;
+    	}
+    }
+<!---END_CODESECTION--->
 
 Client side:
 <!---INCLUDE src=UDPClient.escript, start=14 ,end=34--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    // This script is basically a client, therefore it is OK to let the system use some random port
+    var socket = Util.Network.createUDPNetworkSocket(); // no port or 0 means that a random port is chosen
+    socket.open();
+    socket.addTarget("127.0.0.1", 8080);
+    socket.sendString("Ping");
+    // wait for response
+    
+    var count = 0;
+    while(true) {
+    	outln("Waiting for response");
+    	Util.sleep(1000); // wait one second
+    	var msg = socket.receive();
+    	if(msg) {
+    		outln("Received: ", msg.data);
+    		outln("From: ", msg.host, ":", msg.port);
+    		return;
+    	} else if(count++ == 10) {
+    		outln("Timeout!");
+    		return;
+    	}
+    }
+<!---END_CODESECTION--->
+
+

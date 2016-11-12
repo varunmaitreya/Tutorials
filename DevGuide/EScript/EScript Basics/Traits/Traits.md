@@ -111,3 +111,5 @@ Short overview of the full Traits API
  * Remove a trait from the given object. If the trait is not designed for removal, an exception is thrown.
 * `Traits.requireTrait(obj, traitOrTraitName)`
  * Throws an exception if the given object does not have the given trait.
+
+

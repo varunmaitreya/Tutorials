@@ -40,7 +40,7 @@ The first thing we need to do is creating a frame buffer object and binding a te
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     	this.fbo := new Rendering.FBO();
-    	this.mirrorTexture := Rendering.createStdTexture(renderingContext.getWindowWidth(),
+    	this.mirrorTexture := Rendering.createStdTexture(renderingContext.getWindowWidth(), 
     													renderingContext.getWindowHeight(),
     													true);
     	renderingContext.pushAndSetFBO(this.fbo);
@@ -87,23 +87,23 @@ This function will be called before each frame and updates the mirror texture.
     												  0, 0, 0, 1]);
     		var newNodeMatrix = nodeMatrix * scaleMatrix;
     		thisObj.rootNode.setWorldTransformation(newNodeMatrix.toSRT());
-
+    	
     		//deactivate the mirror mesh, so that it is not part of the mirrored scene
     		thisObj.mirrorNode.deactivate();
-
+    		
     		//set rendering target
     		renderingContext.pushAndSetFBO(thisObj.fbo);
-
+    		
     		//clear the texture and draw the scene to it
     		renderingContext.clearScreen(PADrend.getBGColor());
     		PADrend.getRootNode().display(frameContext, PADrend.getRenderingFlags());
-
+    		
     		//restore the previouse state (e.g. pop the frame buffer object, restore the old transformation and activate the mirror mesh)
     		renderingContext.popFBO();
     		thisObj.rootNode.setWorldTransformation(nodeMatrix.toSRT());
     		thisObj.mirrorNode.activate();
     	};
-
+    	
     	//register the beforeFrame function so that it is called before each frame
     	Util.registerExtension('PADrend_BeforeRendering', this.beforeFrame);
 <!---END_CODESECTION--->
@@ -122,3 +122,5 @@ As rendering flags we use PADrends current ones.
 After this step the mirrored scene can be seen on the mirror texture.
 As a last step we restore the previous state, which includes pop the FBO, restoring the old transformation matrix and activating the mirror node.
 During the upcoming render pass, the scene gets displayed to the screen and the mirror will show the current content of mirror texture.
+
+

@@ -332,3 +332,5 @@ print(); // Output: void
 var boundedPrint = 42 -> print;
 boundedPrint(); // Output: 42
 ```
+
+

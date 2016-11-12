@@ -78,3 +78,5 @@ The quaternion type defines the following functions. If not stated otherwise, ea
 * `Quaternion normalize()`: Normalizes this instance
 * `Vec3 toEuler()`: Returns the rotation in euler angles
 * `static Quaternion eulerToQuaternion(Vec3)`: Creates a quaternion from euler angles
+
+

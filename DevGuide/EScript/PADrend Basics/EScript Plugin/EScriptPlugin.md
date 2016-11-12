@@ -124,3 +124,5 @@ All callbacks for this extension are only executed once and then they will be re
 
 #### `ExtensionPoint.DEPRECATED`
 The extension point should no longer be used, because it is deprecated. When registering an extension, a warning is shown.
+
+
