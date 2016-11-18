@@ -1,6 +1,8 @@
 <!------------------------------------------------------------------------------------------------
 This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
  To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.
+ Author: Florian Pieper (fpieper@mail.uni-paderborn.de)
+ PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
 
 # Goal of this tutorial
@@ -10,7 +12,7 @@ In detail we want to work rotations to animate the arms movement and make use of
 
 # Assumptions
 All previous tutorial are finished.
-PADrend is opened and the scene TODO is loaded.
+PADrend is opened and the scene _tut5_scene.minsg_ (see [tut5_scene](scene/tut5_scene.minsg)) is loaded.
 Infinite ground and dynamic sky are enabled.
 The _ObjectFactories_ plugin is activated.
 

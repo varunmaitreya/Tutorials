@@ -1,18 +1,20 @@
 <!------------------------------------------------------------------------------------------------
 This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
  To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.
+ Author: Florian Pieper (fpieper@mail.uni-paderborn.de)
+ PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
 
 # Goal of this tutorial
 In this tutorial you will learn some basics techniques for working with PADrend.
-In the first part we will load the first scene. 
+In the first part we will load the first scene.
 This is a crucial step since most of the time you are using PADrend you will have to deal with scenes.
 The second part is about navigation.
 You will learn to move through a scene in three different ways, namely by keyboard, by mouse and by gamepad.
 
 # Assumption
-To finish this tutorial you need a working installation of PADrend. 
-For installation hints follow the [Building PADrend from Source](https://macabeo.cs.upb.de/trac/AlgoCG/wiki/BuildingFromSource "Building PADrend from Source") guide.
+To finish this tutorial you need a working installation of PADrend.
+For installation hints follow the [Building PADrend from Source](../../Installation Guide/InstallationGuide) guide.
 
 # Setting up PADrend
 Lets start PADrend.
@@ -33,11 +35,25 @@ Restart PADrend by using the _Restart_ button in the file menu PADrend and it sh
 ![Restart PADrend](figures/restart.png)
 
 # Import and load a scene
+There a two kinds of scenes.
+The first kind are scenes that contain of a single file.
+The single file includes also all of the senes meshes.
+In contrast there a scenes that split the secne information (such as for example the positioning of objects) and the objects meshes into different files.  
 Now that PADrend is running with a proper window size we can go on and load the first scene.
 Before we can do so it has first to be imported.
 In this tutorial we will use the szene_1 scene.   
-To import the scene it has to be located at the correct folder.
-Open the szene_1.minsg file in a text-editor.
+
+## Placing the scene
+Before you can load a scene you should copy it to a common folder.
+Therefore first navigate to the _data_ folder, which you find in the PADrend's main directory.
+Create a folder _scene_ and copy the file _szene_1.minsg_ to it (see [szene_1.minsg](../models/szene_1.minsg)).
+
+## Finding the coorect folder for a scene having a seperate mesh file
+For scenes made from multiple files it is important to place the files in the correct folder.
+Otherwise the file conatining the meshes may not be found.
+This part shows you how to find the correct folder.
+Note that the used scene is not included in the repository.   
+To find the correct folder open the scenes _.minsg_ file in a text-editor.
 You can extract the path to place the scene of one of the _filesname_ attributes.
 
 ![Extract file location from minsg file](figures/editor_minsg_file.png)
@@ -45,10 +61,12 @@ You can extract the path to place the scene of one of the _filesname_ attributes
 The path (normally it should be _/data/scene_)is relative to the PADrend working directory.
 Check whether it exists and if not created it.
 Copy both, the .minsg and the .zip file, to the directory.
- 
+
 ![Scene file location](figures/content_data_folder.png)
 
-Lets load the scene. Open PADrend.
+## Load the scene
+Lets load the scene.
+Open PADrend.
 Go to the _file_ menu and choose _Load Scene..._.
 Select szene_1.minsg and hit _Confirm_.
 The scene will be loaded.
@@ -69,7 +87,7 @@ Scene \#0 is the empty scene that is created at the startup of PADrend.
 To switch between to another scene choose one form the list by clicking on it.
 You may have noticed the white triangle on the left beside each entry.
 Clicking on it will provide you with the meta information of the scene.
-This are for example the title of the scene and the author who created it. 
+This are for example the title of the scene and the author who created it.
 
 ![Switch between loaded scenes](figures/currently_loaded_scenes.png)
 
@@ -87,13 +105,13 @@ Experiment with the setting for the ground and the sky if you like to.
 # Navigation
 After we have loaded the scene let us start moving around a bit.
 Navigation in PADrend can be done in three different ways.
-You can use the keyboard, the mouse, a gamepad or a combination. 
+You can use the keyboard, the mouse, a gamepad or a combination.
 There is a complete keybindings overview in your PADrend directory under _PADrend/doc/Help.txt_.
 <!--TODO: add PADrend help here, when it has been developed-->
 
 ## Keyboard navigation
 * Use the keys [w], [a], [s] and [d] for moving forward, left, backward and right.
-  You will move in the direction of the camera. 
+  You will move in the direction of the camera.
   If the camera for example looks slightly down in an angle and you press [w] you will move down with this angle.
 * Use the keys [q] and [e] to rotate the camera.
 * Use the keys [r] and [f] to move the camera up and down.

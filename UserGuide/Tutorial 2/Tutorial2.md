@@ -1,6 +1,8 @@
-﻿<!------------------------------------------------------------------------------------------------
+<!------------------------------------------------------------------------------------------------
 This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
  To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.
+ Author: Florian Pieper (fpieper@mail.uni-paderborn.de)
+ PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
 
 # Goal of this tutorial
@@ -13,7 +15,7 @@ The image below shows you how it is about to look like in the end.
 # Assumption
 Tutorial 1 is finished.
 PADrend is opened and an empty scene is loaded.
-Infinite ground and dynamic sky are enabled. 
+Infinite ground and dynamic sky are enabled.
 
 # Adding toy blocks to the scene
 Before we start, first activate the toolbar by pressing [F2].
@@ -22,13 +24,13 @@ Activate the _Scene Editor Window_  by either using the _Scene Editor Window_ en
 
 ![Ready to go](figures/initial.png)
 
-You are faced with a window containing of two the two tabs _Object explorer_ and _ObjectPlacer_. 
+You are faced with a window containing of two the two tabs _Object explorer_ and _ObjectPlacer_.
 Right now we are only interested in the _ObjectPlacer_.
 Before we can add objects to the scene, we need to add them to the _ObjectPlacer_.
 
 ![The object placer](figures/obj_placer.png)
 
-Make sure the toy blocks files are located in PADrend's data folder.
+Make sure the toy blocks files (see [toy blocks](../models/ToyBlocks.zip)) are located in PADrend's data folder.
 In the _ObjectPlacer_ click on add library.
 In the dialog choose the location of the toy blocks and hit _Confirm_.
 
@@ -45,8 +47,8 @@ Add some more toy blocks to the scene (e.g. one of each kind) and close the _Sce
 
 ![Toy blocks placed on the ground](figures/toy_blocks.png)
 
-# Node selection 
-In PADrend parts of the geometry (e.g. a single tree) are seen to be nodes within a hierarchical scene-graph. 
+# Node selection
+In PADrend parts of the geometry (e.g. a single tree) are seen to be nodes within a hierarchical scene-graph.
 Nodes can be manipulated in different ways (e.g moving them or resizing them).
 
 You may have noticed that there is a white bounding box around the last node you have added.
@@ -58,7 +60,7 @@ Also a black description field will appear above the node.
 It provides you with information about the node.
 In our case you should see the instance of the node, the node type (here GeometryNode) and the number of triangles it consists of.
 If you want to select more than one node also hold down the shift key and click on another node.
-To unselect perform a right click on the scene and choose _Unselect all_ from the _Select Node_ context menu. 
+To unselect perform a right click on the scene and choose _Unselect all_ from the _Select Node_ context menu.
 Another way of selecting nodes via mouse is by using the selection tool.
 You can find the selection tool in the toolbar.
 
@@ -86,7 +88,7 @@ Let's start with the baseplate.
 Open the _Scene Editor_ and add two instances of _toyblock4_ to the scene.
 
 ## Snap moving tool
-To move nodes snapped to the ground you can use the snap moving tool. 
+To move nodes snapped to the ground you can use the snap moving tool.
 It has two modes which will be explained in the following.
 You can switch between them by opening the context menu and checking or unchecking _Snap geometry (slow)_ .
 Select one of the toy blocks and check _Snap geometry (slow)_.
@@ -102,14 +104,14 @@ If you now move the toy block towards the other one it will jump onto it.
 This may help you if you want to place a node on top of another one.
 The hight of the arrow restricts the hight of the lower node.
 If you click on the arrow and push it down the ground level will lower.
-   
+
 The second mode works in a different way.
 Uncheck _Snap geometry (slow)_ and you will be faced with an downwards pointing arrow.
 Click on it and move the mouse.
 This will again move the node.
 You may have noticed that the cone of the arrow is pretty wide.
 If you move the node towards another node it will start to move onto the node as soon as the cone touches the other node.
-When the tip of the cone is on top of the other node, the node will also be placed on top of it. 
+When the tip of the cone is on top of the other node, the node will also be placed on top of it.
 
 Let's get back to the baseplate of our house.
 Use the snap moving tool to place the toy blocks beside each other.
@@ -188,7 +190,7 @@ Drag out two instances of _toyblock2_ and place them at the left and right side 
 They are a bit to small to cover the whole roof area.
 So we need to scale them.
 Select one of the roofs and activate the scaling tool.
-You will be faced with some cones around the currently selected node. 
+You will be faced with some cones around the currently selected node.
 The cones show the direction of the scaling.
 When you for example choose the cone on the top of the node it will change its size to the top and also to the sides but its bottom stays on the ground.
 There are two cones at the corners of the bounding box that point towards the middle of the house and also point upwards in an angle.
