@@ -1,6 +1,8 @@
 <!------------------------------------------------------------------------------------------------
 This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
  To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.
+ Author: Florian Pieper (fpieper@mail.uni-paderborn.de)
+ PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
 
 # Goal of this tutorial
@@ -19,14 +21,14 @@ The toy block library of tutorial 2 is loaded.
 Before we can start with our animations, we first need to build the scene.
 The image below shows you how the scene should look like in the end.
 
-![The scene](figures/scene.png)	
+![The scene](figures/scene.png)
 
 ## Adding a ground plate
 We start with a ground plate for our scene.
 Open the object placer, go to _Basic object factories_ and place a _Geometry/Box_ on the ground.
 Give it a name like "GroundPlate".
 
-![Block placed](figures/ground_plate_start.png)	
+![Block placed](figures/ground_plate_start.png)
 
 You may have noticed that it is much to small for our purpose.
 But as mentioned in tutorial 3, functional objects are predefined objects that are already enriched with object traits.
@@ -38,7 +40,7 @@ You can also use the text fields besides the sliders to type in values.
 Enlarge the box so that it has a size of 10 units in x and y direction.
 Leave the size in y direction as it is.
 
-![Ground plate in correct size](figures/ground_plate_finished.png)	
+![Ground plate in correct size](figures/ground_plate_finished.png)
 
 ## Adding the animated object
 Next up we need a sphere which should be animated in the end.
@@ -118,13 +120,13 @@ Deactivate it and move it next to the sphere.
 Next up we need to build a link to the sphere.
 If you already have a link you need probably to change its role.
 The _TransformationProxy_ trait offers five link roles:
-  
+
 * _transform_: Apply the proxie's world transformations
 * _transformRel_: Apply the proxie's relative transformations
 * _transformSnap_: Snap lower center of target's bounding box to proxy's origin(rotation and position)
 * _transformSnapOffset_: Preserve the relative transformation between the proxy and the target
 * _transformSnapPos_: Snap lower center of target's bounding box to proxy's origin(only position)
-  
+
 Create a link with role _transformSnapOffset_ to the sphere, or update the role of an existing one.
 In order to apply the update you need to hit the _Set_ button at the link.
 If the transformation proxy has other links attached to it, remove them.
@@ -204,7 +206,7 @@ Search the _Physics_ plugin and activate it.
 Afterwards restart PADrend.
 
 ![The physics plugin](figures/activate_physics.png)
-  
+
 Lets first add physics to the ground plate.
 Open it in the object explorer and add a _Physics/CollisionShapeTrait_ to it.
 In this way the ground plate acts as a collision shape for other object, so that physic objects can not fall through it.

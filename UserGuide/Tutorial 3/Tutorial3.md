@@ -1,6 +1,8 @@
 <!------------------------------------------------------------------------------------------------
 This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
  To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.
+ Author: Florian Pieper (fpieper@mail.uni-paderborn.de)
+ PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
 
 # Goal of this tutorial
@@ -11,11 +13,11 @@ In the second part we will put a forklift into the scene and use an animation to
 # Assumption
 Tutorial 2 is finished.
 PADrend is opened and an empty scene is loaded.
-Infinite ground and dynamic sky are enabled. 
+Infinite ground and dynamic sky are enabled.
 
 # Preparing the scene
 Before we can start, we need to have an empty factory hall in our scene.
-Add library ... to the object placer just like you did it in Tutorial 2.
+Add the factory library (see [Fabrik](../models/Fabrik.zip)) to the object placer just like you did it in Tutorial 2.
 Open the object placer and position an instance of _HalleBackstein_ on the ground.
 Locate the factory hall in move inside.
 
@@ -52,7 +54,7 @@ In the end it should look like in the image below.
 
 Now that we have build our production line, we want it to become a semantic object.
 Select the four parts of the production line by using one of the object selection techniques.
-Group the selected objects in a common subtree as you did in the last tutorial. 
+Group the selected objects in a common subtree as you did in the last tutorial.
 You may notice that the newly established node has a black description field on it.
 
 ![The common subtrees root node](figures/common_root.png)
@@ -137,7 +139,7 @@ You may have noticed the three buttons underneath each key frame.
 	* Delete: Removes the key frame from the animation.
 You may have also noticed the text field at each key frame.
 Till now it seems to number the key frames, but it is actually used for timing.
-In our case the first key frame has the time 0, the second has the time 1. 
+In our case the first key frame has the time 0, the second has the time 1.
 This means that the first key frame is executed before the second and the animation between the two key frames lasts one unit of time.
 The length of a time unit can be influenced by the speed sliders of the key frame animation and the animator described later.
 If you set both to one, one time unit is equal to one second.
@@ -198,9 +200,9 @@ It has three traits:
 	* MetaObjectTrait: The motor is an meta object, so that it is only visible at layer \#3.
 	* GeometryBox: The motor is box shaped.
 	* ContinuousAnimator: As long as it is in play-state the motor drives animations.
-	
-![Simple motors traits](figures/simple_motor_object.png)	
-	
+
+![Simple motors traits](figures/simple_motor_object.png)
+
 Click on the _play_ button and the forklift will start moving around.
 To pause the animation use _pause_.
 To reset the animation press _stop_.

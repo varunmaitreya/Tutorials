@@ -1,3 +1,10 @@
+<!------------------------------------------------------------------------------------------------
+This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
+ To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.
+ Author: Henrik Heine (hheine@mail.uni-paderborn.de)
+ PADrend Version 1.0.0
+------------------------------------------------------------------------------------------------->
+
 # Goal of this tutorial
 This is a further tutorial on functional objects and moreover on runtime scripting and debugging. We want to modify parts of the scene via a debug script inside PADrend. This can be useful for exact positioning.
 
