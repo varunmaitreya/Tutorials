@@ -3,6 +3,7 @@
  * Platform for Algorithm Development and Rendering (PADrend).
  * Web page: http://www.padrend.de/
  * Copyright (C) 2016 Henrik Heine <hheine@mail.uni-paderborn.de>
+ * Copyright (C) 2016 Stanislaw Eppinger <eppinger@mail.uni-paderborn.de>
  * 
  * PADrend consists of an open source part and a proprietary part.
  * The open source part of PADrend is subject to the terms of the Mozilla
