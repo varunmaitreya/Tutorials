@@ -15,10 +15,10 @@
 static Vec2 = Geometry.Vec2;
 static Vec3 = Geometry.Vec3;
 
-var buildMesh = fn() {
+var buildMesh = fn(r, g, b, a) {
 	// First we build a simple Mesh, consisting of a single quad
 	var mb = new Rendering.MeshBuilder();
-	mb.color(new Util.Color4f(1,0,1,0.5));
+	mb.color(new Util.Color4f(r,g,b,a));
 	// Vertex 0:
 	mb.position(new Vec3(0,0,0));
 	mb.texCoord0(new Vec2(0,1));
@@ -45,43 +45,21 @@ var buildMesh = fn() {
 	return mb.buildMesh();
 };
 
-// build GeometryNode with corresponding mesh
-var geo = new MinSG.GeometryNode(buildMesh());
-// create chess texture of size 1024*1024, with tiles of side length 64
-var chess = Rendering.createChessTexture(1024, 1024, 64);
-// create new TextureState
-var texState = new MinSG.TextureState(chess);
-// you could also set the TextureUnit:
-texState.setTextureUnit(0); // only needed if you add more than one texture though...
-// add state to node
-geo += texState;
+// Build GeometryNode with corresponding mesh
+var geo = new MinSG.GeometryNode(buildMesh(1,0,0,0.5));
+var geo2 = new MinSG.GeometryNode(buildMesh(0,1,0,0.3));
+var geo3 = new MinSG.GeometryNode(buildMesh(0,0,1,0.2));
 
-var vertexShaderCode = "
-void main(void) {
-	gl_TexCoord[0] = gl_MultiTexCoord0;
-	gl_Position = ftransform();
-}
-";
-var fragmentShaderCode = "
-uniform sampler2D chessTexture;
-
-void main(void) {
-	vec2 uv = gl_TexCoord[0].st;
-	vec4 result = texture2D(chessTexture, uv);
-	result.r *= uv.s;
-	result.g *= uv.t;
-	gl_FragColor = result;
-}
-";
-var shader = Rendering.Shader.createShader(vertexShaderCode, fragmentShaderCode);
-var shaderState = new MinSG.ShaderState(shader);
-// our chess texture is bound to texture unit 0
-shaderState.setUniform("chessTexture", Rendering.Uniform.INT, [0]);
-geo += shaderState;
+geo2.moveLocal(new Geometry.Vec3(0, 0, -3));
+geo3.moveLocal(new Geometry.Vec3(0, 0, -6));
 
 
-// create new scene and add node to it
+// Create new scene and add node to it
 var sceneNode = new MinSG.ListNode();
+sceneNode += new MinSG.AlphaTestState();
+sceneNode += new MinSG.TransparencyRenderer();
 sceneNode += geo;
+sceneNode += geo2;
+sceneNode += geo3;
 PADrend.registerScene(sceneNode);
 PADrend.selectScene(sceneNode);
