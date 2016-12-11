@@ -29,6 +29,7 @@ The class of last type of nodes we need is _GeometryNode_.
 A geometry node is capable of holding a mesh which is displayed when the node is traversed by the renderer.
 Geometry nodes are leaf nodes in the scene graph.
 In the following you will the most important methods of the different nodes.
+
 ### MinSG.Node
 
 * `display(FrameContext[,Flags|RenderingParameter])` : Displays a node using a frame context. The rendering parameters are optional.
@@ -37,98 +38,98 @@ In the following you will the most important methods of the different nodes.
 * `isActive()` : Returns _true_ if the node is active, _false_ elsewise.
 * `hasParent()` : Returns _true_ if the node has a parent node (e.g. it is not the root node), _false_ elsewise.
 * `getParent()` : Returns the parent node, if it exists.
-* `getWorldBB()` : Returns the nodes bounding box ins world coordinates.
-* `getBB()` : Returns the nodes bounding box.
+* `getWorldBB()` : Returns the node’s bounding box ins world coordinates.
+* `getBB()` : Returns the node’s bounding box.
 * `hasFixedBB()` : Returns _true_ if the node has a fixed bounding box.
 * `removeFixedBB()` : Removes a fixed bounding box from a node.
-* `setFixedBB()` : Sets a fixed bounding box to a node. Normaly the bounding box would adapt to the nodes size. In some cases it can be useful to set a fixed one.
+* `setFixedBB()` : Sets a fixed bounding box to a node. Normally the bounding box would adapt to the node’s size. In some cases it can be useful to set a fixed one.
 
 
 * `hasTransformation()` : Returns _true_ if a transformation is set to the node, _false_ elsewise.
 * `getWorldTransformationMatrix()` : Returns the transformation matrix (4x4) node->world.
-* `getWorldTransformationSRT()` : Retuns the transformation matrix node->world as SRT-object.
+* `getWorldTransformationSRT()` : Returns the transformation matrix node->world as SRT-object.
 * `getWorldToLocalMatrix()` : Returns the transformation matrix (4x4) world->node.
 * `setWorldTransformation(SRT)` Sets the node->world transformation matrix. Matrix is passed as SRT-object.
-* `hasRelTransformationSRT()` :
-* `setRelTransformation(Matrix4x4|SRT)` :
-* `getRelTransformationMatrix()` :
-* `getRelTransformationSRT()` :
+* `hasRelTransformationSRT()` : Returns _true_ if a relative transformation is set to the node, _false_ elsewise.
+* `setRelTransformation(Matrix4x4|SRT)` : Sets the node->parent node transformation matrix. Matrix is passed as SRT-object or Matrix4x4.
+* `getRelTransformationMatrix()` :  Returns the relative transformation matrix (4x4). The transformation is relative to the parent node’s coordinate system.
+* `getRelTransformationSRT()` : Returns the relative transformation matrix as SRT-object. The transformation is relative to the parent node’s coordinate system.
 
 * `isTransformationObserved()` : Returns _true_ if a transformation observer is set to the node, _false_ elsewise.
-* `getRenderingLayers()` : Returns a bit mask, represesenting the rendering layers this node is visible on.
-* `setRenderingLayers(Number)` : Setting a bit mask, represesenting the rendering layers the node is visible on.
+* `getRenderingLayers()` : Returns a bit mask, representing the rendering layers this node is visible on.
+* `setRenderingLayers(Number)` : Setting a bit mask, representing the rendering layers the node is visible on.
 * `testRenderingLayer(Number)` : Returns _true_ if the node is visible for the passed bit mask, _false_ elsewise.
 
 * `removeStates()` : Removes all states from a node.
-* `hasStates()` : Returns _true_ if the node contains states, _false_ oterwise.
+* `hasStates()` : Returns _true_ if the node contains states, _false_ otherwise.
 * `addState(State)` : Adds the passed state to the node.
 * `removeState(State)` : Removes the passed state from the node.
 * `getStates()` : Returns a list containing all states.
 
-* `moveRel(Vec3 | (x,y,z))` :
+* `moveRel(Vec3 | (x,y,z))` : Moves the node by a vector relative to the parent node's coordinate system. The vector can be passed by a _Geometry.Vec3_ or three values for x, y and z.
 * `moveLocal(Vec3 | (x,y,z))` : Moves the node by a vector in its own coordinate system. The vector can be passed by a _Geometry.Vec3_ or three values for x, y and z.
-* `setRelRotation(Vec3 dir,Vec3 up)` :
-* `resetRelTransformation()` :
-* `rotateRel_rad(float angle, (Vec3|x,y,z))` :
-* `rotateRel_deg(float deg, (Vec3|x,y,z))` :
+* `setRelRotation(Vec3 dir,Vec3 up)` : Sets the node's rotation relative to the parent node's coordinate system. The rotation is passed by a direction and a up vector. Both are passed as _Geometry.Vec3_.
+* `resetRelTransformation()` : Resets the relative transformation.
+* `rotateRel_rad(float angle, (Vec3|x,y,z))` : Rotates the node relative to the parent node's coordinate system by an angle around some axis. The angle is passed as float value in radians, the axis is passed by a _Geometry.Vec3_ or three values for x, y and z.
+* `rotateRel_deg(float deg, (Vec3|x,y,z))` :  Rotates the node relative to the parent node's coordinate system by an angle around some axis. The angle is passed as float value in degrees, the axis is passed by a _Geometry.Vec3_ or three values for x, y and z.
 * `rotateLocal_rad(float angle, (Vec3|x,y,z))` : Rotates the node in its own coordinate system by an angle around some axis. The angle is passed as float value in radians, the axis is passed by a _Geometry.Vec3_ or three values for x, y and z.
 * `rotateLocal_deg(float deg, (Vec3|x,y,z))` : Rotates the node in its own coordinate system by an angle around some axis. The angle is passed as float value in degrees, the axis is passed by a _Geometry.Vec3_ or three values for x, y and z.
-* `getWorldOrigin()` : Returns the nodes origin within in world coordinates.
-* `setWorldOrigin(Vec3)` : Sets the nodes origin within in world coordinates. The origin is passed as _Geometry.Vec3_.
-* `getRelOrigin()` :
-* `getRelPosition()` :
-* `setRelOrigin(Vec3)` :
-* `setRelPosition(Vec3)` :
-* `rotateToWorldDir(Vec3 dir)` : Rotatates the node to allign with a direction vector given in world coordinates. The Vector is passed as _Geometry.Vec3_.
-* `setRelScaling(number)`
+* `getWorldOrigin()` : Returns the node’s origin within in world coordinates.
+* `setWorldOrigin(Vec3)` : Sets the node’s origin within in world coordinates. The origin is passed as _Geometry.Vec3_.
+* `getRelOrigin()` : Returns the node's origin relative to the parent node's coordinate system.
+* `getRelPosition()` : Returns the node's position relative to the parent node's coordinate system.
+* `setRelOrigin(Vec3)` : Sets the node's origin relative to the parent node's coordinate system.
+* `setRelPosition(Vec3)` : Sets the node's position relative to the parent node's coordinate system.
+* `rotateToWorldDir(Vec3 dir)` : Rotates the node to align with a direction vector given in world coordinates. The Vector is passed as _Geometry.Vec3_.
+* `setRelScaling(number)` : Sets the scaling of the node relative to the parent node's coordinate system.
 * `scale(number)` : Sets the scaling of the node.
-* `getRelScaling()` :
+* `getRelScaling()` : Returns the relative scaling of the node.
 
 * `findNodeAttribute(string key)` : Returns the node's attribute with the given key, if it is available; otherwise, if the node's prototype is available and has the attribute, it is taken from there.
 * `getNodeAttributes()` : Returns all node attributes as a map.
 * `getNodeAttribute(string key)` : Returns a node's attribute with a given key.
-* `isNodeAttributeSet(string key)` : Retunrs _true_ if a node's attribute is set.
+* `isNodeAttributeSet(string key)` : Returns _true_ if a node's attribute is set.
 * `removeNodeAttributes()` : Removes all attributes from a node.
 * `setNodeAttribute(string key,value)` : Sets a node's attribute. The attribute needs to be addressed by a key.
 * `unsetNodeAttribute(string key)` : Unsets a node's attribute, addressed by a key.
 * `isClosed()` : Returns _true_ if the node (and its subtrees) represent an individually rendered object.
 * `setClosed(bool closed)` : Closes / Opens a node. If a node is closed the node (and its subtree) represent an individually rendered object.
 * `isTempNode()` : Returns _true_ if the node is not saved.
-* `setTempNode(bool)` : Sets the node to be temporaly.
-* `localDirToWorldDir(Vec3)` : Tranforms a direction passed in local coordinates into world coordinates.
-* `localDirToRelDir(Vec3)` :
-* `localPosToWorldPos(Vec3)` : Tranforms a position passed in local coordinates into world coordinates.
-* `localPosToRelPos(Vec3)` :
-* `relDirToWorldDir(Vec3)` :
-* `relDirToLocalDir(Vec3)` :
-* `relPosToWorldPos(Vec3)` :
-* `relPosToLocalPos(Vec3)` :
-* `worldDirToLocalDir(Vec3)` : Tranforms a direction passed in world coordinates into local coordinates.
-* `worldDirToRelDir(Vec3)` :
-* `worldPosToLocalPos(Vec3)` :  Tranforms a position passed in world coordinates into local coordinates.
-* `worldPosToRelPos(Vec3)` :
-* `rotateAroundLocalAxis_deg(Number,Line3)` : Rotatates the node by a angle, passed in degrees, arround an axis, passed in local coordinates.
-* `rotateAroundLocalAxis_rad(Number,Line3)` : Rotatates the node by a angle, passed in radians, arround an axis, passed in local coordinates.
-* `rotateAroundRelAxis_deg(Number,Line3)` :
-* `rotateAroundRelAxis_rad(Number,Line3)` :
-* `rotateAroundWorldAxis_deg(Number,Line3)` : Rotatates the node by a angle, passed in degrees, arround an axis, passed in world coordinates.
-* `rotateAroundWorldAxis_rad(Number,Line3)` : Rotatates the node by a angle, passed in radians, arround an axis, passed in world coordinates.
+* `setTempNode(bool)` : Sets the node to be temporally.
+* `localDirToWorldDir(Vec3)` : Transforms a direction passed in local coordinates into world coordinates.
+* `localDirToRelDir(Vec3)` : Transforms a direction passed in local coordinates into relative coordinates (relative to the parent node's coordinate system).
+* `localPosToWorldPos(Vec3)` : Transforms a position passed in local coordinates into world coordinates.
+* `localPosToRelPos(Vec3)` : Transforms a position passed in local coordinates into relative coordinates.
+* `relDirToWorldDir(Vec3)` : Transforms a direction passed in relative coordinates into world coordinates.
+* `relDirToLocalDir(Vec3)` : Transforms a direction passed in relative coordinates into local coordinates.
+* `relPosToWorldPos(Vec3)` : Transforms a position passed in relative coordinates into world coordinates.
+* `relPosToLocalPos(Vec3)` : Transforms a position passed in relative coordinates into local coordinates.
+* `worldDirToLocalDir(Vec3)` : Transforms a direction passed in world coordinates into local coordinates.
+* `worldDirToRelDir(Vec3)` : Transforms a direction passed in world coordinates into relative coordinates.
+* `worldPosToLocalPos(Vec3)` :  Transforms a position passed in world coordinates into local coordinates.
+* `worldPosToRelPos(Vec3)` : Transforms a position passed in world coordinates into relative coordinates.
+* `rotateAroundLocalAxis_deg(Number,Line3)` : Rotates the node by a angle, passed in degrees, arround an axis, passed in local coordinates.
+* `rotateAroundLocalAxis_rad(Number,Line3)` : Rotates the node by a angle, passed in radians, arround an axis, passed in local coordinates.
+* `rotateAroundRelAxis_deg(Number,Line3)` : Rotates the node by a angle, passed in degrees, arround an axis, passed in relative coordinates.
+* `rotateAroundRelAxis_rad(Number,Line3)` : Rotates the node by a angle, passed in radians, arround an axis, passed in local coordinates.
+* `rotateAroundWorldAxis_deg(Number,Line3)` : Rotates the node by a angle, passed in degrees, arround an axis, passed in world coordinates.
+* `rotateAroundWorldAxis_rad(Number,Line3)` : Rotates the node by a angle, passed in radians, arround an axis, passed in world coordinates.
 
 ### MinSG.ListNode
 Some of the methods are inherited from _GroupNode_.
 * `addChild(MinSGNode child)` : Appends a child to the node.
-* `countChildren()` : Returns the number of the nodes children.
+* `countChildren()` : Returns the number of the node’s children.
 * `removeChild(MinSGNode child)` : Removes the passed child from the node.
-* `getChild(int index)` : Retunrs the child, addressed by an index.
+* `getChild(int index)` : Returns the child, addressed by an index.
 
 ### MinSG.GeometryNode
 * `new MinSG.GeometryNode([Mesh])` : Constructor. Creates a new _GeometryNode_ and sets the passed mesh to it.
-* `getGraphicsMemoryUsage()` : Retunrs the amount of memory the node occupies on the graphics card.
-* `getMainMemoryUsage()` : Retunrs the amount of main memory the node occupies.
-* `getMesh()` : Retunrs the mesh that is set to the node.
-* `getTriangleCount()` : Retunrs the number of trinangles the nodes mesh contains of.
-* `getVertexCount()` : Retunrs the number of vertices the nodes mesh contains of.
-* `hasMesh()` : Retunrs _true_ if the node contains a mesh, _false_ elsewise.
+* `getGraphicsMemoryUsage()` : Returns the amount of memory the node occupies on the graphics card.
+* `getMainMemoryUsage()` : Returns the amount of main memory the node occupies.
+* `getMesh()` : Returns the mesh that is set to the node.
+* `getTriangleCount()` : Returns the number of triangles the node’s mesh contains of.
+* `getVertexCount()` : Returns the number of vertices the node’s mesh contains of.
+* `hasMesh()` : Returns _true_ if the node contains a mesh, _false_ elsewise.
 * `setMesh(mesh)` : Sets a mesh to the node.
 
 ## Creating a simple scene graph
@@ -143,11 +144,11 @@ It is not important to understand the mesh creation, since it will be the main t
     //building nodes
     var rootNode = new MinSG.ListNode();
     var listNode = new MinSG.ListNode();
-    
+
     var mesh1 = Rendering.MeshBuilder.createBox(new Geometry.Box(-2, 0, 0, 1, 1, 1));
     var mesh2 = Rendering.MeshBuilder.createBox(new Geometry.Box(2, 0, 0, 1, 1, 1));
     var mesh3 = Rendering.MeshBuilder.createBox(new Geometry.Box(0, 0, -2, 1, 1, 1));
-    
+
     var geometryNode1 = new MinSG.GeometryNode(mesh1);
     var geometryNode2 = new MinSG.GeometryNode(mesh2);
     var geometryNode3 = new MinSG.GeometryNode(mesh3);
@@ -171,7 +172,7 @@ Afterwards the two other geometry nodes are connected to the list node.
     //Building the scene graph
     rootNode.addChild(geometryNode1);
     rootNode.addChild(listNode);
-    
+
     listNode += geometryNode2;
     listNode += geometryNode3;
 <!---END_CODESECTION--->
@@ -186,7 +187,7 @@ This id's will show up in the _Node Editor_ and can help identifying specific no
     //giving nodes a unique id
     PADrend.getSceneManager().registerNode("root", rootNode);
     PADrend.getSceneManager().registerNode("some_list_node", listNode);
-    
+
     PADrend.getSceneManager().registerNode("geometry_node_1", geometryNode1);
     PADrend.getSceneManager().registerNode("geometry_node_2", geometryNode2);
     PADrend.getSceneManager().registerNode("geometry_node_3", geometryNode3);
@@ -255,5 +256,3 @@ The scenes geometry will now be displayed.
 You can use PADrend's _Main_-window to check the structure of the scene graph.
 
 ![Main window showing the scenes structure](main_window.png)
-
-
