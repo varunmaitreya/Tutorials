@@ -71,8 +71,8 @@ This example will use the `execute` function to simply render a quad using the g
 <!---Automaticly generated section. Do not edit!!!--->
     var vertexShaderCode = "
     void main(void){
-    	gl_TexCoord[0] = gl_MultiTexCoord0;
-    	gl_Position = ftransform();
+        gl_TexCoord[0] = gl_MultiTexCoord0;
+        gl_Position = ftransform();
     }";
 <!---END_CODESECTION--->
 
@@ -85,10 +85,10 @@ The fragment shader is of course more complex and depends on your goal. In this 
     #version 120
     uniform sampler2D uTexture;
     void main(void) {
-    	vec2 uv = gl_TexCoord[0].st;
-    	vec4 color = texture2D(uTexture, uv);
-    	color.rgb = 1 - abs(2 * color.rgb - 1);
-    	gl_FragColor = color;
+        vec2 uv = gl_TexCoord[0].st;
+        vec4 color = texture2D(uTexture, uv);
+        color.rgb = 1 - abs(2 * color.rgb - 1);
+        gl_FragColor = color;
     }
     ";
 <!---END_CODESECTION--->
@@ -113,10 +113,10 @@ Afterwards we just execute the `TextureProcessor` and save the result:
 <!---Automaticly generated section. Do not edit!!!--->
     // create and execute TextureProcessor
     (new TextureProcessor)
-    	.setInputTextures([input])
-    	.setOutputTexture(output)
-    	.setShader(shader)
-    	.execute();
+        .setInputTextures([input])
+        .setOutputTexture(output)
+        .setShader(shader)
+        .execute();
     
     // just save the result to the filesystem
     Rendering.saveTexture(renderingContext, output, "presets/output.png");
@@ -156,25 +156,25 @@ The vertex shader is still the same, but the fragment shader is now a bit more c
     // 1 2 1	
     // sum = 16
     const float kernel[KERNEL_SIZE] = { 
-    	1.0/16.0, 2.0/16.0, 1.0/16.0,
-    	2.0/16.0, 4.0/16.0, 2.0/16.0,
-    	1.0/16.0, 2.0/16.0, 1.0/16.0 
+        1.0/16.0, 2.0/16.0, 1.0/16.0,
+        2.0/16.0, 4.0/16.0, 2.0/16.0,
+        1.0/16.0, 2.0/16.0, 1.0/16.0 
     };
     
     const vec2 offset[KERNEL_SIZE] = { 
-    	vec2(-step_w, -step_h), vec2(0.0, -step_h), vec2(step_w, -step_h), 
-    	vec2(-step_w, 0.0), vec2(0.0, 0.0), vec2(step_w, 0.0), 
-    	vec2(-step_w, step_h), vec2(0.0, step_h), vec2(step_w, step_h) 
+        vec2(-step_w, -step_h), vec2(0.0, -step_h), vec2(step_w, -step_h), 
+        vec2(-step_w, 0.0), vec2(0.0, 0.0), vec2(step_w, 0.0), 
+        vec2(-step_w, step_h), vec2(0.0, step_h), vec2(step_w, step_h) 
     };
     
     void main(void) {
-    	vec2 uv = gl_TexCoord[0].st;
-    	vec4 sum = vec4(0.0);
-    	for(int i = 0; i < KERNEL_SIZE; i++) {
-    		vec4 tmp = texture2D(uImage, uv + offset[i]);
-    		sum += tmp * kernel[i];
-    	}
-    	gl_FragColor = sum;
+        vec2 uv = gl_TexCoord[0].st;
+        vec4 sum = vec4(0.0);
+        for(int i = 0; i < KERNEL_SIZE; i++) {
+            vec4 tmp = texture2D(uImage, uv + offset[i]);
+            sum += tmp * kernel[i];
+        }
+        gl_FragColor = sum;
     }
     ";
 <!---END_CODESECTION--->
@@ -224,5 +224,8 @@ And now you get:
 
 ![PADrend Icon](PADrendIcon.png)
 ![Output texture](edgeDetection.png)
+
+
+
 
 

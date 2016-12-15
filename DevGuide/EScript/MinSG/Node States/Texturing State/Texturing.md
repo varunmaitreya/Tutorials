@@ -26,33 +26,33 @@ In this simple example we construct a simple quad mesh and add a chess pattern t
     static Vec3 = Geometry.Vec3;
     
     var buildMesh = fn() {
-    	// First we build a simple Mesh, consisting of a single quad
-    	var mb = new Rendering.MeshBuilder();
-    	mb.color(new Util.Color4f(1,1,1,1));
-    	// Vertex 0:
-    	mb.position(new Vec3(0,0,0));
-    	mb.texCoord0(new Vec2(0,1));
-    	mb.addVertex();
+        // First we build a simple Mesh, consisting of a single quad
+        var mb = new Rendering.MeshBuilder();
+        mb.color(new Util.Color4f(1,1,1,1));
+        // Vertex 0:
+        mb.position(new Vec3(0,0,0));
+        mb.texCoord0(new Vec2(0,1));
+        mb.addVertex();
     
-    	// Vertex 1:
-    	mb.position(new Vec3(10,0,0));
-    	mb.texCoord0(new Vec2(1,1));
-    	mb.addVertex();
+        // Vertex 1:
+        mb.position(new Vec3(10,0,0));
+        mb.texCoord0(new Vec2(1,1));
+        mb.addVertex();
     
-    	// Vertex 2:
-    	mb.position(new Vec3(10,10,0));
-    	mb.texCoord0(new Vec2(1,0));
-    	mb.addVertex();
+        // Vertex 2:
+        mb.position(new Vec3(10,10,0));
+        mb.texCoord0(new Vec2(1,0));
+        mb.addVertex();
     
-    	// Vertex 3:
-    	mb.position(new Vec3(0,10,0));
-    	mb.texCoord0(new Vec2(0,0));
-    	mb.addVertex();
+        // Vertex 3:
+        mb.position(new Vec3(0,10,0));
+        mb.texCoord0(new Vec2(0,0));
+        mb.addVertex();
     
-    	// create quad
-    	mb.addQuad(0,1,2,3);
-    	// return mesh
-    	return mb.buildMesh();
+        // create quad
+        mb.addQuad(0,1,2,3);
+        // return mesh
+        return mb.buildMesh();
     };
     
     // build GeometryNode with corresponding mesh
@@ -91,5 +91,8 @@ var chess = Rendering.createChessTexture(1024, 1024, 64);
 The first two arguments specify the size of the texture and the last argument specifies the side length of a single chess tile. Afterwards we create a new texture state.
 
 Now we could change the texture unit of this state, by using `setTextureUnit(unit)`. The default shader will only use texture unit 0, but if you provide an own shader, you could of course use all texture units.
+
+
+
 
 

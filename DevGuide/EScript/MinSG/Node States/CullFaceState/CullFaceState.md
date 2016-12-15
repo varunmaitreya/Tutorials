@@ -31,11 +31,11 @@ The color and the position of a square are passed by two parameters.
 <!---INCLUDE src=CullFaceState.escript, start=37, end=41--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-     //creating four squares, each having an unique color
-     var node1 = createNodeWithRect(new Util.Color4f(1, 0, 0, 1), -3.5);
-     var node2 = createNodeWithRect(new Util.Color4f(0, 1, 0, 1), -1.5);
-     var node3 = createNodeWithRect(new Util.Color4f(0, 0, 1, 1), 0.5);
-     var node4 = createNodeWithRect(new Util.Color4f(1, 1, 0, 1), 2.5);
+    //creating four squares, each having an unique color
+    var node1 = createNodeWithRect(new Util.Color4f(1, 0, 0, 1), -3.5);
+    var node2 = createNodeWithRect(new Util.Color4f(0, 1, 0, 1), -1.5);
+    var node3 = createNodeWithRect(new Util.Color4f(0, 0, 1, 1), 0.5);
+    var node4 = createNodeWithRect(new Util.Color4f(1, 1, 0, 1), 2.5);
 <!---END_CODESECTION--->
 
 Next up we create four culling states.
@@ -48,16 +48,16 @@ There are three cull modes which can be found in the namespace _Rendering_:
 <!---INCLUDE src=CullFaceState.escript, start=43, end=52--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-     //different culling states
-     //enable back face culling
-     var stateCullBack = new MinSG.CullFaceState();
-     stateCullBack.setCullMode(Rendering.CULL_BACK);
-     //enable front face culling
-     var stateCullFront = new MinSG.CullFaceState();
-     stateCullFront.setCullMode(Rendering.CULL_FRONT);
-      //enable front and back face culling
-     var stateCullBoth = new MinSG.CullFaceState();
-     stateCullBoth.setCullMode(Rendering.CULL_FRONT_AND_BACK);
+    //different culling states
+    //enable back face culling
+    var stateCullBack = new MinSG.CullFaceState();
+    stateCullBack.setCullMode(Rendering.CULL_BACK);
+    //enable front face culling
+    var stateCullFront = new MinSG.CullFaceState();
+    stateCullFront.setCullMode(Rendering.CULL_FRONT);
+     //enable front and back face culling
+    var stateCullBoth = new MinSG.CullFaceState();
+    stateCullBoth.setCullMode(Rendering.CULL_FRONT_AND_BACK);
 <!---END_CODESECTION--->
 
 To deactivate culling we create a cull state and call the method _setCullingEnabled_.
@@ -66,9 +66,9 @@ We pass _false_ to it.
 <!---INCLUDE src=CullFaceState.escript, start=53, end=55--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-     //disable culling
-     var stateCullingOff = new MinSG.CullFaceState();
-     stateCullingOff.setCullingEnabled(false);
+    //disable culling
+    var stateCullingOff = new MinSG.CullFaceState();
+    stateCullingOff.setCullingEnabled(false);
 <!---END_CODESECTION--->
 
 Next up we add the states to the geometry nodes.
@@ -76,11 +76,11 @@ Next up we add the states to the geometry nodes.
 <!---INCLUDE src=CullFaceState.escript, start=57, end=61--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-     //adding the states to the nodes
-     node1.addState(stateCullBack);
-     node2.addState(stateCullFront);
-     node3.addState(stateCullBoth);
-     node4.addState(stateCullingOff);
+    //adding the states to the nodes
+    node1.addState(stateCullBack);
+    node2.addState(stateCullFront);
+    node3.addState(stateCullBoth);
+    node4.addState(stateCullingOff);
 <!---END_CODESECTION--->
 
 In a last step the scene graph is build and the scene gets activated.
@@ -95,3 +95,6 @@ Since we used back and front face culling on the blue square, it can not be seen
 ![Front side](front_side.png)
 
 ![Back side](back_side.png)
+
+
+

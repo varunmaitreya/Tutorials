@@ -17,10 +17,31 @@ In this example we will create two cubes and attach our own NodeRendererState wh
 First of all we create the cubes and displace one.
 
 <!---INCLUDE src=NodeRendererState.escript, start=15, end=16--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    var cube1 = new MinSG.GeometryNode(Rendering.MeshBuilder.createBox(new Geometry.Box(0,0,0,1,1,1)));
+    var cube2 = new MinSG.GeometryNode(Rendering.MeshBuilder.createBox(new Geometry.Box(0,0,0,1,1,1)));
+<!---END_CODESECTION--->
 
 Now we create our own NodeRendererState and overload the `displayNode` method.
 
 <!---INCLUDE src=NodeRendererState.escript, start=20, end=32--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    //Create our own NodeRenderer and overload the displayNode method
+    var MyRendererState = new Type(MinSG.ScriptedNodeRendererState);
+    MyRendererState.displayNode @(override) ::= fn(node, rp){
+        
+        if(Rand.equilikely(0,10)>5){
+            // Both lines are creating the same flickering effect
+            // node.display(frameContext);
+            return MinSG.FrameContext.PASS_ON;
+        }
+        return MinSG.FrameContext.NODE_HANDLED;
+        
+    };
+    var flickerRenderer = new MyRendererState(return MinSG.FrameContext.APPROXMATION_CHANNEL);
+<!---END_CODESECTION--->
 
 The method has two parameters: `(Node owner, RenderParam params)`. The `node` parameter is the node on which the method is called and `param` contains further information about the rendering, e.g. the current rendering channel in which this node is in.  
 Our `displayNode()` method creates a random number between 0 and 10. If it's higher than 5 than we return `MinSG.FrameContext.PASS_ON` which means that we pass the further rendering of the node to the node itself, i.e. the node calls its `display()` method afterwards. If it's lower or equal than 5 then we return `MinSG.FrameContext.NODE_HANDLED` which means that the rendering of the node has been handled and the `display()` method of the node will not be called afterwards.  
@@ -29,6 +50,16 @@ Note that we also could have called `node.display(frameContext)` instead of retu
 At the end of the example we are creating the list node and adding our cubes and NoderRendererState to it. 
 
 <!---INCLUDE src=NodeRendererState.escript, start=35, end=41--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    // Create new scene and add the flickerRenderer and the cubes to it
+    var sceneNode = new MinSG.ListNode();
+    sceneNode += flickerRenderer;
+    sceneNode += cube1;
+    sceneNode += cube2;
+    PADrend.registerScene(sceneNode);
+    PADrend.selectScene(sceneNode);
+<!---END_CODESECTION--->
 
 The resulting effect is that the cubes will start flickering. Note that both cubes are flickering because our renderer traverses the whole subtree of the list node and calls our overloaded `displayNode()` on every descendent node.
 
@@ -39,5 +70,8 @@ We could also assign our renderer to the approximation channel. To do that we cr
 ```
 
 Now our renderer will only consider nodes which are in this rendering channel. Try it out and you will see that the cubes are not flickering anymore because they are assigned to the default channel by default.
+
+
+
 
 

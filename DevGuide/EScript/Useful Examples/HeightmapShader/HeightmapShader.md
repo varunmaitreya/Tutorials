@@ -16,20 +16,20 @@ First of all, we define a simple function, which will create a regular grid:
 <!---Automaticly generated section. Do not edit!!!--->
     // creates a regular grid of the size width*height. Each single grid cell has a size of tileSize*tileSize
     var makeGrid = fn(Number width, Number height, Number tileSize = 1) {
-    	var xTiles = width / tileSize; // number of tiles in x direction
-    	var mb = new Rendering.MeshBuilder();
-    	mb.color(new Util.Color4f(1, 1, 1, 1));
-    	for(var y=0; y<height; y+=tileSize) {
-    		for(var x=0; x<width; x+=tileSize) {
-    			mb.position(new Vec3(x * tileSize, 0, y * tileSize));
-    			mb.texCoord0(new Vec2(x / width, y / height));
-    			var id = mb.addVertex();
-    			if(x > 0 && y > 0) {
-    				mb.addQuad(id, id - xTiles, id - xTiles - 1, id - 1);
-    			}
-    		}
-    	}
-    	return mb.buildMesh();
+        var xTiles = width / tileSize; // number of tiles in x direction
+        var mb = new Rendering.MeshBuilder();
+        mb.color(new Util.Color4f(1, 1, 1, 1));
+        for(var y=0; y<height; y+=tileSize) {
+            for(var x=0; x<width; x+=tileSize) {
+                mb.position(new Vec3(x * tileSize, 0, y * tileSize));
+                mb.texCoord0(new Vec2(x / width, y / height));
+                var id = mb.addVertex();
+                if(x > 0 && y > 0) {
+                    mb.addQuad(id, id - xTiles, id - xTiles - 1, id - 1);
+                }
+            }
+        }
+        return mb.buildMesh();
     };
 <!---END_CODESECTION--->
 
@@ -48,12 +48,12 @@ The vertex shader looks like this:
     varying float height;
     
     void main(void) {
-    	normalizedHeight = texture2D(heightmap, gl_MultiTexCoord0.st).r;
-    	height = offset + scale * normalizedHeight;
-    	gl_TexCoord[0] = gl_MultiTexCoord0;
-    	vec4 pos = ftransform();
-    	pos.y += height;
-    	gl_Position = pos;
+        normalizedHeight = texture2D(heightmap, gl_MultiTexCoord0.st).r;
+        height = offset + scale * normalizedHeight;
+        gl_TexCoord[0] = gl_MultiTexCoord0;
+        vec4 pos = ftransform();
+        pos.y += height;
+        gl_Position = pos;
     }
     ";
 <!---END_CODESECTION--->
@@ -69,7 +69,7 @@ The fragment shader is a bit shorter:
     varying float height;
     
     void main(void) {
-    	gl_FragColor = vec4(normalizedHeight, normalizedHeight, normalizedHeight, 1);
+        gl_FragColor = vec4(normalizedHeight, normalizedHeight, normalizedHeight, 1);
     }
     ";
 <!---END_CODESECTION--->
@@ -78,5 +78,8 @@ Here we just set the color based on the height of each fragment.
 
 The final result looks like this:
 ![Heightmap](Heightmap.jpg)
+
+
+
 
 

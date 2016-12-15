@@ -45,27 +45,27 @@ Server side:
     
     var server = TCPServer.create(8080);
     if(!server) {
-    	outln("Failed to start server");
-    	return;
+        outln("Failed to start server");
+        return;
     }
     
     var count = 0;
     var client;
     while(!client) {
-    	outln("Waiting for client");
-    	Util.sleep(1000); // wait one second
-    	client = server.getIncomingConnection();
-    	if(count++ == 10) {
-    		outln("Timeout!");
-    		server.close(); // never forget to close!
-    		return;
-    	}
+        outln("Waiting for client");
+        Util.sleep(1000); // wait one second
+        client = server.getIncomingConnection();
+        if(count++ == 10) {
+            outln("Timeout!");
+            server.close(); // never forget to close!
+            return;
+        }
     }
     
     // client is connected, now we just respond
     var data;
     while(!data) {
-    	data = client.receiveString();
+        data = client.receiveString();
     }
     outln("Received: ", data);
     client.sendString("Pong");
@@ -83,14 +83,14 @@ Client side:
     
     var client = TCPConnection.connect("127.0.0.1", 8080);
     if(!client) {
-    	outln("Failed to connect!");
-    	return;
+        outln("Failed to connect!");
+        return;
     }
     
     client.sendString("Ping");
     var data;
     while(!data) {
-    	data = client.receiveString();
+        data = client.receiveString();
     }
     outln("Received: ", data);
     
@@ -127,21 +127,21 @@ Server side:
     
     var count = 0;
     while(true) {
-    	outln("Waiting for a message");
-    	Util.sleep(1000); // wait one second
-    	var msg = socket.receive();
-    	if(msg) {
-    		outln("Received: ", msg.data);
-    		outln("From: ", msg.host, ":", msg.port);
-    		// In this simple example we don't want to remember the sender
-    		// Therefore we just add it as a target, send the message and then we remove the target
-    		socket.addTarget(msg.host, msg.port).sendString("Pong");
-    		socket.removeTarget(msg.host, msg.port);
-    		return;
-    	} else if(count++ == 10) {
-    		outln("Timeout!");
-    		return;
-    	}
+        outln("Waiting for a message");
+        Util.sleep(1000); // wait one second
+        var msg = socket.receive();
+        if(msg) {
+            outln("Received: ", msg.data);
+            outln("From: ", msg.host, ":", msg.port);
+            // In this simple example we don't want to remember the sender
+            // Therefore we just add it as a target, send the message and then we remove the target
+            socket.addTarget(msg.host, msg.port).sendString("Pong");
+            socket.removeTarget(msg.host, msg.port);
+            return;
+        } else if(count++ == 10) {
+            outln("Timeout!");
+            return;
+        }
     }
 <!---END_CODESECTION--->
 
@@ -158,18 +158,21 @@ Client side:
     
     var count = 0;
     while(true) {
-    	outln("Waiting for response");
-    	Util.sleep(1000); // wait one second
-    	var msg = socket.receive();
-    	if(msg) {
-    		outln("Received: ", msg.data);
-    		outln("From: ", msg.host, ":", msg.port);
-    		return;
-    	} else if(count++ == 10) {
-    		outln("Timeout!");
-    		return;
-    	}
+        outln("Waiting for response");
+        Util.sleep(1000); // wait one second
+        var msg = socket.receive();
+        if(msg) {
+            outln("Received: ", msg.data);
+            outln("From: ", msg.host, ":", msg.port);
+            return;
+        } else if(count++ == 10) {
+            outln("Timeout!");
+            return;
+        }
     }
 <!---END_CODESECTION--->
+
+
+
 
 

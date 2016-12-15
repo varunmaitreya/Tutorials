@@ -73,11 +73,11 @@ The following example simply skips rendering if the node is more than 20 units a
     // Define new ScriptedState
     var MyState = new Type(MinSG.ScriptedState);
     MyState.doEnableState @(override) ::= fn(node, rp) {
-    	var camPos = frameContext.getCamera().getWorldOrigin();
-    	var nodePos = node.getWorldPosition();
-    	var diff = (camPos - nodePos).length();
-    	if(diff > 20) return MinSG.STATE_SKIP_RENDERING;
-    	return MinSG.STATE_OK;
+        var camPos = frameContext.getCamera().getWorldOrigin();
+        var nodePos = node.getWorldPosition();
+        var diff = (camPos - nodePos).length();
+        if(diff > 20) return MinSG.STATE_SKIP_RENDERING;
+        return MinSG.STATE_OK;
     };
     
     // create simple cube
@@ -126,5 +126,8 @@ In the header we have to override `doEnableState` and `doDisableState`. In the s
 ```
 
 In this example we don't have to do anything in the `doDisableState`, so we could also omit it since this method is not pure virtual in the **State** class and contains an empty program block.
+
+
+
 
 

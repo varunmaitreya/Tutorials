@@ -25,17 +25,17 @@ After that the nodes are moved so that they do not overlap.
 <!---INCLUDE src=PolygonModeState.escript, start=14, end=24--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-     //create a sphere mesh
-     var mesh = Rendering.MeshBuilder.createSphere(50, 50);
-
-     //create three geometry nodes including the mesh
-     var node1 = new MinSG.GeometryNode(mesh);
-     var node2 = new MinSG.GeometryNode(mesh);
-     var node3 = new MinSG.GeometryNode(mesh);
-
-     //move two nodes so that they are seperated
-     node1.moveLocal(new Geometry.Vec3(-2.5, 0, 0));
-     node3.moveLocal(new Geometry.Vec3(2.5, 0, 0));
+    //create a sphere mesh
+    var mesh = Rendering.MeshBuilder.createSphere(50, 50);
+    
+    //create three geometry nodes including the mesh
+    var node1 = new MinSG.GeometryNode(mesh);
+    var node2 = new MinSG.GeometryNode(mesh);
+    var node3 = new MinSG.GeometryNode(mesh);
+    
+    //move two nodes so that they are seperated
+    node1.moveLocal(new Geometry.Vec3(-2.5, 0, 0));
+    node3.moveLocal(new Geometry.Vec3(2.5, 0, 0));
 <!---END_CODESECTION--->
 
 Next up we create the three node states.
@@ -45,12 +45,12 @@ First of all you can call _setMode_ on the state and pass a mode to it.
 <!---INCLUDE src=PolygonModeState.escript, start=26, end=31--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-     //create three polygone mode states with different modes
-     var fillState = new MinSG.PolygonModeState();
-     fillState.setMode(Rendering.PolygonModeParameters.FILL);
-
-     var pointState = new MinSG.PolygonModeState();
-     pointState.setMode(Rendering.PolygonModeParameters.POINT);
+    //create three polygone mode states with different modes
+    var fillState = new MinSG.PolygonModeState();
+    fillState.setMode(Rendering.PolygonModeParameters.FILL);
+    
+    var pointState = new MinSG.PolygonModeState();
+    pointState.setMode(Rendering.PolygonModeParameters.POINT);
 <!---END_CODESECTION--->
 
 For the second way you need to instantiate a _Rendering.PolygonModeParameters_ object.
@@ -60,10 +60,10 @@ After that the parameter is added to the state by calling _setParameters_.
 <!---INCLUDE src=PolygonModeState.escript, start=33, end=36--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-     var lineState = new MinSG.PolygonModeState();
-     var parameter = new Rendering.PolygonModeParameters();
-     parameter.setMode(Rendering.PolygonModeParameters.LINE);
-     lineState.setParameters(parameter);
+    var lineState = new MinSG.PolygonModeState();
+    var parameter = new Rendering.PolygonModeParameters();
+    parameter.setMode(Rendering.PolygonModeParameters.LINE);
+    lineState.setParameters(parameter);
 <!---END_CODESECTION--->
 
 Next up we attach the states to our nodes.
@@ -71,13 +71,16 @@ Next up we attach the states to our nodes.
 <!---INCLUDE src=PolygonModeState.escript, start=38, end=41--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-     //add the states to the nodes
-     node1.addState(fillState);
-     node2.addState(pointState);
-     node3.addState(lineState);
+    //add the states to the nodes
+    node1.addState(fillState);
+    node2.addState(pointState);
+    node3.addState(lineState);
 <!---END_CODESECTION--->
 
 In a last step a scene graph is build and register to PADrend.
 The different polygon modes can be seen in the image below.
 
 ![Polygon modes](polygon_modes.png)
+
+
+

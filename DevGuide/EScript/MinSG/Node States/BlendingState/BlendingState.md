@@ -92,23 +92,23 @@ The code for creating the quads is provided by a function so that it can be reus
     //geometry node including the mesh of the quad. The z-parameter
     //sets the quad's displacement along the z-axis.
     var createQuad = fn(z, r, g, b){
-    	var meshBuilder = new Rendering.MeshBuilder();
-    	meshBuilder.color(new Util.Color4f(r, g, b, 0.5));
-    	
-    	meshBuilder.position(new Geometry.Vec3(-0.5, 0, z));
-    	meshBuilder.addVertex();
+        var meshBuilder = new Rendering.MeshBuilder();
+        meshBuilder.color(new Util.Color4f(r, g, b, 0.5));
+        
+        meshBuilder.position(new Geometry.Vec3(-0.5, 0, z));
+        meshBuilder.addVertex();
     
-    	meshBuilder.position(new Geometry.Vec3(0.5, 0, z));
-    	meshBuilder.addVertex();
-    	
-    	meshBuilder.position(new Geometry.Vec3(0.5, 1, z));
-    	meshBuilder.addVertex();
+        meshBuilder.position(new Geometry.Vec3(0.5, 0, z));
+        meshBuilder.addVertex();
+        
+        meshBuilder.position(new Geometry.Vec3(0.5, 1, z));
+        meshBuilder.addVertex();
     
-    	meshBuilder.position(new Geometry.Vec3(-0.5, 1, z));
-    	meshBuilder.addVertex();
-    	
-    	meshBuilder.addQuad(0, 1, 2, 3);
-    	return new MinSG.GeometryNode(meshBuilder.buildMesh());
+        meshBuilder.position(new Geometry.Vec3(-0.5, 1, z));
+        meshBuilder.addVertex();
+        
+        meshBuilder.addQuad(0, 1, 2, 3);
+        return new MinSG.GeometryNode(meshBuilder.buildMesh());
     };
 <!---END_CODESECTION--->
 
@@ -144,13 +144,13 @@ You can find the constants of the blending equations in the namespace _Rendering
     //Two setting two different blending functions. The boolean variable
     //useCostantAlpha can be used to switch between both settings.
     if(useConstantAlpha){
-    	blendingState.setBlendConstAlpha(0.3);
-    	blendingState.setBlendFuncSrc(Rendering.BlendFunc.CONSTANT_ALPHA);
-    	blendingState.setBlendFuncDst(Rendering.BlendFunc.CONSTANT_ALPHA);
+        blendingState.setBlendConstAlpha(0.3);
+        blendingState.setBlendFuncSrc(Rendering.BlendFunc.CONSTANT_ALPHA);
+        blendingState.setBlendFuncDst(Rendering.BlendFunc.CONSTANT_ALPHA);
     }
     else{
-    	blendingState.setBlendFuncSrc(Rendering.BlendFunc.SRC_ALPHA);
-    	blendingState.setBlendFuncDst(Rendering.BlendFunc.ONE_MINUS_SRC_ALPHA);
+        blendingState.setBlendFuncSrc(Rendering.BlendFunc.SRC_ALPHA);
+        blendingState.setBlendFuncDst(Rendering.BlendFunc.ONE_MINUS_SRC_ALPHA);
     }
 <!---END_CODESECTION--->
 
@@ -166,4 +166,7 @@ You can also use PADrend's main window to manipulate the values.
 You need to navigate to the scenes root node to access the state.
 
 ![Blending state in main window](blending_state.png)
+
+
+
 

@@ -21,37 +21,38 @@ Before we start with the shader, we first have to create a simple mesh. In this 
 <!---INCLUDE src=ShaderStateExample.escript, start=14, end=56--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
+    
     static Vec2 = Geometry.Vec2;
     static Vec3 = Geometry.Vec3;
     
     var buildMesh = fn() {
-    	// First we build a simple Mesh, consisting of a single quad
-    	var mb = new Rendering.MeshBuilder();
-    	mb.color(new Util.Color4f(1,1,1,1));
-    	// Vertex 0:
-    	mb.position(new Vec3(0,0,0));
-    	mb.texCoord0(new Vec2(0,1));
-    	mb.addVertex();
+        // First we build a simple Mesh, consisting of a single quad
+        var mb = new Rendering.MeshBuilder();
+        mb.color(new Util.Color4f(1,0,1,0.5));
+        // Vertex 0:
+        mb.position(new Vec3(0,0,0));
+        mb.texCoord0(new Vec2(0,1));
+        mb.addVertex();
     
-    	// Vertex 1:
-    	mb.position(new Vec3(10,0,0));
-    	mb.texCoord0(new Vec2(1,1));
-    	mb.addVertex();
+        // Vertex 1:
+        mb.position(new Vec3(10,0,0));
+        mb.texCoord0(new Vec2(1,1));
+        mb.addVertex();
     
-    	// Vertex 2:
-    	mb.position(new Vec3(10,10,0));
-    	mb.texCoord0(new Vec2(1,0));
-    	mb.addVertex();
+        // Vertex 2:
+        mb.position(new Vec3(10,10,0));
+        mb.texCoord0(new Vec2(1,0));
+        mb.addVertex();
     
-    	// Vertex 3:
-    	mb.position(new Vec3(0,10,0));
-    	mb.texCoord0(new Vec2(0,0));
-    	mb.addVertex();
+        // Vertex 3:
+        mb.position(new Vec3(0,10,0));
+        mb.texCoord0(new Vec2(0,0));
+        mb.addVertex();
     
-    	// create quad
-    	mb.addQuad(0,1,2,3);
-    	// return mesh
-    	return mb.buildMesh();
+        // create quad
+        mb.addQuad(0,1,2,3);
+        // return mesh
+        return mb.buildMesh();
     };
     
     // build GeometryNode with corresponding mesh
@@ -63,7 +64,6 @@ Before we start with the shader, we first have to create a simple mesh. In this 
     // you could also set the TextureUnit:
     texState.setTextureUnit(0); // only needed if you add more than one texture though...
     // add state to node
-    geo += texState;
 <!---END_CODESECTION--->
 
 If you have read the Texturing tutorial, this code is straight forward.
@@ -74,24 +74,24 @@ Next we continue with the actual shader code.
 <!---INCLUDE src=ShaderStateExample.escript, start=58, end=75--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
+    
     var vertexShaderCode = "
     void main(void) {
-    	gl_TexCoord[0] = gl_MultiTexCoord0;
-    	gl_Position = ftransform();
+        gl_TexCoord[0] = gl_MultiTexCoord0;
+        gl_Position = ftransform();
     }
     ";
     var fragmentShaderCode = "
     uniform sampler2D chessTexture;
     
     void main(void) {
-    	vec2 uv = gl_TexCoord[0].st;
-    	vec4 result = texture2D(chessTexture, uv);
-    	result.r *= uv.s;
-    	result.g *= uv.t;
-    	gl_FragColor = result;
+        vec2 uv = gl_TexCoord[0].st;
+        vec4 result = texture2D(chessTexture, uv);
+        result.r *= uv.s;
+        result.g *= uv.t;
+        gl_FragColor = result;
     }
     ";
-    var shader = Rendering.Shader.createShader(vertexShaderCode, fragmentShaderCode);
 <!---END_CODESECTION--->
 
 Our vertex shader is super simple, it does nothing more than just setting the texture coordinate and the position. This is done by using OpenGL internal functions. The fragment shader has a bit more functionality. It first retrieves the uv coordinate from the `gl_TexCoord` array. Afterwards we just look up the color of the chess texture at the given uv coordinate. To make it look different from the default shader, we further multiply the `r` and `g` channels of the color with the uv coordinate. This will result in a blue/purple coloring of the white tiles. The last step is just setting the `gl_FragColor` value.
@@ -102,9 +102,9 @@ Now we use this shader programm to instantiate a new `ShaderState`. Furthermore 
 <!---INCLUDE src=ShaderStateExample.escript, start=76, end=78--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
+    var shader = Rendering.Shader.createShader(vertexShaderCode, fragmentShaderCode);
     var shaderState = new MinSG.ShaderState(shader);
     // our chess texture is bound to texture unit 0
-    shaderState.setUniform("chessTexture", Rendering.Uniform.INT, [0]);
 <!---END_CODESECTION--->
 
 The `TextureState` was set to texture unit 0, therefore we also use the same unit here. After that, we can finally add this state to the node:
@@ -112,9 +112,12 @@ The `TextureState` was set to texture unit 0, therefore we also use the same uni
 <!---INCLUDE src=ShaderStateExample.escript, start=79, end=79--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-    geo += shaderState;
+    shaderState.setUniform("chessTexture", Rendering.Uniform.INT, [0]);
 <!---END_CODESECTION--->
 
 Now the node will be rendered using the given shader.
+
+
+
 
 

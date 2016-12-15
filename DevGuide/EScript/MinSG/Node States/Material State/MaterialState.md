@@ -34,43 +34,43 @@ Since the spheres only differ in their position and material, but overall the co
 <!---INCLUDE src=MaterialState.escript, start=14, end=50--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-     //creates a geometry node with a material state and attaches a light source to it
-     var createNodeWithLightSource = fn(xMovement, Util.Color4f ambient, Util.Color4f diffuse, Util.Color4f specular, shininess){
-     	//creating a geometry node containing the mesh
-     	var mesh = Rendering.MeshBuilder.createSphere(50, 50);
-     	var geoNode = new MinSG.GeometryNode(mesh);
-     	geoNode.moveLocal(new Geometry.Vec3(xMovement, 0, 0));
-     	
-     	//create a material state and setting its properties
-     	var materialState = new MinSG.MaterialState();
-     	materialState.setAmbient(ambient);
-     	materialState.setDiffuse(diffuse);
-     	materialState.setSpecular(specular);
-     	materialState.setShininess(shininess);
-     	
-     	//creating a new light node having a white light color
-    	var pointLightNode = new MinSG.LightNode(MinSG.LightNode.POINT);
-    	pointLightNode.setAmbientLightColor(new Util.Color4f(1.0, 1.0, 1.0, 1.0));
-    	pointLightNode.setSpecularLightColor(new Util.Color4f(1.0, 1.0, 1.0, 1.0));
-    	pointLightNode.setDiffuseLightColor(new Util.Color4f(1.0, 1.0, 1.0, 1.0));
-    	pointLightNode.moveLocal(new Geometry.Vec3(xMovement, 5, 5));
-    	
-    	//creating a light state so that only the geometry node ist illuminated by the light source
-    	var lightingState = new MinSG.LightingState(pointLightNode);
-    	lightingState.setEnableLight(true);
-    	
-    	//adding the states to the node
-    	geoNode.addState(materialState);
-    	geoNode.addState(lightingState);
-    	
-    	//creating a subtree for the created nodes
-    	var lstNode = new MinSG.ListNode();
-    	lstNode += geoNode;
-    	lstNode += pointLightNode;
-    	
-    	//returning the subtree
-    	return lstNode;
-     };
+    //creates a geometry node with a material state and attaches a light source to it
+    var createNodeWithLightSource = fn(xMovement, Util.Color4f ambient, Util.Color4f diffuse, Util.Color4f specular, shininess){
+        //creating a geometry node containing the mesh
+        var mesh = Rendering.MeshBuilder.createSphere(50, 50);
+        var geoNode = new MinSG.GeometryNode(mesh);
+        geoNode.moveLocal(new Geometry.Vec3(xMovement, 0, 0));
+        
+        //create a material state and setting its properties
+        var materialState = new MinSG.MaterialState();
+        materialState.setAmbient(ambient);
+        materialState.setDiffuse(diffuse);
+        materialState.setSpecular(specular);
+        materialState.setShininess(shininess);
+        
+        //creating a new light node having a white light color
+       var pointLightNode = new MinSG.LightNode(MinSG.LightNode.POINT);
+       pointLightNode.setAmbientLightColor(new Util.Color4f(1.0, 1.0, 1.0, 1.0));
+       pointLightNode.setSpecularLightColor(new Util.Color4f(1.0, 1.0, 1.0, 1.0));
+       pointLightNode.setDiffuseLightColor(new Util.Color4f(1.0, 1.0, 1.0, 1.0));
+       pointLightNode.moveLocal(new Geometry.Vec3(xMovement, 5, 5));
+       
+       //creating a light state so that only the geometry node ist illuminated by the light source
+       var lightingState = new MinSG.LightingState(pointLightNode);
+       lightingState.setEnableLight(true);
+       
+       //adding the states to the node
+       geoNode.addState(materialState);
+       geoNode.addState(lightingState);
+       
+       //creating a subtree for the created nodes
+       var lstNode = new MinSG.ListNode();
+       lstNode += geoNode;
+       lstNode += pointLightNode;
+       
+       //returning the subtree
+       return lstNode;
+    };
 <!---END_CODESECTION--->
 
 First of all a geometry node containing the sphere is created and positioned.
@@ -98,11 +98,11 @@ For the bras material we use:
 <!---INCLUDE src=MaterialState.escript, start=52, end=56--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-     //color of a brass like material
-     var ambientPart = new Util.Color4f(0.2125, 0.1275, 0.054, 1.0);
-     var diffusePart = new Util.Color4f(0.714, 0.4284, 0.18144, 1.0);
-     var specularPart = new Util.Color4f(0.393548, 0.271906, 0.166721, 1.0);
-     var shininess = 25.6;
+    //color of a brass like material
+    var ambientPart = new Util.Color4f(0.2125, 0.1275, 0.054, 1.0);
+    var diffusePart = new Util.Color4f(0.714, 0.4284, 0.18144, 1.0);
+    var specularPart = new Util.Color4f(0.393548, 0.271906, 0.166721, 1.0);
+    var shininess = 25.6;
 <!---END_CODESECTION--->
 
 In addition we need a black color to switch off single parts of the Phong equation.
@@ -110,8 +110,8 @@ In addition we need a black color to switch off single parts of the Phong equati
 <!---INCLUDE src=MaterialState.escript, start=58, end=59--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-     //black color for switching single parts of the phong equation off 
-     var blackColor = new Util.Color4f(0.0, 0.0, 0.0, 1.0);
+    //black color for switching single parts of the phong equation off 
+    var blackColor = new Util.Color4f(0.0, 0.0, 0.0, 1.0);
 <!---END_CODESECTION--->
 
 Next up we create the four nodes.
@@ -122,20 +122,20 @@ In a last step all nodes are connected to build a scene graph.
 <!---INCLUDE src=MaterialState.escript, start=61, end=74--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-     //creating four nodes
-     //the first three nodes show the single parts of the phong equation individually 
-     var nodeAmbient = createNodeWithLightSource(-4.5, ambientPart, blackColor, blackColor, 0.0); 
-     var nodeDiffuse = createNodeWithLightSource(-1.5, blackColor, diffusePart, blackColor, 0.0); 
-     var nodeSpecular = createNodeWithLightSource(1.5, blackColor, blackColor, specularPart, 25.6); 
-     //the last node shows the resulting phong illumination
-     var nodePhong = createNodeWithLightSource(4.5, ambientPart, diffusePart, specularPart, 25.6);  
-     
-     //creating the scene graph
-     var scene = new MinSG.ListNode();
-     scene += nodeAmbient;
-     scene += nodeDiffuse;
-     scene += nodeSpecular;
-     scene += nodePhong;
+    //creating four nodes
+    //the first three nodes show the single parts of the phong equation individually 
+    var nodeAmbient = createNodeWithLightSource(-4.5, ambientPart, blackColor, blackColor, 0.0); 
+    var nodeDiffuse = createNodeWithLightSource(-1.5, blackColor, diffusePart, blackColor, 0.0); 
+    var nodeSpecular = createNodeWithLightSource(1.5, blackColor, blackColor, specularPart, 25.6); 
+    //the last node shows the resulting phong illumination
+    var nodePhong = createNodeWithLightSource(4.5, ambientPart, diffusePart, specularPart, 25.6);  
+    
+    //creating the scene graph
+    var scene = new MinSG.ListNode();
+    scene += nodeAmbient;
+    scene += nodeDiffuse;
+    scene += nodeSpecular;
+    scene += nodePhong;
 <!---END_CODESECTION--->
 
 The image below shows the outcome.
@@ -144,4 +144,7 @@ The diffuse term only depends on the light sources position, so that it is const
 The specular part depends on the viewers position, so that from different position you can observe changes in the specular reflection.
 
 ![Phong illumination](phong.png)
+
+
+
 

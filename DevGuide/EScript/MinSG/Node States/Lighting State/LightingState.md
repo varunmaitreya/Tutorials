@@ -25,7 +25,7 @@ The nodes are moved a bit so that the spheres are not located at the same positi
 <!---Automaticly generated section. Do not edit!!!--->
     //creating the scene nodes
     var scene = new MinSG.ListNode();
-
+    
     var mesh = Rendering.MeshBuilder.createSphere(50, 50);
     var node = new MinSG.GeometryNode(mesh);
     node.moveLocal(new Geometry.Vec3(-2, 0, 0));
@@ -88,11 +88,11 @@ The last thing we need to do is calling _setEnableLight_ on the state, so that t
 <!---INCLUDE src=LightingState.escript, start=41, end=45--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-    	//if using the LightingState, create one, attache the light node to it,
-    	//activate it and add it to one of the geometry nodes
-    	var state = new MinSG.LightingState(pointLightNode);
-    	node.addState(state);
-    	state.setEnableLight(true);
+    //if using the LightingState, create one, attache the light node to it,
+    //activate it and add it to one of the geometry nodes 
+    var state = new MinSG.LightingState(pointLightNode);
+    node.addState(state);
+    state.setEnableLight(true);
 <!---END_CODESECTION--->
 
 ## Difference between lighting state and using light nodes directly
@@ -104,8 +104,8 @@ This makes PADrend to use it for the scenes illumination until it is switched of
 <!---INCLUDE src=LightingState.escript, start=48, end=49--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-    	//otherwise just switch on the light node
-    	pointLightNode.switchOn(frameContext);
+    //otherwise just switch on the light node
+    pointLightNode.switchOn(frameContext);
 <!---END_CODESECTION--->
 
 The image below shows the resulting illumination.
@@ -117,3 +117,6 @@ You can see that both spheres are illuminated by the light node.
 If using the light state instead, only the sphere that has the state attached to it is illuminated.
 
 ![Light state](light_state.png)
+
+
+
