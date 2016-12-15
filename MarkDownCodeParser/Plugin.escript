@@ -25,6 +25,8 @@ plugin.init := fn(){
 	return true;
 };
 
+
+
 static creatGUI = fn(_gui){
 	static gui = _gui;
 	
@@ -96,6 +98,47 @@ static creatGUI = fn(_gui){
 	
 };
 
+static removeWasteSpaces = fn(lines){
+	var minSpaces = -1;
+	var linesWOTabs = [];
+	var returnText = "";
+
+	foreach(lines as var line){
+		var totalSpaces = 0;
+		
+		while(line.beginsWith("\t")||line.beginsWith(" ")){
+			if(line.beginsWith("\t")){
+				line = line.replace("\t", "");
+				totalSpaces += 4;
+			}
+			
+			if(line.beginsWith(" ")){
+				line = line.replace(" ", "");
+				totalSpaces++;
+			}
+		}
+		
+		if(minSpaces < 0)
+			minSpaces = totalSpaces;
+		else if(totalSpaces < minSpaces)
+			minSpaces = totalSpaces;
+		
+		linesWOTabs +=  (" " * totalSpaces + line);
+	}
+	
+	
+	
+	if(minSpaces < 0)
+		minSpaces = 0;
+		
+	foreach(linesWOTabs as var line){
+		//throwing away waste spaces and adding four spaces to indicate a codesection (MarkDown convention) 
+		returnText += "    " + line.substr(minSpaces) +"\n"; 
+	}
+	
+	return returnText;
+};
+
 static collectLinesFromSourceCodeFile = fn(file, start = 0, end = -1){	
 	if(end == 0 || (end > 0 && start > end))
 		return "";
@@ -114,13 +157,80 @@ static collectLinesFromSourceCodeFile = fn(file, start = 0, end = -1){
 	
 	var firstLine = (start > 0) ? start - 1 : start;
 	var lastLine = (end > 0) ? end - 1 : lines.size()-1;
+	var lineList = [];
 		
 	for(var i = firstLine; i <= lastLine; i++){
-		readLines += "    " + lines[i] + "\n"; //four spaces indent at the begin of each line, so that the text is noticed as code section by Markdown
+		lineList += lines[i];
 	}
+	
+	readLines += removeWasteSpaces(lineList);
 	
 	readLines += codesectionEndTag + "\n";
 	return readLines;
+};
+
+static ParameterStruct = new Type();
+ParameterStruct.srcFile := "";
+ParameterStruct.startLine := 0;
+ParameterStruct.endLine := -1;
+
+
+static parseIncludeTag = fn(String line, lineNumber){
+	line = line.replaceAll(" ", "");
+	line = line.replaceAll("\t", "");
+			
+	var split = line.split(",");
+	var parameterSet = new ParameterStruct();
+			
+	if(!split[0].beginsWith(includeTag))
+		throw new Exception("Error in line " + (lineNumber) + ": Include tag could not be found");
+	else{
+		split[0] = split[0].replace(includeTag, "");//remove the include tag
+
+		if(!split[0].beginsWith(fileAttribute))
+			throw new Exception("Error in line " + (lineNumber) + ": File attribute could not be found or is corrupt");
+		else{
+			split[0] = split[0].replace(fileAttribute, "");
+
+			if(split.size() == 1){//include the hole file
+				parameterSet.srcFile = split[0].replace(endTag, "");
+				parameterSet.srcFile = parameterSet.srcFile.trim();//somehow there is a strange empty character on the end of the string
+								
+				return parameterSet;
+			}
+			else 
+				parameterSet.srcFile = split[0];
+		}	
+	}
+			
+	if(split.size() > 1 && (split[1].beginsWith(startLineAttribute) || split[1].beginsWith(endLineAttribute))){
+		var startTagSet = false;
+		if(split[1].beginsWith(startLineAttribute)){
+			split[1] = split[1].replace(startLineAttribute, "");
+			
+			if(split.size() == 2)
+				parameterSet.startLine = new Number(split[1].replace(endTag, ""));	
+			else
+				parameterSet.startLine = new Number(split[1]);
+			
+			startTagSet = true;
+		}
+		
+		var endStr = (split.size() == 2) ? split[1] : split[2];
+		if((split.size() == 3 && !endStr.beginsWith(endLineAttribute)) || 
+			(split.size() == 2 && !endStr.beginsWith(endLineAttribute) && !startTagSet)){
+			
+			throw new Exception("Error in line " + (lineNumber) + ": Line attribute could not be found or is corrupt");
+		}
+		else if(!endStr.beginsWith(startLineAttribute)&&endStr.beginsWith(endLineAttribute)){
+			endStr = endStr.replace(endLineAttribute, "");
+			parameterSet.endLine = new Number(endStr.replace(endTag, ""));
+		}
+	}
+	else
+		throw new Exception("Error in line " + (lineNumber) + ": Line attribute could not be found or is corrupt");
+
+	return parameterSet;
 };
 
 static parseDocument = fn(file){
@@ -142,79 +252,70 @@ static parseDocument = fn(file){
 	
 	var lines = inDocument.split("\n");
 	var skipOldCode = false;
+	var checkNextLineForOldCodeSection = false;
+	var changeFound = false;
+	var oldCode = "";
+	var codeSection = "";
+	var lineNumber = 0;
 	
 	foreach(lines as var line){
-		if(line.contains(codesectionBeginTag))
+		lineNumber ++;
+		
+		if(line.contains(codesectionBeginTag)){
 			skipOldCode = true;
-			
+			oldCode = "";
+			checkNextLineForOldCodeSection = false;
+		}else if(checkNextLineForOldCodeSection){
+			outDocument += codeSection;
+			changeFound = true;
+			checkNextLineForOldCodeSection = false;
+			codeSection = "";
+		}
+		
 		if(!skipOldCode)
-			outDocument += line +"\n";
+			outDocument += line + "\n";
+		else
+			oldCode += line + "\n";
 		
 		if(line.contains(includeTag)){
-			line = line.replaceAll(" ", "");
-			line = line.replaceAll("\t", "");
-			
-			var split = line.split(",");
-			var srcFile = "";
-			var startLine = 0;
-			var endLine = -1;
-			
-			if(!split[0].beginsWith(includeTag))
-				outln("Error in line " + (outDocument.size() + 1) + ": Include tag could not be found");
-			else{
-				split[0] = split[0].replace(includeTag, "");//remove the include tag
-
-				if(!split[0].beginsWith(fileAttribute))
-					outln("Error in line " + (outDocument.size() + 1) + ": File attribute could not be found or is corrupt");
-				else{
-					split[0] = split[0].replace(fileAttribute, "");
-
-					if(split.size() == 1){//include the hole file
-						srcFile = split[0].replace(endTag, "");
-						srcFile = srcFile.trim();//somehow there is a strange empty character on the end of the string
-					}
-					else 
-						srcFile = split[0];
-				}	
-			}
-			
-			if(split.size() > 1 && (split[1].beginsWith(startLineAttribute) || split[1].beginsWith(endLineAttribute))){
-				if(split[1].beginsWith(startLineAttribute)){
-					split[1] = split[1].replace(startLineAttribute, "");
-					
-					if(split.size() == 2)
-						startLine = new Number(split[1].replace(endTag, ""));	
-					else
-						startLine = new Number(split[1]);
-				}
-		
-				var endStr = (split.size() == 2) ? split[1] : split[2];
-				if((split.size() == 3 && !endStr.beginsWith(endLineAttribute)) || 
-					(split.size() == 2 && !endStr.beginsWith(endLineAttribute) && !endStr.beginsWith(startLineAttribute)))
-					outln("Error in line " + (outDocument.size() + 1) + ": Line attribute could not be found or is corrupt");
-				else if(!endStr.beginsWith(startLineAttribute)){
-					endStr = endStr.replace(endLineAttribute, "");
-					endLine = new Number(endStr.replace(endTag, ""));
+			checkNextLineForOldCodeSection = true;
+			try{
+				var includeTag = parseIncludeTag(line, lineNumber);
+				
+				if(!includeTag.srcFile.empty()){
+					//src files have to be given relative to the markdown file
+					codeSection = collectLinesFromSourceCodeFile(folder + "/" + includeTag.srcFile, includeTag.startLine, includeTag.endLine); 
+				}else{
+					codeSection = "";
 				}
 			}
-			else
-				outln("Error in line " + (outDocument.size() + 1) + ": Line attribute could not be found or is corrupt");
-			
-			if(!srcFile.empty()){
-				var codeSection = collectLinesFromSourceCodeFile(folder + "/" + srcFile, startLine, endLine); //src files have to be given relative to the markdown file
-				outDocument += codeSection;
+			catch(e){
+				outln(e);
 			}
 		}
 		
-		if(line.contains(codesectionEndTag))
-			skipOldCode = false;
+		if(line.contains(codesectionEndTag)){
+			
+			if(codeSection != oldCode){
+				changeFound = true;	
+			}
+			
+			outDocument += codeSection;
+				
+			skipOldCode = false;	
+		}
 	}
 	
-	try{
-		IO.saveTextFile(file, outDocument);
-	}catch(e){
-		Runtime.warn("Could not load file" + file);
-		return;
+	if(changeFound){
+		outln("File "+ file + " has changed. Writing file...");
+		try{
+			IO.saveTextFile(file, outDocument);
+		}catch(e){
+			Runtime.warn("Could not load file" + file);
+			return;
+		}
+	}else{
+		outln("File "+ file + ":no changes found.");
 	}
 	
 	//TODO write to HTML file in the end
