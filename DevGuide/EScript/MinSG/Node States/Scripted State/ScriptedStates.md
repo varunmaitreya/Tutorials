@@ -55,42 +55,6 @@ The following example simply skips rendering if the node is more than 20 units a
 
 As you can see implementing a state in EScript is rather easy. For an implementation in C++ you should look at the example provided in the C++ DevGuide.
 
-## Implementing a State in C++
-We're going to implement our own state in C++ with the same functionality as the scripted state. Everything should be straight forward after the scripted state. Let's take a look at the header:
-
-```
-    class MyState : public State {
-      PROVIDES_TYPE_NAME(MyState)
-    public:
-      State::stateResult_t doEnableState(FrameContext & context, Node * node, const RenderParam & rp) override;
-      void doDisableState(FrameContext & context,Node *, const RenderParam & rp) override;
-      MyState * clone() const override;
-    };
-```
-
-In the header we have to override `doEnableState` and `doDisableState`. In the source file we're are going to implement the methods:
-
-```
-    State::stateResult_t MyState::doEnableState(FrameContext & context, Node * node, const RenderParam & rp){
-      auto camPos = context.getCamera()->getWorldOrigin();
-      auto nodePos = node->getWorldPosition();
-      auto diff = (camPos - nodePos).length();
-      if (diff > 20) return State::stateResult_t::STATE_SKIP_RENDERING;
-      return State::stateResult_t::STATE_OK;
-    }
-    
-    void MyState::doDisableState(FrameContext & context, Node * node, const RenderParam & rp) {
-      //Clean up everything you have done in doEnableState, e.g. popping shaders from the rendering context
-    }
-    
-    MyState * MyState::clone() const {
-      return new PhongGI(*this);
-    }
-```
-
-In this example we don't have to do anything in the `doDisableState`, so we could also omit it since this method is not pure virtual in the **State** class and contains an empty program block.
-
-
 
 
 

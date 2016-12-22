@@ -16,12 +16,6 @@ class Runtime;
 class Type;
 }
 
-namespace MinSG {
-namespace ThesisStanislaw {
-class ApproxSceneDebug;
-}
-}
-
 namespace E_MinSG {
 /***
  **   E_MyState ---|> E_State ---|> Object
