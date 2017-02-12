@@ -50,3 +50,4 @@ Now you can go ahead and play around with the Reference Value and the options in
 ![Light states activated](quads_with_alpha_test.png)
 
 
+
