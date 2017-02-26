@@ -1,12 +1,61 @@
 static ImageViewer = new Type();
 
 ImageViewer.init := fn(){
+	this.shownImageFile := new Std.DataWrapper();
+	this.shownImageFile.onDataChanged += [this] => fn(imageViewer, file){
+		if(!file)
+			return;
+			
+		var image = gui.loadImage(file);
+		
+		imageViewer.imagePanel.clear();
+		imageViewer.imagePanel.add(image);
+		
+		imageViewer.currentImage = image;
+	};
+	
+	this.currentImage := void;
+	
+	this.imagesInFolder := void;
+	this.imageFolderIndex := 0;
+
 	this.imagePanel := void;
 	
 	this.window := this.createWindow();
 	this.window.setEnabled(true);
 };
 
+ImageViewer.getAllImagesInFolder := fn(folder){
+	if(!folder || !IO.isDir(folder))
+		return void;
+	
+	var images = [];
+	var filter = [".png", ".jpg", ".bmp"];
+	
+	var files = IO.dir(folder, IO.DIR_FILES);
+	
+	foreach(files as var file){
+		foreach(filter as var fileEnding){
+			if(file.endsWith(fileEnding))
+				images += file;
+		}
+	} 
+	
+	if(images.empty())
+		return void;
+	
+	return images;
+};
+
+ImageViewer.saveCurrentImageToFile := fn(file){
+	if(!this.currentImage || !file)
+		return;
+
+	var bitmap = this.currentImage.getImageData().getBitmap();
+	Util.saveBitmap(bitmap, file);
+};
+
+//creating the UI
 ImageViewer.createWindow := fn(){
 	var window = gui.createWindow(800, 800, "Image Viewer Tutorial Version 1");
 	window.setPosition(50, 50);
@@ -57,14 +106,42 @@ ImageViewer.createMenu := fn(){
 				{
 					GUI.LABEL : "Open Folder...",
 					GUI.ON_CLICK : [this] => fn(imageViewer){
-						;
+						var diag = new GUI.FileDialog
+						(
+							"Open Image Folder...",
+							__DIR__,
+							void,
+							[imageViewer] => fn(imageViewer, folder){
+								imageViewer.imageFolderIndex = 0;
+								imageViewer.imagesInFolder = imageViewer.getAllImagesInFolder(folder);
+								
+								if(!imageViewer.imagesInFolder)
+									return;
+									
+								imageViewer.shownImageFile(imageViewer.imagesInFolder[imageViewer.imageFolderIndex]);
+							}
+						);
+						diag.folderSelector = true;
+						diag.init();
 					}
 				},
 				
 				{
 					GUI.LABEL : "Open Image File...",
 					GUI.ON_CLICK : [this] => fn(imageViewer){
-						;
+						var diag = new GUI.FileDialog
+						(
+							"Open Image File...",
+							__DIR__,
+							[".png", ".jpg", ".bmp"],
+							[imageViewer] => fn(imageViewer, fileName){
+								imageViewer.imageFolderIndex = 0;
+								imageViewer.imagesInFolder = void;
+								imageViewer.shownImageFile(fileName);
+							} 
+						);
+						diag.initialFilename = "";
+						diag.init();
 					}
 				},
 				
@@ -73,14 +150,41 @@ ImageViewer.createMenu := fn(){
 				{
 					GUI.LABEL : "Save File as...",
 					GUI.ON_CLICK : [this] => fn(imageViewer){
-						;
+						if(!imageViewer.currentImage || !imageViewer.shownImageFile())
+							return;
+					
+						var diag = new GUI.FileDialog
+						(
+							"Save File as...",
+							__DIR__,
+							[".png", ".jpg", ".bmp"],
+							[imageViewer] => fn(imageViewer, fileName){
+								if(IO.isFile(fileName)){
+									var overWriteMsg = gui.createPopupWindow(300,100,"The file already exists. Do you want to overwrite it?");
+									overWriteMsg.addAction(
+										"Yes", 
+										[imageViewer, fileName] => fn(imageViewer, fileName){
+											imageViewer.saveCurrentImageToFile(fileName);
+										});
+									overWriteMsg.addAction("No");
+									overWriteMsg.init();
+								}
+								else
+									imageViewer.saveCurrentImageToFile(fileName);
+							} 
+						);
+						diag.initialFilename = "";
+						diag.init();
 					}
 				},
 				
 				{
 					GUI.LABEL : "Save File...",
 					GUI.ON_CLICK : [this] => fn(imageViewer){
-						
+						if(!imageViewer.currentImage || !imageViewer.shownImageFile())
+							return;
+							
+						imageViewer.saveCurrentImageToFile(imageViewer.shownImageFile());
 					}
 				},
 				
@@ -127,7 +231,11 @@ ImageViewer.createToolBar := fn(){
 			GUI.ICON : "#Tut_Left",
 			GUI.TOOLTIP : "Previouse Image",
 			GUI.ON_CLICK : [this] => fn(imageViewer){
-				;
+				if(!imageViewer.imagesInFolder || imageViewer.imageFolderIndex == 0)
+					return;
+				
+				imageViewer.imageFolderIndex--;
+				imageViewer.shownImageFile(imageViewer.imagesInFolder[imageViewer.imageFolderIndex]);
 			}
 		},
 		{
@@ -135,7 +243,11 @@ ImageViewer.createToolBar := fn(){
 			GUI.ICON : "#Tut_Right",
 			GUI.TOOLTIP : "Next Image",
 			GUI.ON_CLICK : [this] => fn(imageViewer){
-				;
+				if(!imageViewer.imagesInFolder || imageViewer.imageFolderIndex >= imageViewer.imagesInFolder.count()-1)
+					return;
+				
+				imageViewer.imageFolderIndex++;
+				imageViewer.shownImageFile(imageViewer.imagesInFolder[imageViewer.imageFolderIndex]);
 			}
 			
 		}	
