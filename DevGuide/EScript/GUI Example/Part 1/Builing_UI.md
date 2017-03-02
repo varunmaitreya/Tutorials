@@ -66,7 +66,7 @@ First of all we create the content panel by using the first technique.
             GUI.POS_X_ABS|GUI.REFERENCE_X_LEFT|GUI.ALIGN_X_LEFT|
             GUI.POS_Y_ABS|GUI.REFERENCE_Y_TOP|GUI.ALIGN_Y_TOP|
             GUI.WIDTH_ABS|GUI.HEIGHT_ABS,
-            new Geometry.Vec2(0,0),new Geometry.Vec2(-1, -1) 
+            new Geometry.Vec2(0,0),new Geometry.Vec2(-1, -1)
     );
 <!---END_CODESECTION--->
 
@@ -80,11 +80,12 @@ In this way you can also pass a description as a list of maps to it.
 Each map in the list describes one GUI element.
 In this way we add the panel for the controls to the content panel.
 
-<!---INCLUDE src=ImageViewer1.escript, start=23, end=29--->
+<!---INCLUDE src=ImageViewer1.escript, start=22, end=29--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
+    contentPanel += [{
         GUI.TYPE : GUI.TYPE_PANEL,
-        GUI.FLAGS : GUI.BORDER,	
+        GUI.FLAGS : GUI.BORDER,
         GUI.POSITION : [GUI.POS_X_ABS|GUI.REFERENCE_X_LEFT|GUI.ALIGN_X_LEFT|
                         GUI.POS_Y_ABS|GUI.REFERENCE_Y_TOP|GUI.ALIGN_Y_TOP ,0,0],
         GUI.SIZE : [GUI.WIDTH_ABS|GUI.HEIGHT_ABS, -20, 75],
@@ -110,7 +111,7 @@ We store the panel in an attribute so that we can access it later on.
 <!---Automaticly generated section. Do not edit!!!--->
     this.imagePanel = gui.create({
         GUI.TYPE : GUI.TYPE_PANEL,
-        GUI.FLAGS : GUI.BORDER,	
+        GUI.FLAGS : GUI.BORDER,
         GUI.WIDTH : 750,
         GUI.HEIGHT : 400,
         GUI.POSITION : [GUI.POS_X_ABS|GUI.REFERENCE_X_LEFT|GUI.ALIGN_X_LEFT|
@@ -137,12 +138,12 @@ In a last step we use _+=_ to add the content panel to the window.
 ### Layout information
 
 Components reference point. Tells PADrend where the coordinates origin within the component is.
-* _REFERENCE_\__X_\__LEFT_ : x-coordinate of origin is on the left side.
-* _REFERENCE_\__X_\__CENTER_ : x-coordinate of origin is in the center.
-* _REFERENCE_\__X_\__RIGHT_ : x-coordinate of origin is on the right side.
-* _REFERENCE_\__Y_\__TOP_ : y-coordinate of origin is on the top.
-* _REFERENCE_\__Y_\__CENTER_ : y-coordinate of origin is in the center.
-* _REFERENCE_\__Y_\__BOTTOM_ : y-coordinate of origin is on the bottom.
+* _REFERENCE_X_LEFT_ : x-coordinate of origin is on the left side.
+* _REFERENCE_X_CENTER_ : x-coordinate of origin is in the center.
+* _REFERENCE_X_RIGHT_ : x-coordinate of origin is on the right side.
+* _REFERENCE_Y_TOP_ : y-coordinate of origin is on the top.
+* _REFERENCE_Y_CENTER_ : y-coordinate of origin is in the center.
+* _REFERENCE_Y_BOTTOM_ : y-coordinate of origin is on the bottom.
 
 Alignment inside parent. Tells PADrend where to position the component within its parents component.
 * _ALIGN_\__X_\__RIGHT_ : Use parents right side as reference for the components alignment in x direction.
@@ -246,41 +247,41 @@ The settings menu is created in a similar way like the file menu.
                         ;
                     }
                 },
-                
+
                 {
                     GUI.LABEL : "Open Image File...",
                     GUI.ON_CLICK : [this] => fn(imageViewer){
                         ;
                     }
                 },
-                
+
                 '----',
-                
+
                 {
                     GUI.LABEL : "Save File as...",
                     GUI.ON_CLICK : [this] => fn(imageViewer){
                         ;
                     }
                 },
-                
+
                 {
                     GUI.LABEL : "Save File...",
                     GUI.ON_CLICK : [this] => fn(imageViewer){
-                        
+
                     }
                 },
-                
+
                 '----',
-                
+
                 {
                     GUI.LABEL : "Close",
                     GUI.ON_CLICK : [this] => fn(imageViewer){					
                         imageViewer.window.close();
                     }
                 }
-            ],	
+            ],
         },
-        
+
         {
             GUI.TYPE				:	GUI.TYPE_MENU,
             GUI.TOOLTIP				:	"Settings",
@@ -293,7 +294,7 @@ The settings menu is created in a similar way like the file menu.
                         ;
                     }
                 }
-            
+
             ],
         },
     ];
@@ -345,7 +346,7 @@ For the image switching buttons we leave it empty for now.
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     var toolBar = gui.createPanel(450, 55, GUI.AUTO_LAYOUT);
-    
+
     toolBar += [
         {
             GUI.TYPE : GUI.TYPE_BUTTON,
@@ -362,8 +363,8 @@ For the image switching buttons we leave it empty for now.
             GUI.ON_CLICK : [this] => fn(imageViewer){
                 ;
             }
-            
-        }	
+
+        }
     ];
 <!---END_CODESECTION--->
 
@@ -378,7 +379,7 @@ The rest of the function will be created in a later tutorial.
 <!---Automaticly generated section. Do not edit!!!--->
     static btnDrawTool;
     static btnMoveTool;
-    
+
     btnDrawTool = gui.create({
         GUI.TYPE : GUI.TYPE_BUTTON,
         GUI.ICON : "#Tut_Pen",
@@ -388,7 +389,7 @@ The rest of the function will be created in a later tutorial.
             btnMoveTool.setSwitch(false);
         }
     });
-    
+
     btnMoveTool = gui.create({
         GUI.TYPE : GUI.TYPE_BUTTON,
         GUI.ICON : "#Tut_Move",
@@ -398,8 +399,7 @@ The rest of the function will be created in a later tutorial.
             btnMoveTool.setSwitch(true);
         }
     });
-    
+
     toolBar += btnDrawTool;
     toolBar += btnMoveTool;
 <!---END_CODESECTION--->
-
