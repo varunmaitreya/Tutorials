@@ -1,3 +1,16 @@
+ /*
+ * This file is part of the open source part of the
+ * Platform for Algorithm Development and Rendering (PADrend).
+ * Web page: http://www.padrend.de/
+ * Copyright (C) 2016 Florian Pieper <fpieper@mail.upb.de>
+ * 
+ * PADrend consists of an open source part and a proprietary part.
+ * The open source part of PADrend is subject to the terms of the Mozilla
+ * Public License, v. 2.0. You should have received a copy of the MPL along
+ * with this library; see the file LICENSE. If not, you can obtain one at
+ * http://mozilla.org/MPL/2.0/.
+ */
+ 
  static codesectionBeginTag = "<!---BEGINN_CODESECTION--->";
  static codesectionEndTag = "<!---END_CODESECTION--->";
  static includeTag = "<!---INCLUDE";
@@ -7,6 +20,7 @@
  static endTag = "--->";
  
  static rootFolder = Std.DataWrapper.createFromEntry( PADrend.configCache,'MarkdownParser.rootFolder', __DIR__ );
+ static parseToHTML = Std.DataWrapper.createFromEntry( PADrend.configCache, 'MarkdownParser.parseHTML', true);
  
  var plugin = new Plugin({
 		Plugin.NAME : 'Markdown Parser',
@@ -24,8 +38,6 @@ plugin.init := fn(){
 	module.on('PADrend/gui', creatGUI);
 	return true;
 };
-
-
 
 static creatGUI = fn(_gui){
 	static gui = _gui;
@@ -48,8 +60,7 @@ static creatGUI = fn(_gui){
 	}
 	]);
 	
-	
-	static panel = gui.createPanel(400, 50, GUI.AUTO_LAYOUT);
+	static panel = gui.createPanel(400, 55, GUI.AUTO_LAYOUT);
 	panel.setMargin(0);
 
 	panel += [
@@ -78,6 +89,12 @@ static creatGUI = fn(_gui){
 		},
 		{GUI.TYPE : GUI.TYPE_NEXT_ROW	},
 		{
+			GUI.TYPE : GUI.TYPE_BOOL,
+			GUI.LABEL : "Create HTML Files",
+			GUI.DATA_WRAPPER : parseToHTML
+		},
+		{GUI.TYPE : GUI.TYPE_NEXT_ROW	},
+		{
 		
 			GUI.TYPE : GUI.TYPE_BUTTON,
 			GUI.LABEL : "Parse Documents",
@@ -93,9 +110,7 @@ static creatGUI = fn(_gui){
 	
 	gui.register('MarkDownParserWindow.file',[ 
 		panel
-	]);
-	
-	
+	]);	
 };
 
 static removeWasteSpaces = fn(lines){
@@ -125,8 +140,6 @@ static removeWasteSpaces = fn(lines){
 		
 		linesWOTabs +=  (" " * totalSpaces + line);
 	}
-	
-	
 	
 	if(minSpaces < 0)
 		minSpaces = 0;
@@ -158,6 +171,11 @@ static collectLinesFromSourceCodeFile = fn(file, start = 0, end = -1){
 	var firstLine = (start > 0) ? start - 1 : start;
 	var lastLine = (end > 0) ? end - 1 : lines.size()-1;
 	var lineList = [];
+	
+	if(lastLine >= lines.size()){
+		outln("WARNING: Source file " + file + " has does not contain lines " + firstLine + " to " + lastLine);
+		return "";
+ 	}
 		
 	for(var i = firstLine; i <= lastLine; i++){
 		lineList += lines[i];
@@ -173,7 +191,6 @@ static ParameterStruct = new Type();
 ParameterStruct.srcFile := "";
 ParameterStruct.startLine := 0;
 ParameterStruct.endLine := -1;
-
 
 static parseIncludeTag = fn(String line, lineNumber){
 	line = line.replaceAll(" ", "");
@@ -318,7 +335,34 @@ static parseDocument = fn(file){
 		outln("File "+ file + ":no changes found.");
 	}
 	
-	//TODO write to HTML file in the end
+	
+	if(!parseToHTML())
+		return;
+	
+	static Parser = Std.module('MarkDownCodeParser/MarkdownParser');
+	if(!Parser)
+		return;
+		
+	var parser = new Parser();
+	var html = parser.convertDocument(outDocument);
+	var htmlFilePath = file.replace(".md", ".html");
+	var oldHtml = void;
+		
+	try{
+		oldHtml = IO.loadTextFile(htmlFilePath);
+	}catch(e){
+		oldHtml = "";
+	}
+	
+	if(oldHtml != html && html != ""){
+		try{
+			IO.saveTextFile(htmlFilePath, html);
+			outln("Wrote HTML file: " + htmlFilePath);
+		}catch(e){
+			Runtime.warn("Could not save html file" + htmlFilePath);
+			return;
+		}
+	}
 };
 
 static recurseFolderAndParse = fn(root){
