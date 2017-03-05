@@ -1,6 +1,26 @@
+/*
+ * This file is part of the open source part of the
+ * Platform for Algorithm Development and Rendering (PADrend).
+ * Web page: http://www.padrend.de/
+ * Copyright (C) 2016 Florian Pieper <fpieper@mail.upb.de>
+ * 
+ * PADrend consists of an open source part and a proprietary part.
+ * The open source part of PADrend is subject to the terms of the Mozilla
+ * Public License, v. 2.0. You should have received a copy of the MPL along
+ * with this library; see the file LICENSE. If not, you can obtain one at
+ * http://mozilla.org/MPL/2.0/.
+ */
+ 
 static ImageViewer = new Type();
-
 static ColorDialog = new Type();
+
+static Tool = new Type();
+Tool.mouseDown := fn(x, y, button){};
+Tool.mouseMove := fn(x, y, dx, dy, button){};
+Tool.mouseUp := fn(x, y, button){};
+
+static DrawTool = new Type(Tool);
+static MoveTool = new Type(Tool);
 
 ColorDialog.selectColor := fn(index){
 	foreach(this.colorLabels as var label){
@@ -41,7 +61,6 @@ ColorDialog.createContent := fn(){
 			GUI.WIDTH : 40,
 			GUI.HEIGHT : 40,
 			GUI.ON_CLICK : [index, this] => fn(selfIndex, dialog){
-				outln("On click...");
 				dialog.selectColor(selfIndex);
 			}
 		});
@@ -94,17 +113,17 @@ ColorDialog.openDialog := fn(callBackFunction, oldColor){
 
 //----------------------------------------------------------------
 
-static Tool = new Type();
-Tool.mouseDown := fn(x, y, button){};
-Tool.mouseMove := fn(x, y, dx, dy, button){};
-Tool.mouseUp := fn(x, y, button){};
-
-//----------------------------------------------------------------
-
-static DrawTool = new Type(Tool);
 DrawTool._constructor := fn(color = Util.Color4f(0,0,0,1)){
 	this.image := void;
 	this.color := color;
+};
+
+DrawTool.setColor := fn(color){
+	this.color = color;
+};
+
+DrawTool.setImage := fn(image){
+	this.image = image;
 };
 
 DrawTool.paintPixel := fn(x,y){
@@ -126,14 +145,6 @@ DrawTool.paintPixel := fn(x,y){
 	this.image.dataChanged();
 };
 
-DrawTool.setColor := fn(color){
-	this.color = color;
-};
-
-DrawTool.setImage := fn(image){
-	this.image = image;
-};
-
 DrawTool.mouseDown = fn(x, y, button){
 	if(button == Util.UI.MOUSE_BUTTON_LEFT)
 		this.paintPixel(x, y);
@@ -151,16 +162,15 @@ DrawTool.mouseUp = fn(x, y, button){
 
 //----------------------------------------------------------------
 
-static MoveTool = new Type(Tool);
 MoveTool._constructor := fn(imagePanel){
 	this.imagePanel := imagePanel;
 };
 
-MoveTool.scroll := fn(dx, dy){//currX, currY){
+MoveTool.scroll := fn(dx, dy){
 	if(!this.imagePanel)
 		return;
 		
-	var delta = new Geometry.Vec2(-dx, -dy);//new Geometry.Vec2(this.prevX - currX, this.prevY - currY);
+	var delta = new Geometry.Vec2(-dx, -dy);
 	
 	var oldPosition = this.imagePanel.getScrollPos();
 	var newPosition = oldPosition + delta;
@@ -168,34 +178,17 @@ MoveTool.scroll := fn(dx, dy){//currX, currY){
 	this.imagePanel.scrollTo(newPosition);
 };
 
-MoveTool.mouseDown = fn(x, y, button){
-	if(button == Util.UI.MOUSE_BUTTON_LEFT){
-		@(once) static cursor = Util.loadBitmap(Std.module('PADrend/GUI/Style').resourceFolder+"/MouseCursors/moveableCursor.png");
-		Std.module('PADrend/gui').registerMouseCursor(GUI.PROPERTY_MOUSECURSOR_DEFAULT, cursor, 0, 0);
-	}
-};
-
 MoveTool.mouseMove = fn(x, y, dx, dy, button){
 	if(button == Util.UI.MASK_MOUSE_BUTTON_LEFT){
-		@(once) static cursor = Util.loadBitmap(Std.module('PADrend/GUI/Style').resourceFolder+"/MouseCursors/moveableCursor.png");
-		Std.module('PADrend/gui').registerMouseCursor(GUI.PROPERTY_MOUSECURSOR_DEFAULT, cursor, 0, 0);
 		this.scroll(dx, dy);		
 	}
 };
 
-MoveTool.mouseUp = fn(x, y, button){
-	Std.module('PADrend/gui').registerMouseCursor(GUI.PROPERTY_MOUSECURSOR_DEFAULT, Std.module('PADrend/GUI/Style').CURSOR_DEFAULT, 0, 0);
-};
-
 //-----------------------------------------------------------------
-
-static ZoomTool = new Type(Tool);
 
 ImageViewer.init := fn(){
 	this.shownImageFile := new Std.DataWrapper();
 	this.shownImageFile.onDataChanged += [this] => fn(imageViewer, file){
-		outln(file);
-		
 		if(!file)
 			return;
 			
@@ -213,32 +206,26 @@ ImageViewer.init := fn(){
 	
 	this.imagesInFolder := void;
 	this.imageFolderIndex := 0;
-	
-	this.pencileColor  := new Std.DataWrapper(new Util.Color4f(0, 0, 0, 1));
-		
-	this.window := void;
+
 	this.imagePanel := void;
 	
-	this.createAndOpenWindow();
+	this.window := this.createWindow();
+	
+	this.pencileColor  := new Std.DataWrapper(new Util.Color4f(0, 0, 0, 1));
 	
 	this.drawTool := new DrawTool(this.pencileColor());
 	this.moveTool := new MoveTool(this.imagePanel);
-	this.currentTool := drawTool; 
+	this.currentTool := new Tool(); 
 	
 	this.pencileColor.onDataChanged += [this.drawTool] => fn(drawTool, newColor){
 		drawTool.setColor(newColor);
 	};
-};
-
-ImageViewer.createAndOpenWindow := fn(){
-	if(!this.window)
-		this.createWindow();
 	
 	this.window.setEnabled(true);
 };
 
 ImageViewer.getAllImagesInFolder := fn(folder){
-	if(!IO.isDir(folder))
+	if(!folder || !IO.isDir(folder))
 		return void;
 	
 	var images = [];
@@ -263,13 +250,22 @@ ImageViewer.saveCurrentImageToFile := fn(file){
 	if(!this.currentImage || !file)
 		return;
 
-	var texture = Rendering.createTextureFromBitmap(this.currentImage.getImageData().getBitmap());
-	Rendering.saveTexture(renderingContext, texture, file);
+	var bitmap = this.currentImage.getImageData().getBitmap();
+	Util.saveBitmap(bitmap, file);
 };
 
+ImageViewer.openColorDialog := fn(){
+	var dialog = new ColorDialog();
+	dialog.openDialog([this] => fn(imageViewer, newColor){
+			imageViewer.pencileColor(newColor);
+		},
+		this.pencileColor());
+};
+
+//creating the UI
 ImageViewer.createWindow := fn(){
-	this.window = gui.createWindow(800, 800, "Image Viewer Tutorial Version 1");
-	this.window.setPosition(50, 50);
+	var window = gui.createWindow(800, 800, "Image Viewer Tutorial Version 1");
+	window.setPosition(50, 50);
 	
 	var contentPanel = gui.createPanel(800, 700);
 	contentPanel.setExtLayout(
@@ -278,33 +274,34 @@ ImageViewer.createWindow := fn(){
 			GUI.WIDTH_ABS|GUI.HEIGHT_ABS,
 			new Geometry.Vec2(0,0),new Geometry.Vec2(-1, -1) 
     );
-    
-    var menuBarPanel = gui.create({
+
+    contentPanel += [{
     	GUI.TYPE : GUI.TYPE_PANEL,
-    	GUI.FLAGS: GUI.BORDER,	
+    	GUI.FLAGS : GUI.BORDER,	
     	GUI.POSITION : [GUI.POS_X_ABS|GUI.REFERENCE_X_LEFT|GUI.ALIGN_X_LEFT|
 						GUI.POS_Y_ABS|GUI.REFERENCE_Y_TOP|GUI.ALIGN_Y_TOP ,0,0],
-    	GUI.SIZE : [GUI.WIDTH_ABS|GUI.HEIGHT_ABS, -20, 70],
+    	GUI.SIZE : [GUI.WIDTH_ABS|GUI.HEIGHT_ABS, -20, 75],
     	GUI.CONTENTS : [this.createMenu(), this.createToolBar()]    
-    });
+    }];
     
-	this.imagePanel = gui.createPanel(750, 400, GUI.BORDER);
-	this.imagePanel.setExtLayout(
-			GUI.POS_X_ABS|GUI.REFERENCE_X_LEFT|GUI.ALIGN_X_LEFT|
-			GUI.POS_Y_ABS|GUI.REFERENCE_Y_TOP|GUI.ALIGN_Y_TOP|
-			GUI.WIDTH_ABS|GUI.HEIGHT_ABS,
-            new Geometry.Vec2(0,0), new Geometry.Vec2(-20,-100)
-    );
-            
-	contentPanel.add(menuBarPanel);
+	this.imagePanel = gui.create({
+    	GUI.TYPE : GUI.TYPE_PANEL,
+    	GUI.FLAGS : GUI.BORDER,	
+    	GUI.WIDTH : 750,
+    	GUI.HEIGHT : 400,
+    	GUI.POSITION : [GUI.POS_X_ABS|GUI.REFERENCE_X_LEFT|GUI.ALIGN_X_LEFT|
+						GUI.POS_Y_ABS|GUI.REFERENCE_Y_TOP|GUI.ALIGN_Y_TOP ,0,0],
+    	GUI.SIZE : [GUI.WIDTH_ABS|GUI.HEIGHT_ABS, -20, -100]   
+    });
+	
 	contentPanel += [{GUI.TYPE : GUI.TYPE_NEXT_ROW}];
 	contentPanel.add(this.imagePanel);
-	this.window += contentPanel;
+	window += contentPanel;
 	
+	//Mouse Listener
 	Util.registerExtensionRevocably('PADrend_UIEvent', 
 		[this] => fn(imageViewer, event){
 			if(event.type == Util.UI.EVENT_MOUSE_BUTTON || event.type == Util.UI.EVENT_MOUSE_MOTION){
-				// x, y, button, pressed
 				if(!imageViewer.currentImage || !imageViewer.imagePanel.getAbsRect().contains(event.x, event.y))
 					return;
 					
@@ -323,32 +320,28 @@ ImageViewer.createWindow := fn(){
 			}
 		}
 	);
+	
+	return window;
 };
 
 ImageViewer.createMenu := fn(){
 	var menu = gui.createPanel(100, 50, GUI.AUTO_LAYOUT);
 	
-	var zoom = new Std.DataWrapper(100);
-	zoom.setOptions([25, 50, 75, 100, 150, 200, 400, 800]);
-	
 	menu += [
 		{
 			GUI.TYPE				:	GUI.TYPE_MENU,
-			GUI.LABEL				:	"File",
+			GUI.TOOLTIP				:	"File",
 			GUI.ICON				:	"#File",
 			GUI.MENU				:	[
 				{
-					GUI.LABEL : "Open Floder...",
+					GUI.LABEL : "Open Folder...",
 					GUI.ON_CLICK : [this] => fn(imageViewer){
 						var diag = new GUI.FileDialog
 						(
 							"Open Image Folder...",
-							__DIR__, //replace this
+							__DIR__,
 							void,
 							[imageViewer] => fn(imageViewer, folder){
-								if(!IO.isDir(folder))
-									return;
-								
 								imageViewer.imageFolderIndex = 0;
 								imageViewer.imagesInFolder = imageViewer.getAllImagesInFolder(folder);
 								
@@ -356,7 +349,6 @@ ImageViewer.createMenu := fn(){
 									return;
 									
 								imageViewer.shownImageFile(imageViewer.imagesInFolder[imageViewer.imageFolderIndex]);
-								
 							}
 						);
 						diag.folderSelector = true;
@@ -367,7 +359,6 @@ ImageViewer.createMenu := fn(){
 				{
 					GUI.LABEL : "Open Image File...",
 					GUI.ON_CLICK : [this] => fn(imageViewer){
-						outln("Open File...");
 						var diag = new GUI.FileDialog
 						(
 							"Open Image File...",
@@ -414,7 +405,6 @@ ImageViewer.createMenu := fn(){
 						);
 						diag.initialFilename = "";
 						diag.init();
-						
 					}
 				},
 				
@@ -441,18 +431,15 @@ ImageViewer.createMenu := fn(){
 		
 		{
 			GUI.TYPE				:	GUI.TYPE_MENU,
-			GUI.LABEL				:	"Settings",
+			GUI.TOOLTIP				:	"Settings",
 			GUI.ICON				:	"#Settings",
 			GUI.MENU_WIDTH			: 	150,
 			GUI.MENU				:	[
 				{
-					GUI.TYPE : GUI.TYPE_NUMBER,
-					GUI.DATA_WRAPPER : zoom,
-					GUI.LABEL : "Zoom in %"
-				},
-				{
 					GUI.LABEL : "Choose Color...",
-					GUI.ON_CLICK : [this] => fn(imageViewer){imageViewer.openColorDialog();}
+					GUI.ON_CLICK : [this] => fn(imageViewer){
+						imageViewer.openColorDialog();
+					}
 				}
 			
 			],
@@ -463,21 +450,15 @@ ImageViewer.createMenu := fn(){
 	return menu;
 };
 
-ImageViewer.openColorDialog := fn(){
-	var dialog = new ColorDialog();
-	dialog.openDialog([this] => fn(imageViewer, newColor){
-			imageViewer.pencileColor(newColor);
-		},
-		this.pencileColor());
-};
-
 ImageViewer.createToolBar := fn(){
-	var toolBar = gui.createPanel(450, 50, GUI.AUTO_LAYOUT);
+	gui.loadIconFile(__DIR__ + "/resources/icons.json");
+	
+	var toolBar = gui.createPanel(450, 55, GUI.AUTO_LAYOUT);
 	
 	toolBar += [
 		{
 			GUI.TYPE : GUI.TYPE_BUTTON,
-			GUI.LABEL : "<-",
+			GUI.ICON : "#Tut_Left",
 			GUI.TOOLTIP : "Previouse Image",
 			GUI.ON_CLICK : [this] => fn(imageViewer){
 				if(!imageViewer.imagesInFolder || imageViewer.imageFolderIndex == 0)
@@ -489,7 +470,7 @@ ImageViewer.createToolBar := fn(){
 		},
 		{
 			GUI.TYPE : GUI.TYPE_BUTTON,
-			GUI.LABEL : "->",
+			GUI.ICON : "#Tut_Right",
 			GUI.TOOLTIP : "Next Image",
 			GUI.ON_CLICK : [this] => fn(imageViewer){
 				if(!imageViewer.imagesInFolder || imageViewer.imageFolderIndex >= imageViewer.imagesInFolder.count()-1)
@@ -499,33 +480,38 @@ ImageViewer.createToolBar := fn(){
 				imageViewer.shownImageFile(imageViewer.imagesInFolder[imageViewer.imageFolderIndex]);
 			}
 			
-		},
-		/*{
-			GUI.TYPE : GUI.TYPE_BUTTON,
-			GUI.LABEL : "Z",
-			GUI.ON_CLICK : [this] => fn(imageViewer){
-				outln("Local rect: " + imageViewer.imagePanel.getLocalRect());
-				outln("Rect: " + imageViewer.imagePanel.getRect());
-				outln("Absolute Rect: " + imageViewer.imagePanel.getAbsRect());
-			}
-		},*/
-		{
-			GUI.TYPE : GUI.TYPE_BUTTON,
-			GUI.LABEL : "P",
-			GUI.TOOLTIP : "Draw Tool",
-			GUI.ON_CLICK : [this] => fn(imageViewer){
-				imageViewer.currentTool = imageViewer.drawTool;
-			}
-		},
-		{
-			GUI.TYPE : GUI.TYPE_BUTTON,
-			GUI.LABEL : "H",
-			GUI.TOOLTIP : "Move Tool",
-			GUI.ON_CLICK : [this] => fn(imageViewer){
-				imageViewer.currentTool = imageViewer.moveTool;
-			}
 		}	
 	];
+	
+	static btnDrawTool;
+	static btnMoveTool;
+	
+	btnDrawTool = gui.create({
+		GUI.TYPE : GUI.TYPE_BUTTON,
+		GUI.ICON : "#Tut_Pen",
+		GUI.TOOLTIP : "Draw Tool",
+		GUI.ON_CLICK : [this] => fn(imageViewer){
+			btnDrawTool.setSwitch(true);
+			btnMoveTool.setSwitch(false);
+			
+			imageViewer.currentTool = imageViewer.drawTool;
+		}
+	});
+	
+	btnMoveTool = gui.create({
+		GUI.TYPE : GUI.TYPE_BUTTON,
+		GUI.ICON : "#Tut_Move",
+		GUI.TOOLTIP : "Move Tool",
+		GUI.ON_CLICK : [this] => fn(imageViewer){
+			btnDrawTool.setSwitch(false);
+			btnMoveTool.setSwitch(true);
+			
+			imageViewer.currentTool = imageViewer.moveTool;
+		}
+	});
+	
+	toolBar += btnDrawTool;
+	toolBar += btnMoveTool;
 	
 	return toolBar;
 };

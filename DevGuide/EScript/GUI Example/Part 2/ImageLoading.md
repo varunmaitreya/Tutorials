@@ -25,7 +25,7 @@ The paths of all images contained in a folder will be stored in _imagesInFolder_
 Initially there is no list, so we set the variable to _void_.
 Furthermore we need to have some index determining which is the current shown image in the list.
 
-<!---INCLUDE src=ImageViewer2.escript, start=17, end=20--->
+<!---INCLUDE src=ImageViewer2.escript, start=30, end=33--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     this.currentImage := void;
@@ -40,7 +40,7 @@ We store the image's path in the attribute _shownImageFile_.
 whenever there is a new value written to this attribute, a image has to be loaded.
 Here a _Std.DataWrapper_ comes in handy.
 
-<!---INCLUDE src=ImageViewer2.escript, start=4, end=4--->
+<!---INCLUDE src=ImageViewer2.escript, start=17, end=17--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     this.shownImageFile := new Std.DataWrapper();
@@ -62,7 +62,7 @@ This is done by calling _clear_ on the image panel.
 In general _clear_ removes all children from a component.
 In a last step we update _currentImage_ to the new image.
 
-<!---INCLUDE src=ImageViewer2.escript, start=5, end=15--->
+<!---INCLUDE src=ImageViewer2.escript, start=18, end=28--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     this.shownImageFile.onDataChanged += [this] => fn(imageViewer, file){
@@ -94,7 +94,7 @@ To save the image we need to extract the actual bitmap from the component.
 We can access it via the image data of the component by calling _currentImage.getImageData().getBitmap()_.
 To save the image we can use _Util.saveImage(bitmap, path)_.
 
-<!---INCLUDE src=ImageViewer2.escript, start=50, end=56--->
+<!---INCLUDE src=ImageViewer2.escript, start=63, end=69--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     ImageViewer.saveCurrentImageToFile := fn(file){
@@ -119,7 +119,7 @@ Since we only want to process some image formats (PNG, JPEG and Bitmap) we need 
 Therefore we iterate over the file list and check for each file whether its file ending is in the list of the supported formats.
 If this is the case, the file is added to the output list.
 
-<!---INCLUDE src=ImageViewer2.escript, start=28, end=48--->
+<!---INCLUDE src=ImageViewer2.escript, start=41, end=61--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     ImageViewer.getAllImagesInFolder := fn(folder){
@@ -157,7 +157,7 @@ Here we will finish the callback function of our _Open Folder..._ menu item.
 First thing we need to do is to set up a file dialog.
 Therefore we instantiate a new _GUI.FileDialog_ object.
 To the constructor we pass a title for the dialog, the start directory, a list of file endings that should be accepted and a callback function.
-We set the start directory to \_\_DIR\_\_, which is the current directory.
+We set the start directory to ___DIR___, which is the current directory.
 Since we want to process folders only, we do not need any file endings, so that we pass _void_.  
 Next up we write our callback function.
 When the file dialog calls this function it passes the chosen folder to it.
@@ -169,7 +169,7 @@ After we have created the dialog we need to set it to open folders only.
 This is done by setting the _folderSelector_ attribute of the instance to _true_.
 To open the dialog we simply call _init()_ on the instance.
 
-<!---INCLUDE src=ImageViewer2.escript, start=109, end=125--->
+<!---INCLUDE src=ImageViewer2.escript, start=122, end=138--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     var diag = new GUI.FileDialog
@@ -200,7 +200,7 @@ After that the image is loaded and shown.
 When opening a file dialog, it will set some initial default file name.
 Since we want the text field, showing the currently chosen file, to be empty at the opening of the dialog, we set _initialFilename_ to an empty string.
 
-<!---INCLUDE src=ImageViewer2.escript, start=132, end=144--->
+<!---INCLUDE src=ImageViewer2.escript, start=145, end=157--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     var diag = new GUI.FileDialog
@@ -231,7 +231,7 @@ We add them by calling _addAction_.
 The _Yes_ button gets a callback function which saves the image.
 Since the _No_ button simply just closes the window, it does not need any callback function.
 
-<!---INCLUDE src=ImageViewer2.escript, start=153, end=177--->
+<!---INCLUDE src=ImageViewer2.escript, start=166, end=190--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
         if(!imageViewer.currentImage || !imageViewer.shownImageFile())
@@ -263,7 +263,7 @@ Since the _No_ button simply just closes the window, it does not need any callba
 
 _Save File..._ saves the current image to the file it was loaded from.
 
-<!---INCLUDE src=ImageViewer2.escript, start=184, end=187--->
+<!---INCLUDE src=ImageViewer2.escript, start=197, end=200--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     if(!imageViewer.currentImage || !imageViewer.shownImageFile())
@@ -277,7 +277,7 @@ Next up we create the function for switching between the images of a folder.
 To switch to the next (previous) image, we increase (decrease) _imageFolderIndex_ and load the corresponding image from _imagesInFolder_.
 To ensure the index to be valid, we first check whether that it is in bounds before accessing the list.
 
-<!---INCLUDE src=ImageViewer2.escript, start=234, end=238--->
+<!---INCLUDE src=ImageViewer2.escript, start=247, end=251--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     if(!imageViewer.imagesInFolder || imageViewer.imageFolderIndex == 0)
@@ -286,4 +286,5 @@ To ensure the index to be valid, we first check whether that it is in bounds bef
     imageViewer.imageFolderIndex--;
     imageViewer.shownImageFile(imageViewer.imagesInFolder[imageViewer.imageFolderIndex]);
 <!---END_CODESECTION--->
+
 

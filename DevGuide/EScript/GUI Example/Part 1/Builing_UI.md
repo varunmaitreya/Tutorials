@@ -20,16 +20,17 @@ It takes three parameters.
 The first two are the width and height of the window, the third one sets the window's title.
 We use the member function _setPosition_ to position the window within PADrend.
 
-<!---INCLUDE src=ImageViewer1.escript, start=11, end=12--->
+<!---INCLUDE src=ImageViewer1.escript, start=24, end=26--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     var window = gui.createWindow(800, 800, "Image Viewer Tutorial Version 1");
     window.setPosition(50, 50);
+    
 <!---END_CODESECTION--->
 
 To open the window we have to call the member function _setEnabled_.
 
-<!---INCLUDE src=ImageViewer1.escript, start=7, end=7--->
+<!---INCLUDE src=ImageViewer1.escript, start=20, end=20--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     this.window.setEnabled(true);
@@ -58,7 +59,7 @@ The specialization of the element is also included in the map.
 We will use both ways in the creation of our panels.
 First of all we create the content panel by using the first technique.
 
-<!---INCLUDE src=ImageViewer1.escript, start=14, end=20--->
+<!---INCLUDE src=ImageViewer1.escript, start=27, end=33--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     var contentPanel = gui.createPanel(800, 700);
@@ -66,7 +67,7 @@ First of all we create the content panel by using the first technique.
             GUI.POS_X_ABS|GUI.REFERENCE_X_LEFT|GUI.ALIGN_X_LEFT|
             GUI.POS_Y_ABS|GUI.REFERENCE_Y_TOP|GUI.ALIGN_Y_TOP|
             GUI.WIDTH_ABS|GUI.HEIGHT_ABS,
-            new Geometry.Vec2(0,0),new Geometry.Vec2(-1, -1)
+            new Geometry.Vec2(0,0),new Geometry.Vec2(-1, -1) 
     );
 <!---END_CODESECTION--->
 
@@ -80,12 +81,12 @@ In this way you can also pass a description as a list of maps to it.
 Each map in the list describes one GUI element.
 In this way we add the panel for the controls to the content panel.
 
-<!---INCLUDE src=ImageViewer1.escript, start=22, end=29--->
+<!---INCLUDE src=ImageViewer1.escript, start=35, end=42--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     contentPanel += [{
         GUI.TYPE : GUI.TYPE_PANEL,
-        GUI.FLAGS : GUI.BORDER,
+        GUI.FLAGS : GUI.BORDER,	
         GUI.POSITION : [GUI.POS_X_ABS|GUI.REFERENCE_X_LEFT|GUI.ALIGN_X_LEFT|
                         GUI.POS_Y_ABS|GUI.REFERENCE_Y_TOP|GUI.ALIGN_Y_TOP ,0,0],
         GUI.SIZE : [GUI.WIDTH_ABS|GUI.HEIGHT_ABS, -20, 75],
@@ -106,12 +107,12 @@ One way of creating it would be the function _createPanel_, but we can also _cre
 The description is similar to the one for the controls panel.
 We store the panel in an attribute so that we can access it later on.
 
-<!---INCLUDE src=ImageViewer1.escript, start=31, end=39--->
+<!---INCLUDE src=ImageViewer1.escript, start=44, end=52--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     this.imagePanel = gui.create({
         GUI.TYPE : GUI.TYPE_PANEL,
-        GUI.FLAGS : GUI.BORDER,
+        GUI.FLAGS : GUI.BORDER,	
         GUI.WIDTH : 750,
         GUI.HEIGHT : 400,
         GUI.POSITION : [GUI.POS_X_ABS|GUI.REFERENCE_X_LEFT|GUI.ALIGN_X_LEFT|
@@ -127,7 +128,7 @@ First of all we add _GUI.TYPE_NEXT_ROW_ to the content panel to ensure the image
 Afterwards we add the image panel to the content panel by using _add_.
 In a last step we use _+=_ to add the content panel to the window.
 
-<!---INCLUDE src=ImageViewer1.escript, start=41, end=43--->
+<!---INCLUDE src=ImageViewer1.escript, start=54, end=56--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     contentPanel += [{GUI.TYPE : GUI.TYPE_NEXT_ROW}];
@@ -146,33 +147,33 @@ Components reference point. Tells PADrend where the coordinates origin within th
 * _REFERENCE_Y_BOTTOM_ : y-coordinate of origin is on the bottom.
 
 Alignment inside parent. Tells PADrend where to position the component within its parents component.
-* _ALIGN_\__X_\__RIGHT_ : Use parents right side as reference for the components alignment in x direction.
-* _ALIGN_\__X_\__CENTER_ : Use parents center as reference for the components alignment in x direction.
-* _ALIGN_\__X_\__LEFT_ : Use parents left side as reference for the components alignment in x direction.
-* _ALIGN_\__Y_\__TOP_ : Use parents right side as reference for the components alignment in y direction.
-* _ALIGN_\__Y_\__CENTER_ : Use parents center as reference for the components alignment in y direction.
-* _ALIGN_\__Y_\__BOTTOM_ : Use parents left side as reference for the components alignment in y direction.
+* _ALIGN_X_RIGHT_ : Use parents right side as reference for the components alignment in x direction.
+* _ALIGN_X_CENTER_ : Use parents center as reference for the components alignment in x direction.
+* _ALIGN_X_LEFT_ : Use parents left side as reference for the components alignment in x direction.
+* _ALIGN_Y_TOP_ : Use parents right side as reference for the components alignment in y direction.
+* _ALIGN_Y_CENTER_ : Use parents center as reference for the components alignment in y direction.
+* _ALIGN_Y_BOTTOM_ : Use parents left side as reference for the components alignment in y direction.
 
 Type of position value. Sets the components position within the parents components. If not set the components values will be used. Absolute means the position is passed in pixels. Relative means the position is passed as percentage value between 0 and 1. You can also mix relative and absolute values. The values is passed as _Geometry.Vec2_.
-* _POS_\__X_\__ABS_ : Positions x-coordinate in pixels.
-* _POS_\__X_\__REL_ : Positions x-coordinate as percentage value.
-* _POS_\__Y_\__ABS_ : Positions y-coordinate in pixels.
-* _POS_\__Y_\__REL_ : Positions y-coordinate as percentage value.
+* _POS_X_ABS_ : Positions x-coordinate in pixels.
+* _POS_X_REL_ : Positions x-coordinate as percentage value.
+* _POS_Y_ABS_ : Positions y-coordinate in pixels.
+* _POS_Y_REL_ : Positions y-coordinate as percentage value.
 
 Type of size value. Sets the components size. As for the position the value can be passed as absolute or relative. A _Geometry.Vec2_ is used as input. If one axis is not is not set, the components value will be used.
 
-* _WIDTH_\__REL_ : Set the width relative to the parents width.
-* _HEIGHT_\__REL_ : Set the height relative to the parents height.
-* _WIDTH_\__ABS_ : Set the width in pixels. On negative values, the value is subtracted form the parents width.
-* _HEIGHT_\__ABS_ : Set the height in pixels. On negative values, the value is subtracted form the parents height.
-* _WIDTH_\__CHILDREN_\__REL_ : Set the width relative to the children’s width.
-* _HEIGHT_\__CHILDREN_\__REL_ : Set the height relative to the children’s height.
-* _WIDTH_\__CHILDREN_\__ABS_ : Set the width in pixels. On negative values, the value is subtracted form the children’s width.
-* _HEIGHT_\__CHILDREN_\__ABS_ : Set the height in pixels. On negative values, the value is subtracted form the children’s height.
-* _WIDTH_\__FILL_\__REL_ : Fills up the components width relative to the parents width.
-* _HEIGHT_\__FILL_\__REL_ : Fills up the components height relative to the parents height.
-* _WIDTH_\__FILL_\__ABS_ : Fills up the components width absolute to the parents width.
-* _HEIGHT_\__FILL_\__ABS_ : Fills up the components height absolute to the parents height.
+* _WIDTH_REL_ : Set the width relative to the parents width.
+* _HEIGHT_REL_ : Set the height relative to the parents height.
+* _WIDTH_ABS_ : Set the width in pixels. On negative values, the value is subtracted form the parents width.
+* _HEIGHT_ABS_ : Set the height in pixels. On negative values, the value is subtracted form the parents height.
+* _WIDTH_CHILDREN_REL_ : Set the width relative to the children’s width.
+* _HEIGHT_CHILDREN_REL_ : Set the height relative to the children’s height.
+* _WIDTH_CHILDREN_ABS_ : Set the width in pixels. On negative values, the value is subtracted form the children’s width.
+* _HEIGHT_CHILDREN_ABS_ : Set the height in pixels. On negative values, the value is subtracted form the children’s height.
+* _WIDTH_FILL_REL_ : Fills up the components width relative to the parents width.
+* _HEIGHT_FILL_REL_ : Fills up the components height relative to the parents height.
+* _WIDTH_FILL_ABS_ : Fills up the components width absolute to the parents width.
+* _HEIGHT_FILL_ABS_ : Fills up the components height absolute to the parents height.
 
 Lets have a look at a small example:
 
@@ -196,7 +197,7 @@ The first thing we need is a container holding our menus.
 We use a panel for this purpose.
 The panel's layout is set to _GUI.AUTO_LAYOUT_.
 
-<!---INCLUDE src=ImageViewer1.escript, start=49, end=49--->
+<!---INCLUDE src=ImageViewer1.escript, start=62, end=62--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     var menu = gui.createPanel(100, 50, GUI.AUTO_LAYOUT);
@@ -232,7 +233,7 @@ You may have noticed that inbetween the menu item there are some lines containin
 This lines build separates between the menu entries and help to structure the menu.  
 The settings menu is created in a similar way like the file menu.
 
-<!---INCLUDE src=ImageViewer1.escript, start=51, end=113--->
+<!---INCLUDE src=ImageViewer1.escript, start=64, end=126--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     menu += [
@@ -247,41 +248,41 @@ The settings menu is created in a similar way like the file menu.
                         ;
                     }
                 },
-
+                
                 {
                     GUI.LABEL : "Open Image File...",
                     GUI.ON_CLICK : [this] => fn(imageViewer){
                         ;
                     }
                 },
-
+                
                 '----',
-
+                
                 {
                     GUI.LABEL : "Save File as...",
                     GUI.ON_CLICK : [this] => fn(imageViewer){
                         ;
                     }
                 },
-
+                
                 {
                     GUI.LABEL : "Save File...",
                     GUI.ON_CLICK : [this] => fn(imageViewer){
-
+                        
                     }
                 },
-
+                
                 '----',
-
+                
                 {
                     GUI.LABEL : "Close",
                     GUI.ON_CLICK : [this] => fn(imageViewer){					
                         imageViewer.window.close();
                     }
                 }
-            ],
+            ],	
         },
-
+        
         {
             GUI.TYPE				:	GUI.TYPE_MENU,
             GUI.TOOLTIP				:	"Settings",
@@ -294,7 +295,7 @@ The settings menu is created in a similar way like the file menu.
                         ;
                     }
                 }
-
+            
             ],
         },
     ];
@@ -331,7 +332,7 @@ In this way it is possible to create images that contain a number of icons.
 For each icon the offset within the image and the size of the icon is defined in the form [x-offset, y-offset, width, height].  
 _gui.loadIconFile_ loads all icons defined in the file and registers them to PADrend, so that you can address them by their identifier.
 
-<!---INCLUDE src=ImageViewer1.escript, start=120, end=120--->
+<!---INCLUDE src=ImageViewer1.escript, start=133, end=133--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     gui.loadIconFile(__DIR__ + "/resources/icons.json");
@@ -339,14 +340,14 @@ _gui.loadIconFile_ loads all icons defined in the file and registers them to PAD
 
 We need four buttons for switching between images of a folder and between the tools.
 The creation of buttons is similar to the creation of the menus.
-Again there is a _ON_\__CLICK_ function, which is called whenever the button is clicked.
+Again there is a _ON_CLICK_ function, which is called whenever the button is clicked.
 For the image switching buttons we leave it empty for now.  
 
-<!---INCLUDE src=ImageViewer1.escript, start=122, end=142--->
+<!---INCLUDE src=ImageViewer1.escript, start=135, end=155--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     var toolBar = gui.createPanel(450, 55, GUI.AUTO_LAYOUT);
-
+    
     toolBar += [
         {
             GUI.TYPE : GUI.TYPE_BUTTON,
@@ -363,23 +364,23 @@ For the image switching buttons we leave it empty for now.
             GUI.ON_CLICK : [this] => fn(imageViewer){
                 ;
             }
-
-        }
+            
+        }	
     ];
 <!---END_CODESECTION--->
 
 To indicate which tool is selected we will set the corresponding button to stay pressed.
-So we will need to access the buttons within their _ON_\__CLICK_ function.
+So we will need to access the buttons within their _ON_CLICK_ function.
 That is why the buttons are stored in static variables.
-Within the _ON_\__CLICK_ function we set the one button pressed by calling _isSwitch_.
+Within the _ON_CLICK_ function we set the one button pressed by calling _isSwitch_.
 The rest of the function will be created in a later tutorial.
 
-<!---INCLUDE src=ImageViewer1.escript, start=144, end=168--->
+<!---INCLUDE src=ImageViewer1.escript, start=157, end=181--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     static btnDrawTool;
     static btnMoveTool;
-
+    
     btnDrawTool = gui.create({
         GUI.TYPE : GUI.TYPE_BUTTON,
         GUI.ICON : "#Tut_Pen",
@@ -389,7 +390,7 @@ The rest of the function will be created in a later tutorial.
             btnMoveTool.setSwitch(false);
         }
     });
-
+    
     btnMoveTool = gui.create({
         GUI.TYPE : GUI.TYPE_BUTTON,
         GUI.ICON : "#Tut_Move",
@@ -399,7 +400,9 @@ The rest of the function will be created in a later tutorial.
             btnMoveTool.setSwitch(true);
         }
     });
-
+    
     toolBar += btnDrawTool;
     toolBar += btnMoveTool;
 <!---END_CODESECTION--->
+
+
