@@ -41,9 +41,9 @@ The color and the position of a square are passed by two parameters.
 Next up we create four culling states.
 For the first three states the method _setCullMode_ is used to set the sates mode.
 There are three cull modes which can be found in the namespace _Rendering_:
-* _CULL\_BACK_ : Enables back face culling only.
-* _CULL\_FRONT_ : Enables front face culling only.
-* _CULL\_FRONT\_AND\_BACK_ : Enables front and back face culling.
+* _CULL_BACK_ : Enables back face culling only.
+* _CULL_FRONT_ : Enables front face culling only.
+* _CULL_FRONT_AND_BACK_ : Enables front and back face culling.
 
 <!---INCLUDE src=CullFaceState.escript, start=43, end=52--->
 <!---BEGINN_CODESECTION--->
@@ -95,6 +95,3 @@ Since we used back and front face culling on the blue square, it can not be seen
 ![Front side](front_side.png)
 
 ![Back side](back_side.png)
-
-
-

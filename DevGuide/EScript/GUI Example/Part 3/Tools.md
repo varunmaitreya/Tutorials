@@ -43,7 +43,7 @@ The three methods correspond to the different mouse events:
     Tool.mouseDown := fn(x, y, button){};
     Tool.mouseMove := fn(x, y, dx, dy, button){};
     Tool.mouseUp := fn(x, y, button){};
-
+    
     static DrawTool = new Type(Tool);
     static MoveTool = new Type(Tool);
 <!---END_CODESECTION--->
@@ -63,11 +63,11 @@ Since the image as well as the color can change during runtime, there are also s
         this.image := void;
         this.color := color;
     };
-
+    
     DrawTool.setColor := fn(color){
         this.color = color;
     };
-
+    
     DrawTool.setImage := fn(image){
         this.image = image;
     };
@@ -94,12 +94,12 @@ Note that this check differs for _mouseMove_ since the listener receives a mask 
         if(button == Util.UI.MOUSE_BUTTON_LEFT)
             this.paintPixel(x, y);
     };
-
+    
     DrawTool.mouseMove = fn(x, y, dx, dy, button){
         if(button == Util.UI.MASK_MOUSE_BUTTON_LEFT)
             this.paintPixel(x, y);
     };
-
+    
     DrawTool.mouseUp = fn(x, y, button){
         if(button == Util.UI.MOUSE_BUTTON_LEFT)
             this.paintPixel(x, y);
@@ -131,12 +131,12 @@ We use the method _scrollTo_ in order to scroll to the new position.
     MoveTool.scroll := fn(dx, dy){
         if(!this.imagePanel)
             return;
-
+            
         var delta = new Geometry.Vec2(-dx, -dy);
-
+        
         var oldPosition = this.imagePanel.getScrollPos();
         var newPosition = oldPosition + delta;
-
+        
         this.imagePanel.scrollTo(newPosition);
     };
 <!---END_CODESECTION--->
@@ -167,11 +167,11 @@ We use a data wrapper for this purpose and apply a call back function to it.
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     this.pencileColor  := new Std.DataWrapper(new Util.Color4f(0, 0, 0, 1));
-
+    
     this.drawTool := new DrawTool(this.pencileColor());
     this.moveTool := new MoveTool(this.imagePanel);
-    this.currentTool := new Tool();
-
+    this.currentTool := new Tool(); 
+    
     this.pencileColor.onDataChanged += [this.drawTool] => fn(drawTool, newColor){
         drawTool.setColor(newColor);
     };
@@ -200,19 +200,19 @@ For mouse move events we need to access the field _buttonMask_ instead of _butto
 <!---INCLUDE src=ImageViewer3.escript, start=302, end=322--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-    Util.registerExtensionRevocably('PADrend_UIEvent',
+    Util.registerExtensionRevocably('PADrend_UIEvent', 
         [this] => fn(imageViewer, event){
             if(event.type == Util.UI.EVENT_MOUSE_BUTTON || event.type == Util.UI.EVENT_MOUSE_MOTION){
                 if(!imageViewer.currentImage || !imageViewer.imagePanel.getAbsRect().contains(event.x, event.y))
                     return;
-
+                    
                 var x = event.x - imageViewer.currentImage.getAbsRect().getX();
                 var y = event.y - imageViewer.currentImage.getAbsRect().getY();
-
+                    
                 if(event.type == Util.UI.EVENT_MOUSE_BUTTON){
                     if(event.pressed)
                         imageViewer.currentTool.mouseDown(x, y, event.button);
-                    else
+                    else	
                         imageViewer.currentTool.mouseUp(x, y, event.button);
                 }
                 if(event.type == Util.UI.EVENT_MOUSE_MOTION){
@@ -237,11 +237,11 @@ The only thing we need to do is to set the current tool to the tool associated w
         GUI.ON_CLICK : [this] => fn(imageViewer){
             btnDrawTool.setSwitch(true);
             btnMoveTool.setSwitch(false);
-
+            
             imageViewer.currentTool = imageViewer.drawTool;
         }
     });
-
+    
     btnMoveTool = gui.create({
         GUI.TYPE : GUI.TYPE_BUTTON,
         GUI.ICON : "#Tut_Move",
@@ -249,7 +249,7 @@ The only thing we need to do is to set the current tool to the tool associated w
         GUI.ON_CLICK : [this] => fn(imageViewer){
             btnDrawTool.setSwitch(false);
             btnMoveTool.setSwitch(true);
-
+            
             imageViewer.currentTool = imageViewer.moveTool;
         }
     });
@@ -294,13 +294,13 @@ After creating the dialogs content, we select the button of the current color.
             new Util.Color4f(0.0, 0.0, 1.0, 1.0),
             new Util.Color4f(0.0, 0.0, 0.0, 1.0)
         ];
-
+        
         this.currentColor := oldColor;
         this.colorLabels := [];
         this.onConfirm := new Std.MultiProcedure();
-
+    
         this.createContent();
-
+        
         var index = this.getIndexForColor(this.currentColor);
         this.selectColor(index);
     };
@@ -329,7 +329,7 @@ Therefore we simply call the multi procedure and pass the color to it.
 <!---Automaticly generated section. Do not edit!!!--->
     ColorDialog.createContent := fn(){
         var colorPanel = gui.createPanel(370,60);
-
+        
         foreach(this.colors as var index, var color){
             var lbl = gui.create({
                 GUI.TYPE : GUI.TYPE_BUTTON,
@@ -342,11 +342,11 @@ Therefore we simply call the multi procedure and pass the color to it.
                     dialog.selectColor(selfIndex);
                 }
             });
-
+            
             this.colorLabels += lbl;
             colorPanel += lbl;
         }
-
+    
         this.diag := gui.createDialog({
             GUI.TYPE : GUI.TYPE_POPUP_DIALOG,
             GUI.LABEL : "Choose Color...",
@@ -360,7 +360,7 @@ Therefore we simply call the multi procedure and pass the color to it.
             ],
         });
     };
-
+    
     ColorDialog.init := fn(oldColor){
         this.colors := [
             new Util.Color4f(1.0, 1.0, 1.0, 1.0),
@@ -372,13 +372,13 @@ Therefore we simply call the multi procedure and pass the color to it.
             new Util.Color4f(0.0, 0.0, 1.0, 1.0),
             new Util.Color4f(0.0, 0.0, 0.0, 1.0)
         ];
-
+        
         this.currentColor := oldColor;
         this.colorLabels := [];
         this.onConfirm := new Std.MultiProcedure();
-
+    
         this.createContent();
-
+        
         var index = this.getIndexForColor(this.currentColor);
         this.selectColor(index);
     };
@@ -399,12 +399,12 @@ Otherwise we set _currentColor_ to the color value that is found at the passed p
         foreach(this.colorLabels as var label){
             label.setFlag(GUI.BORDER, false);
         }
-
+        
         if(index < 0 || index >= this.colors.size()){
             this.currentColor = void;
             return;
         }
-
+        
         this.currentColor = this.colors[index];
         this.colorLabels[index].setFlag(GUI.BORDER, true);
     };
@@ -451,3 +451,4 @@ This method is called when the _Choose Color..._ item in the settings menu is cl
         imageViewer.openColorDialog();
     }
 <!---END_CODESECTION--->
+

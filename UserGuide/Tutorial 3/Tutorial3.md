@@ -45,8 +45,8 @@ For ordinary nodes there is a black description box, for semantic objects there 
 ## Marking nodes as semantic objects
 The factory hall is empty till now.
 Lets fill it with a small production line.
-Place two instances of _Rollen\_Gerade\_Lang2_ in the hall.
-Use two instances of _Rollen\_Kurve\_180_ to connect them (one of them needs to be rotated by 180 degrees).
+Place two instances of _Rollen_Gerade_Lang2_ in the hall.
+Use two instances of _Rollen_Kurve_180_ to connect them (one of them needs to be rotated by 180 degrees).
 Pay attention to the alignment.
 In the end it should look like in the image below.
 
