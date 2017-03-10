@@ -341,9 +341,3 @@ ES_FUNCTION(typeObject, "getXZ", 1, 1, {
 ### Compile
 Before you compile your classes, you have to make sure that your compile tool knows them. For example if you're using `CodeBlocks`, you have to run the `PADrend\PADrend\PADrend.ekki` script, which will add all source files to the project file. After this step, you can actually compile PADrend.
 
-
-
-
-
-
-

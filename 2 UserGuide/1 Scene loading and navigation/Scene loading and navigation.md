@@ -107,7 +107,6 @@ After we have loaded the scene let us start moving around a bit.
 Navigation in PADrend can be done in three different ways.
 You can use the keyboard, the mouse, a gamepad or a combination.
 There is a complete keybindings overview in your PADrend directory under _PADrend/doc/Help.txt_.
-<!--TODO: add PADrend help here, when it has been developed-->
 
 ## Keyboard navigation
 * Use the keys [w], [a], [s] and [d] for moving forward, left, backward and right.
@@ -115,7 +114,7 @@ There is a complete keybindings overview in your PADrend directory under _PADren
   If the camera for example looks slightly down in an angle and you press [w] you will move down with this angle.
 * Use the keys [q] and [e] to rotate the camera.
 * Use the keys [r] and [f] to move the camera up and down.
-* Use [space] to reset the camera. <!--TODO what means reset-->
+* Use [space] to reset the camera. 
 * Use [Numpad 5] to move the camera above the whole scene.
 
 ## Mouse navigation
