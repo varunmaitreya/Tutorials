@@ -77,59 +77,16 @@ There are two settings of blending functions in the code.
 You can switch between them by changing the value of the boolean variable _useConstantAlpha_.
 
 <!---INCLUDE src=BlendingState.escript, start=14, end=15--->
-<!---BEGINN_CODESECTION--->
-<!---Automaticly generated section. Do not edit!!!--->
-    //This variable is used to switch between two blending functions.
-    var useConstantAlpha = false;
-<!---END_CODESECTION--->
 
 The code for creating the quads is provided by a function so that it can be reused.
 
 <!---INCLUDE src=BlendingState.escript, start=17, end=38--->
-<!---BEGINN_CODESECTION--->
-<!---Automaticly generated section. Do not edit!!!--->
-    //Creates a quad with a specific color. The function returns a
-    //geometry node including the mesh of the quad. The z-parameter
-    //sets the quad's displacement along the z-axis.
-    var createQuad = fn(z, r, g, b){
-        var meshBuilder = new Rendering.MeshBuilder();
-        meshBuilder.color(new Util.Color4f(r, g, b, 0.5));
-        
-        meshBuilder.position(new Geometry.Vec3(-0.5, 0, z));
-        meshBuilder.addVertex();
-    
-        meshBuilder.position(new Geometry.Vec3(0.5, 0, z));
-        meshBuilder.addVertex();
-        
-        meshBuilder.position(new Geometry.Vec3(0.5, 1, z));
-        meshBuilder.addVertex();
-    
-        meshBuilder.position(new Geometry.Vec3(-0.5, 1, z));
-        meshBuilder.addVertex();
-        
-        meshBuilder.addQuad(0, 1, 2, 3);
-        return new MinSG.GeometryNode(meshBuilder.buildMesh());
-    };
-<!---END_CODESECTION--->
 
 First we need to create the three quads.
 We use the z-parameter to position the quads along the z-axis.
 Next up we create a _ListNode_ that combines the three nodes to a scene graph.
 
 <!---INCLUDE src=BlendingState.escript, start=40, end=49--->
-<!---BEGINN_CODESECTION--->
-<!---Automaticly generated section. Do not edit!!!--->
-    //Three quads
-    var node1 = createQuad(0, 1, 0, 0);
-    var node2 = createQuad(1, 0, 1, 0);
-    var node3 = createQuad(2, 0, 0, 1);
-    
-    //Building the scene graph
-    var scene = new MinSG.ListNode();
-    scene += node1;
-    scene += node2;
-    scene += node3;
-<!---END_CODESECTION--->
 
 Next up we create the blending state.
 In an if statement two different blending functions are applied.
@@ -139,20 +96,6 @@ Use _setBlendEquation_ to change the blending equation.
 You can find the constants of the blending equations in the namespace _Rendering.BlendEquation_.
 
 <!---INCLUDE src=BlendingState.escript, start=54, end=64--->
-<!---BEGINN_CODESECTION--->
-<!---Automaticly generated section. Do not edit!!!--->
-    //Two setting two different blending functions. The boolean variable
-    //useCostantAlpha can be used to switch between both settings.
-    if(useConstantAlpha){
-        blendingState.setBlendConstAlpha(0.3);
-        blendingState.setBlendFuncSrc(Rendering.BlendFunc.CONSTANT_ALPHA);
-        blendingState.setBlendFuncDst(Rendering.BlendFunc.CONSTANT_ALPHA);
-    }
-    else{
-        blendingState.setBlendFuncSrc(Rendering.BlendFunc.SRC_ALPHA);
-        blendingState.setBlendFuncDst(Rendering.BlendFunc.ONE_MINUS_SRC_ALPHA);
-    }
-<!---END_CODESECTION--->
 
 Below you find two images that show the difference between the blending functions set in the code.
 The first image shows the constant alpha blending function, the second shows the combination of SRC_ALPHA and ONE_MINUS_SRC_ALPHA.
@@ -166,6 +109,7 @@ You can also use PADrend's main window to manipulate the values.
 You need to navigate to the scenes root node to access the state.
 
 ![Blending state in main window](blending_state.png)
+
 
 
 
