@@ -13,6 +13,9 @@ For some editors we already have a corresponding highlighting file.
 The syntax is defined in [EScriptNPP.xml](EScriptNPP.xml).
 In order to install it you have to click on `Language` -> `Define your language`. A new window will pop up and there you have to click on `import`. This will open an open file dialog and here you have to select the `EScriptNPP.xml` file.
 
+## Atom
+Simply install the `language-escript` package under `Packages` -> `Settings View` -> `Install Packages/Themes`.
+
 ## Code Blocks
 The syntax is defined in [lexer_escript.xml](lexer_escript.xml). To enable it, copy the file to `???\CodeBlocks\share\CodeBlocks\lexers`, where `???` is your Code Blocks installation folder.
 
