@@ -835,13 +835,13 @@ ChapterTree.storeToDisk := fn(){
 		if(node.isFolder && Util.isDir(node.originalNode.folderPath)){ //folder and still exists
 			var rmpath = node.originalNode.folderPath;
 			rmpath = rmpath.endsWith("/") ? rmpath : (rmpath+"/");
-			Util.remove(rmpath, true); //remove the whole folder and content recursively
+			Util.removeFile(rmpath, true); //remove the whole folder and content recursively
 		}
 		else if(!node.isFolder && Util.isFile(node.originalNode.markDownPath)){//remove simple projects
-			Util.remove(node.originalNode.markDownPath); 
+			Util.removeFile(node.originalNode.markDownPath); 
 
 			if(Util.isFile(node.originalNode.htmlPath)){//if there is a html file also remove it
-				Util.remove(node.originalNode.htmlPath);	
+				Util.removeFile(node.originalNode.htmlPath);	
 			}
 		}//Otherwise the files may be removed recursively before
 	}
@@ -898,7 +898,7 @@ ChapterTree.storeToDisk := fn(){
 	
 	//step 5: clean up by removing the temp folder
 	if(Util.isDir(tempFolder))
-		Util.remove(tempFolder + "/", true);
+		Util.removeFile(tempFolder + "/", true);
 		
 	//step 6: add new tutorials
 	var newTutorials = visitor.newTutorials;
