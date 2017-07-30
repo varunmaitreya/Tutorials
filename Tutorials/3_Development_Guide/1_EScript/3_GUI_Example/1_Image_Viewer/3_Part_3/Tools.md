@@ -81,7 +81,28 @@ This method is called in two for-loops, which iterate over the pixels neighborho
 Before we set a pixels color we first need to check whether the current coordinate is within the images bounds.
 After we have colored all necessary pixels, we call _dataChanged_ on the image, so that it gets updated.
 
-<!---INCLUDE src=ImageViewer3.escript, start=129, end=14--->
+<!---INCLUDE src=ImageViewer3.escript, start=129, end=146--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    DrawTool.paintPixel := fn(x,y){
+        if(!this.image)
+            return;
+            
+        if(!this.color){
+            outln("No color set!");
+            return;
+        }
+        
+        var accessor = this.image.getImageData().createPixelAccessor();
+        
+        for(var px = x-1; px <= x+1; px++)
+            for(var py = y-1; py <= y+1; py++)
+                if(px >= 0 && py >= 0 && px < accessor.getWidth() && py < accessor.getHeight())
+                    accessor.writeColor(px, py, this.color);
+            
+        this.image.dataChanged();
+    };
+<!---END_CODESECTION--->
 
 In the delegation methods _paintPixel_ is called and the current mouse position is passed to it.
 Before we call the function we first make sure that the left mouse button is pressed.
