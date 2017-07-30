@@ -4,6 +4,14 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
  Author: Henrik Heine (hheine@mail.uni-paderborn.de)
  PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
+<!---BEGINN_INDEXSECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+# Overview
+* 3.1.6 Useful Examples
+    * 3.1.6.1 [TextureProcessor](../../../../3_Development_Guide/1_EScript/6_Useful_Examples/1_Texture_Processor/TextureProcessor.html)
+    * 3.1.6.2 [HeightmapShader](../../../../3_Development_Guide/1_EScript/6_Useful_Examples/2_Heightmap_Shader/HeightmapShader.html)
+    * 3.1.6.3 [PostProcessEffect](../../../../3_Development_Guide/1_EScript/6_Useful_Examples/3_Post_Process_Effect/PostProcessEffect.html)
+<!---END_INDEXSECTION--->
 
 # Shader example: Heightmap
 This simple example will render a terrain based on a heightmap. Instead of building a mesh based on the heightmap, the mesh itself is just a regular grid and the heightmap is applied in the vertex shader.

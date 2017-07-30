@@ -4,6 +4,13 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
  Author: Henrik Heine (hheine@mail.uni-paderborn.de)
  PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
+<!---BEGINN_INDEXSECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+# Overview
+* 3.1.1.5 Traits
+    * 3.1.1.5.1 [Traits](../../../../3_Development_Guide/1_EScript/1_EScript_Basics/5_Traits/1_Traits.html)
+    * 3.1.1.5.2 [Useful Traits](../../../../3_Development_Guide/1_EScript/1_EScript_Basics/5_Traits/2_Useful_Traits.html)
+<!---END_INDEXSECTION--->
 
 # Traits
 Traits are a concept of object oriented programming. A trait represents a set of methods and/or attributes, that can be used to extend a class. Traits are one possible solution for the problem that arises if an object should provide a mix of different properties. For example if a class should inherit methods from two different classes, but the underlying language doesn't support multiple inheritance.

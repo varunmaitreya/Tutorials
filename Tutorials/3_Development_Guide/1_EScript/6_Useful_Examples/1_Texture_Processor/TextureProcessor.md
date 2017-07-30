@@ -4,6 +4,14 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
  Author: Henrik Heine (hheine@mail.uni-paderborn.de)
  PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
+<!---BEGINN_INDEXSECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+# Overview
+* 3.1.6 Useful Examples
+    * 3.1.6.1 [TextureProcessor](../../../../3_Development_Guide/1_EScript/6_Useful_Examples/1_Texture_Processor/TextureProcessor.html)
+    * 3.1.6.2 [HeightmapShader](../../../../3_Development_Guide/1_EScript/6_Useful_Examples/2_Heightmap_Shader/HeightmapShader.html)
+    * 3.1.6.3 [PostProcessEffect](../../../../3_Development_Guide/1_EScript/6_Useful_Examples/3_Post_Process_Effect/PostProcessEffect.html)
+<!---END_INDEXSECTION--->
 
 # TextureProcessor
 A `TextureProcessor` converts some input textures into some output textures using a shader. It is just a wrapper for some simple `FBO` handling, but can simplify your code. The basic idea is that you only specify the input/output textures and the shader. The `TextureProcessor` will then take care of the rest.

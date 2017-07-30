@@ -4,6 +4,14 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
  Author: Henrik Heine (hheine@mail.uni-paderborn.de)
  PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
+<!---BEGINN_INDEXSECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+# Overview
+* 1 Installation Guide
+    * 1.1 [Installation Guide](../../1_Installation_Guide/1_Installation_Guide.html)
+    * 1.2 [Student Project Guide](../../1_Installation_Guide/2_Student_Project_Guide/Student_Project_Guide.html)
+    * 1.3 [SyntaxHighlighting](../../1_Installation_Guide/3_EScript_Syntax_Highlighting/SyntaxHighlighting.html)
+<!---END_INDEXSECTION--->
 
 # Syntax Highlighting for EScript
 EScripts syntax is very similar to JavaScript, therefore you could just set the language of your favorite editor to JavaScript, but in order to highlight all keywords, it might be better to use a special EScript highlighting.

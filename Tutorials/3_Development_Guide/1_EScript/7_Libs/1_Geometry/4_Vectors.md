@@ -4,6 +4,15 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
  Author: Henrik Heine (hheine@mail.uni-paderborn.de)
  PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
+<!---BEGINN_INDEXSECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+# Overview
+* 3.1.7.1 Geometry
+    * 3.1.7.1.1 [GeometricObjects](../../../../3_Development_Guide/1_EScript/7_Libs/1_Geometry/1_GeometricObjects.html)
+    * 3.1.7.1.2 [Geometry](../../../../3_Development_Guide/1_EScript/7_Libs/1_Geometry/2_Geometry.html)
+    * 3.1.7.1.3 [Matrices](../../../../3_Development_Guide/1_EScript/7_Libs/1_Geometry/3_Matrices.html)
+    * 3.1.7.1.4 [Vectors](../../../../3_Development_Guide/1_EScript/7_Libs/1_Geometry/4_Vectors.html)
+<!---END_INDEXSECTION--->
 
 ## Vector types
 The geometry libary contains 2-, 3- and 4-dimensional vectors. They share many functions and therefore they are described only once in this section and not for each vector separately. The type `VecX` refers to the corresponding vector type (`Vec2`, `Vec3` or `Vec4`). The components are named `x`, `y`, `z` and `w`. So a `Vec2` only has x and y components, while a `Vec4` has all components. Each component can be accessed via `get` and `set` methods, like `getX()` or `setX(42)`. Each setter returns the `this` object for chaining, so you could write `myVector.setX(10).setY(20)` in order to set two components. Furthermore each component can be accessed in a `DataWrapper` like fashion. For example the `x` function has one optional parameter. If no parameter is given, it will behave like `getX`, but if the parameter is given, it behaves like `setX`.

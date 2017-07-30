@@ -4,6 +4,13 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
  Author: Henrik Heine (hheine@mail.uni-paderborn.de)
  PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
+<!---BEGINN_INDEXSECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+# Overview
+* 3.1.1.4 Operators
+    * 3.1.1.4.1 [Operator Precedence](../../../../3_Development_Guide/1_EScript/1_EScript_Basics/4_Operators/1_Operator_Precedence.html)
+    * 3.1.1.4.2 [Operator Overloading](../../../../3_Development_Guide/1_EScript/1_EScript_Basics/4_Operators/2_Operator_Overloading.html)
+<!---END_INDEXSECTION--->
 
 # Operator overloading
 In EScript it is also possible to overload several operators. This happens on a 'per instance' level. This means that an overloaded operator is a function that is called on the object. For unary operators this means that the operator function doesn't have a parameter and the operand is the `this` object. For binary operators, the function has a single argument, which is the operand to the right of the operator. The left operand is the `this` object. The following code shows a simple example class, which overrides the `+` operator:

@@ -4,6 +4,14 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
  Author: Henrik Heine (hheine@mail.uni-paderborn.de)
  PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
+<!---BEGINN_INDEXSECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+# Overview
+* 3.1.3 GUI Example
+    * 3.1.3.1 Image Viewer
+    * 3.1.3.2 [UI Events](../../../3_Development_Guide/1_EScript/3_GUI_Example/2_UI_Events.html)
+    * 3.1.3.3 [GUI Items and DataWrappers](../../../3_Development_Guide/1_EScript/3_GUI_Example/3_GUI_and_DataWrapper/GUI_Items_and_DataWrappers.html)
+<!---END_INDEXSECTION--->
 
 # UI Events
 An `Util.UI.Event` object represents a single UI event. Each instance has a `type` attribute, which determines the kind of event and several different other attributes depending on this type.
