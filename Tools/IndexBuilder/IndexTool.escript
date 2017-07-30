@@ -368,7 +368,7 @@ IndexTool.createWindow := fn(){
     	GUI.SIZE : [GUI.WIDTH_REL|GUI.HEIGHT_ABS, 0.48, 30],
     	GUI.ON_CLICK : [this] => fn(indexTool){
     		if(indexTool.indexTree)
-    			IndexBuilder.createIndex(indexTool.indexTree);
+    			IndexBuilder.createAndSaveIndex(indexTool.indexTree, true);
     		outln("Index building done");
     	}
     });

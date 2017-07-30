@@ -1,2 +1,1 @@
-Copy this folder to the plugins folder. You can find it PADrend's main folder.  
-Activate the plugin in PADrend (Config -> Plugins -> MarkDownCodeParser). Restart PADrend. Start the code parser in PADrend (Plugins -> Mardown Parser).
+To start the parser, execute the file MarkDownTool.escript (e.g. in PADrend file -> load script). If you copy the files to your PADrends main folder, make sure to copy all files to the same directory. Otherwise they will not be found.
