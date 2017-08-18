@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="Menu.css"/>
+<link rel="stylesheet" type="text/css" href="main.css"/>
 <div class = "index" 
 # Tutorial Index
 * 1 Installation Guide
@@ -69,6 +69,7 @@
                 * 3.1.7.1.4 [Vectors](3_Development_Guide/1_EScript/7_Libs/1_Geometry/4_Vectors.html)
             * 3.1.7.2 Util
                 * 3.1.7.2.1 [Network](3_Development_Guide/1_EScript/7_Libs/2_Util/1_Network.html)
+                * 3.1.7.2.2 [Folder Traversal](3_Development_Guide/1_EScript/7_Libs/2_Util/2_Folder_Traversal/Folder_Traversal.html)
     * 3.2 C++
         * 3.2.1 [CppPlugin](3_Development_Guide/2_C++/1_CppPlugin.html)
         * 3.2.2 [Macros for EScript Bindings](3_Development_Guide/2_C++/2_Macros_for_EScript_Bindings.html)
