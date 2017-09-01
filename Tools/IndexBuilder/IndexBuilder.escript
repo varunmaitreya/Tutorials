@@ -464,7 +464,7 @@ ChapterTree.correctPathes := fn(){
 	if(this.isFolder){
 		//Only leaf nodes have html/md path
 		//The md file has to be included in the folder directly
-		if(this.isLeaf()){
+		if(this.isLeaf() && this.markDownPath){
 			var mdFile = this.markDownPath.substr(this.markDownPath.rFind("/")+1, this.markDownPath.length());
 			this.markDownPath = this.folderPath + (this.folderPath.endsWith("/") ? "" : "/") + mdFile;
 			this.htmlPath = this.markDownPath.replace(".md", ".html");
@@ -1040,7 +1040,7 @@ ChapterTree.storeToDisk := fn(){
 		path = rootFolder;
 		
 		while(Util.isDir(path) && !folders.empty()){
-			path += (path.endstWith("/") ? "" : "/") + folders.popFront();
+			path += (path.endsWith("/") ? "" : "/") + folders.popFront();
 		}
 		
 		//now path points to the first folder, which is not in the tutorials folder
