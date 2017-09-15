@@ -9,6 +9,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 # Overview
 * 3.1.5.5 Evaluation
     * 3.1.5.5.1 [Image Compare](../../../../../3_Development_Guide/1_EScript/5_MinSG/5_Evaluation/1_Image_Compare/Image_Compare.html)
+    * 3.1.5.5.2 [Frame Time Measurement](../../../../../3_Development_Guide/1_EScript/5_MinSG/5_Evaluation/2_Frame_Time_Measurement/Frame_Time_Measurement.html)
 <!---END_INDEXSECTION--->
 
 # Image Compare
@@ -166,7 +167,7 @@ It will display the progress of the overall measurement on the console to give y
 ### Store results to disk
 We will store the results as CSV file.
 So it can be processed by tools like Excel.
-Therfore we create a _DataTable_ that contains of two columns.
+Therefore we create a _DataTable_ that contains of two columns.
 We apply the name of the first row by passing it in the constructor call.
 Than we add another column and add our values to it.
 Next up we store the data table to a file.
