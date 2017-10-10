@@ -15,6 +15,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
     * 2.5 [Functional Objects Pointing Joint](../../2_User_Guide/5_Functional_Objects_Pointing_Joint/Functional_Objects_Pointing_Joint.html)
     * 2.6 [Using Scripts](../../2_User_Guide/6_Using_Scripts/Using_Scripts.html)
     * 2.7 [Object Factories](../../2_User_Guide/7_Object_Factories/Object_Factories.html)
+    * 2.8 [Camera Path](../../2_User_Guide/8_Camera_Path/Camera_Path.html)
 <!---END_INDEXSECTION--->
 
 # Goal of this tutorial

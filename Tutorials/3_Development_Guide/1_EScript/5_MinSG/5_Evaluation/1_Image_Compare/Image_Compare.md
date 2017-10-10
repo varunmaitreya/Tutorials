@@ -155,13 +155,31 @@ We draw this texture to the screen and tell PADrend to swap buffers so that it g
 In a last step we tell our progress indicator to increment.
 It will display the progress of the overall measurement on the console to give you an idea how long the measurement is still going to take.
 
-<!---INCLUDE src=ImageCompare.escript, start=22, end=25--->
+<!---INCLUDE src=ImageCompare.escript, start=67, end=88--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-    //setting up path of the shaders needed for the comparing
-    var fileLocator = new Util.FileLocator();
-    fileLocator.addSearchPath("modules/MinSG/data/");
-    MinSG.AbstractOnGpuComparator.initShaderFileLocator(fileLocator);
+    //measurement loop runs for a fixed number of frames
+    var progress = new Util.ProgressIndicator("Measuring", MEASURE_FRAMES, 0.1);
+    for(var frame=0; frame < MEASURE_FRAMES; ++frame) {
+        var pathTime = path.getMaxTime() * frame / MEASURE_FRAMES;
+          measurementCamera.setWorldTransformation(path.getWorldPosition(pathTime));
+          frameContext.setCamera(measurementCamera);
+      
+          // measure
+          evaluator.beginMeasure();
+          evaluator.measure(frameContext, PADrend.getRootNode(), renderingContext.getViewport(););
+          evaluator.endMeasure(frameContext);
+      
+          var value = evaluator.getResults().front();
+          values += value;   
+      
+         //optional output the images that were compared
+         //as well as the resulting difference image
+         Rendering.drawTextureToScreen(renderingContext, renderingContext.getViewport();,  [evaluator.getResultTexture()], [new Geometry.Rect(0, 0, 1, 1)]);
+        PADrend.SystemUI.swapBuffers();
+            
+          progress.increment();
+    }
 <!---END_CODESECTION--->
 
 ### Store results to disk
