@@ -58,9 +58,10 @@
                 * 3.1.5.2.14 [TransparencyRenderer](3_Development_Guide/1_EScript/5_MinSG/2_Node_States/14_TransparencyRenderer/TransparencyRenderer.html)
             * 3.1.5.3 [ObserverTraits](3_Development_Guide/1_EScript/5_MinSG/3_ObserverTraits.html)
             * 3.1.5.4 [TreeQueries](3_Development_Guide/1_EScript/5_MinSG/4_Tree_Queries/TreeQueries.html)
-            * 3.1.5.5 Evaluation
-                * 3.1.5.5.1 [Image Compare](3_Development_Guide/1_EScript/5_MinSG/5_Evaluation/1_Image_Compare/Image_Compare.html)
-                * 3.1.5.5.2 [Frame Time Measurement](3_Development_Guide/1_EScript/5_MinSG/5_Evaluation/2_Frame_Time_Measurement/Frame_Time_Measurement.html)
+            * 3.1.5.5 [Camera Path Scripted](3_Development_Guide/1_EScript/5_MinSG/5_Camera_Path_Scripted/Camera_Path_Scripted.html)
+            * 3.1.5.6 Evaluation
+                * 3.1.5.6.1 Image Compare
+                * 3.1.5.6.2 Frame Time Measurement
         * 3.1.6 Useful Examples
             * 3.1.6.1 [TextureProcessor](3_Development_Guide/1_EScript/6_Useful_Examples/1_Texture_Processor/TextureProcessor.html)
             * 3.1.6.2 [HeightmapShader](3_Development_Guide/1_EScript/6_Useful_Examples/2_Heightmap_Shader/HeightmapShader.html)
