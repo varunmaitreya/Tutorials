@@ -2,36 +2,29 @@
 This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
  To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.
  Author: Henrik Heine (hheine@mail.uni-paderborn.de)
+ Modified by: Sascha Brandt (sascha@brandt.graphics)
  PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
 <!---BEGINN_INDEXSECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
 # Overview
 * 3.2 C++
-    * 3.2.1 [CppPlugin](../../../3_Development_Guide/2_C++/1_CppPlugin.html)
+    * 3.2.1 [Creating a C++ Plugin](../../../3_Development_Guide/2_C++/1_Creating_a_C++_Plugin/Creating_a_C++_Plugin.html)
     * 3.2.2 [Macros for EScript Bindings](../../../3_Development_Guide/2_C++/2_Macros_for_EScript_Bindings.html)
-    * 3.2.3 [SimpleExample](../../../3_Development_Guide/2_C++/3_SimpleExample/SimpleExample.html)
-    * 3.2.4 [State](../../../3_Development_Guide/2_C++/4_State/State.html)
+    * 3.2.3 [Creating Object Bindings](../../../3_Development_Guide/2_C++/3_Creating_Object_Bindings/Creating_Object_Bindings.html)
+    * 3.2.4 [Extending MinSG States](../../../3_Development_Guide/2_C++/4_Extending_MinSG_States/Extending_MinSG_States.html)
 <!---END_INDEXSECTION--->
 
-# Simple C++ example plugin
-This chapter will show you a simple example C++ plugin.
+# Creating Object bindings
+This chapter will show you a simple example how write EScript bindings for simple C++ objects.
 We will basically just add a very simple C++ class to PADrend. For the sake of simplicity we will just add a two dimensional bounding box, which will be described by two `Vec2` instances.
 
-## Folder structure
-Before we can start programming, we should create the correct folder structure. Each C++ plugin basically consists of two parts:
-1. The MinSG part, where all your actual class reside
-2. The E_MinSG part, where all wrapper classes are
+This tutorial assumes, that you have a working C++ plugin project according to the tutorial [Creating a C++ Plugin](../../../3_Development_Guide/2_C++/1_Creating_a_C++_Plugin/Creating_a_C++_Plugin.html)
 
-If not yet done we have to create a folder for our plugin project inside of the `Ext` folder of these two projects. In this tutorial we will name our project just `MyExtension`. Of course you should give it a better name. We have to create the following two folders:
-* `PADrend/modules/MinSG/Ext/MyExtension`
-* `PADrend/modules/E_MinSG/Ext/MyExtension`
+## A simple 2D Bounding Box in C++ 
+For now we only want to add a simple class called `BoundingBox2D`. Typically you would therefore add a header and a source file for this class, but because it is an extremly simple example, we just put everything in the header file. So we just create a file called `BoundingBox2D.h` inside of your source folder, e.g., `MyProject/src/BoundingBox2D.h`. This file will hold the actual logic of our simple bounding box:
 
-Typically you will then continue with adding empty files to your project. If you're using CodeBlocks, you have to run the `PADrend/PADrend/PADrend.ekki` file, whenever you have added or removed files.
-
-## MinSG part
-For now we only want to add a simple class called `BoundingBox2D`. Typically you would therefore add a header and a source file for this class, but because it is an extremly simple example, we just put everything in the header file. So we just create a file called `BoundingBox2D.h` inside of the `PADrend/modules/MinSG/Ext/MyExtension` folder. This file will hold the actual logic of our simple bounding box:
-<!---INCLUDE src=MinSG/MyExtension/BoundingBox2D.h, start=14, end=90--->
+<!---INCLUDE src=files/BoundingBox2D.h, start=14, end=81--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     // prevent multiple includes of this file
@@ -40,26 +33,19 @@ For now we only want to add a simple class called `BoundingBox2D`. Typically you
     
     #include <Geometry/Vec2.h>
     
-    // We're lazy and we just want to write Vec2 instead of Geometry::Vec2
-    using Geometry::Vec2;
-    
     // Never pollute the global namespace!
-    namespace MinSG {
-    // Use your plugin specific namespace inside of the MinSG namespace
-    namespace MyExtension {
+    namespace MyProject {
     // This class is just a very simple example.
-    // This basic bounding box is defined by two Vec2's, describing the two extreme corners
+    // This basic bounding box is defined by two Geometry::Vec2's, describing the two extreme corners
     class BoundingBox2D {
     private:
-        Vec2 min;
-        Vec2 max;
+        Geometry::Vec2 min;
+        Geometry::Vec2 max;
     public:
         // Define some useful constructors
         BoundingBox2D() : min(0.0, 0.0), max(0.0, 0.0) {}
-        BoundingBox2D(BoundingBox2D& other) : min(other.min), max(other.max) {}
-        BoundingBox2D(BoundingBox2D* other) : min(other->min), max(other->max) {}
-        BoundingBox2D(Vec2& pmin, Vec2& pmax) : min(pmin), max(pmax) {}
-        BoundingBox2D(Vec2* pmin, Vec2* pmax) : min(*pmin), max(*pmax) {}
+        BoundingBox2D(const BoundingBox2D& other) : min(other.min), max(other.max) {}
+        BoundingBox2D(const Geometry::Vec2& pmin, const Geometry::Vec2& pmax) : min(pmin), max(pmax) {}
         BoundingBox2D(float minX, float minY, float maxX, float maxY) : min(minX, minY), max(maxX, maxY) {}
         
         // Define some helper methods to get/set all values
@@ -80,22 +66,22 @@ For now we only want to add a simple class called `BoundingBox2D`. Typically you
         
         float getArea() { return getWidth() * getHeight(); }
         
-        Vec2 getMin() { return min; }
-        void setMin(Vec2 v) { min = v; }
-        Vec2 getMax() { return max; }
-        void setMax(Vec2 v) { max = v; }
+        Geometry::Vec2 getMin() { return min; }
+        void setMin(Geometry::Vec2 v) { min = v; }
+        Geometry::Vec2 getMax() { return max; }
+        void setMax(Geometry::Vec2 v) { max = v; }
         
-        Vec2 getCenter() { return (min + max) * 0.5f; }
+        Geometry::Vec2 getCenter() { return (min + max) * 0.5f; }
         
         // Define some additional features
-        bool contains(Vec2 v) {
+        bool contains(Geometry::Vec2 v) {
             float x = v.x(), y = v.y();
             return x >= min.x() && x <= max.x() && y >= min.y() && y <= max.y();
         }
         
         bool intersects(BoundingBox2D* other) {
-            return abs(getMinX() - other->getMinX()) < (getWidth() + other->getWidth()) / 2
-                && abs(getMinY() - other->getMinY()) < (getHeight() + other->getHeight()) / 2;
+            return std::abs(getMinX() - other->getMinX()) < (getWidth() + other->getWidth()) / 2
+                && std::abs(getMinY() - other->getMinY()) < (getHeight() + other->getHeight()) / 2;
         }
         
         // (In)equality operators
@@ -108,20 +94,19 @@ For now we only want to add a simple class called `BoundingBox2D`. Typically you
         }
     };
     }
-    }
-    
     #endif
 <!---END_CODESECTION--->
 
-As you see, nothing fancy here. Just a plain, simple class. In order to make it accessible from EScript, we now have to create a corresponding wrapper class.
+As you can see, nothing fancy here. Just a plain, simple class. In order to make it accessible from EScript, we now have to create a corresponding wrapper class.
 
-## E_MinSG part
-Next we add the following two files to the `PADrend/modules/E_MinSG/Ext/MyExtension` folder:
+## Creating EScript bindings
+Next we add the following two files to our source folder folder:
 * `E_BoundingBox2D.h`
 * `E_BoundingBox2D.cpp`
 
 The header file is always very similar. You provide a type name, a constructor and a destructor. Furthermore you declare the `getTypeObject` and `init` functions, which will be implemented in the source file.
-<!---INCLUDE src=E_MinSG/MyExtension/E_BoundingBox2D.h, start=14, end=56--->
+
+<!---INCLUDE src=files/E_BoundingBox2D.h, start=14, end=53--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     // As for all header files, we should prevent multiple includes:
@@ -133,15 +118,13 @@ The header file is always very similar. You provide a type name, a constructor a
     #include <EScript/Objects/ReferenceObject.h>
     
     // include your real class
-    #include <MinSG/Ext/MyExtension/BoundingBox2D.h>
+    #include "BoundingBox2D.h"
     
-    // Typically the same namespace as your real class, but always pre concatenated with "E_"
-    namespace E_MinSG {
-    namespace E_MyExtension {
+    namespace MyProject {
     /*! A binding class must inherit from EScript::ReferenceObject<T> where T is your actual class. 
      * If your class gets more complex, it might be better to use EScript::ReferenceObject<Util::Reference<BoundingBox2D>> (more on that in the bigger example)
      */
-    class E_BoundingBox2D : public EScript::ReferenceObject<MinSG::MyExtension::BoundingBox2D> {
+    class E_BoundingBox2D : public EScript::ReferenceObject<MyProject::BoundingBox2D> {
         //! The human readable name of this type
         ES_PROVIDES_TYPE_NAME(BoundingBox2D)
     public:
@@ -156,15 +139,14 @@ The header file is always very similar. You provide a type name, a constructor a
         virtual ~E_BoundingBox2D() {}
     };
     }
-    }
     
     //! All conversions must be in the public namespace!
     //! Convert an EScript object to the real object, typically you just dereference it.
-    ES_CONV_EOBJ_TO_OBJ(E_MinSG::E_MyExtension::E_BoundingBox2D, MinSG::MyExtension::BoundingBox2D&, **eObj)
-    ES_CONV_EOBJ_TO_OBJ(E_MinSG::E_MyExtension::E_BoundingBox2D, MinSG::MyExtension::BoundingBox2D*, &**eObj)
+    ES_CONV_EOBJ_TO_OBJ(MyProject::E_BoundingBox2D, MyProject::BoundingBox2D&, **eObj)
+    ES_CONV_EOBJ_TO_OBJ(MyProject::E_BoundingBox2D, MyProject::BoundingBox2D*, &**eObj)
     //! Convert real classes to EScript binding class. typically you just create a new instance.
-    ES_CONV_OBJ_TO_EOBJ(MinSG::MyExtension::BoundingBox2D&, E_MinSG::E_MyExtension::E_BoundingBox2D, new E_MinSG::E_MyExtension::E_BoundingBox2D(obj))
-    ES_CONV_OBJ_TO_EOBJ(MinSG::MyExtension::BoundingBox2D*, E_MinSG::E_MyExtension::E_BoundingBox2D, new E_MinSG::E_MyExtension::E_BoundingBox2D(obj))
+    ES_CONV_OBJ_TO_EOBJ(MyProject::BoundingBox2D&, MyProject::E_BoundingBox2D, new MyProject::E_BoundingBox2D(obj))
+    ES_CONV_OBJ_TO_EOBJ(MyProject::BoundingBox2D*, MyProject::E_BoundingBox2D, new MyProject::E_BoundingBox2D(*obj))
     
     #endif
 <!---END_CODESECTION--->
@@ -173,14 +155,14 @@ A very important part of the header file can be found at the end: The conversion
 Those macros are used to convert between an EScript object and the real object back and forth.
 
 The source file of this header will now look like this:
-<!---INCLUDE src=E_MinSG/MyExtension/E_BoundingBox2D.cpp, start=14, end=101--->
+
+<!---INCLUDE src=files/E_BoundingBox2D.cpp, start=14, end=97--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     #include "E_BoundingBox2D.h"
     #include <E_Geometry/E_Vec2.h>
     
-    namespace E_MinSG {
-    namespace E_MyExtension {
+    namespace MyProject {
     //! returns an instance to an EScript::Type
     EScript::Type * E_BoundingBox2D::getTypeObject() {
         // you want to have this static in order to return always the same instance
@@ -195,8 +177,6 @@ The source file of this header will now look like this:
         // first define the class type in EScript
         declareConstant(&lib, getClassName(), typeObject);
         
-        // We're lazy and we only want to write BoundingBox2D instead of the fully qualified name
-        using MinSG::MyExtension::BoundingBox2D;
         // now you should define all functions for your new type
         // this is done by several macros
         //! BoundingBox2D new BoundingBox2D([otherBB | min2D, max2D | minX, minY, maxX, maxY])
@@ -211,9 +191,9 @@ The source file of this header will now look like this:
                 // case 0: return new E_BoundingBox2D();
                 
                 // Copy constructor: BoundingBox2(BoundingBox2D otherBB)
-                case 1: return EScript::create(new BoundingBox2D( parameter[0].to<BoundingBox2D*>(rt) ));
+                case 1: return EScript::create(new BoundingBox2D( parameter[0].to<BoundingBox2D&>(rt) ));
                 // Constructor using the extreme points: BoundingBox2D(Vec2 min, Vec2 max)
-                case 2: return EScript::create(new BoundingBox2D( parameter[0].to<Vec2*>(rt), parameter[1].to<Vec2*>(rt) ));
+                case 2: return EScript::create(new BoundingBox2D( parameter[0].to<Geometry::Vec2&>(rt), parameter[1].to<Geometry::Vec2&>(rt) ));
                 // float constructor: BoundingBox2D(float minX, float minY, float maxX, float maxY)
                 case 4: return EScript::create(new BoundingBox2D( parameter[0].toFloat(), parameter[1].toFloat(), parameter[2].toFloat(), parameter[3].toFloat() ));
                 // Something went wrong!
@@ -253,16 +233,15 @@ The source file of this header will now look like this:
         ES_MFUN(typeObject, BoundingBox2D, "getArea", 0, 0, thisObj->getArea())
         
         ES_MFUN(typeObject, BoundingBox2D, "getMin", 0, 0, EScript::create(thisObj->getMin()))
-        ES_MFUN(typeObject, BoundingBox2D, "setMin", 1, 1, (thisObj->setMin(parameter[0].to<Vec2>(rt)), thisEObj) )
+        ES_MFUN(typeObject, BoundingBox2D, "setMin", 1, 1, (thisObj->setMin(parameter[0].to<Geometry::Vec2>(rt)), thisEObj) )
         ES_MFUN(typeObject, BoundingBox2D, "getMax", 0, 0, EScript::create(thisObj->getMax()))
-        ES_MFUN(typeObject, BoundingBox2D, "setMax", 1, 1, (thisObj->setMin(parameter[0].to<Vec2>(rt)), thisEObj) )
+        ES_MFUN(typeObject, BoundingBox2D, "setMax", 1, 1, (thisObj->setMin(parameter[0].to<Geometry::Vec2>(rt)), thisEObj) )
         ES_MFUN(typeObject, BoundingBox2D, "getCenter", 0, 0, EScript::create(thisObj->getCenter()))
         
-        ES_MFUN(typeObject, BoundingBox2D, "contains", 1, 1, thisObj->contains(parameter[0].to<Vec2>(rt)))
+        ES_MFUN(typeObject, BoundingBox2D, "contains", 1, 1, thisObj->contains(parameter[0].to<Geometry::Vec2>(rt)))
         ES_MFUN(typeObject, BoundingBox2D, "intersects", 1, 1, thisObj->intersects(parameter[0].to<BoundingBox2D*>(rt)))
     }
     
-    }
     }
 <!---END_CODESECTION--->
 
@@ -275,89 +254,42 @@ First of all you will always implement the `getTypeObject` function. This functi
 Next you implement the init function, which is used to actually add all wrapper functions to the type object. Therefore you first get the type object by calling `getTypeObject`. Then you have to declare your class as a constant inside of the namespace, otherwise your type object won't be usable. Then you just continue with adding all kind of functions to your type object.
 
 ## Overall initialization
-Each init function of your wrapper classes must be called from MinSG. This is done by modifying the `PADrend/modules/E_MinSG/Ext/ELibMinSGExt.cpp` file. This file includes all wrapper classes and callss their corresponding init functions.
+Each init function of your wrapper classes must be called from your EScript library initialization function. This is done by modifying your `src/ELibMyProject.cpp` file. This file should include all wrapper classes and call their corresponding init functions.
 
-Of course you could call each init function from there, but it is recommended to make a so called 'master'-init function. This function is the only one that is called from MinSG itself and this function will then call all your wrapper inits. Todo so, just add the following two filess to your project:
-* `PADrend/modules/E_MinSG/Ext/MyExtension/E_MyExtension.h`
-* `PADrend/modules/E_MinSG/Ext/MyExtension/E_MyExtension.cpp`
-
-These two files will be used as the main entry point for our whole plugin. The header file only declares the init function, which will be implemented in the source file.
-<!---INCLUDE src=E_MinSG/MyExtension/E_MyExtension.h, start=14, end=26--->
-<!---BEGINN_CODESECTION--->
-<!---Automaticly generated section. Do not edit!!!--->
-    #ifndef E_MY_EXTENSION_H_
-    #define E_MY_EXTENSION_H_
-    
-    #include <EScript/Escript.h>
-    #include <EScript/Basics.h>
-    #include <EScript/StdObjects.h>
-    
-    namespace E_MinSG {
-    namespace E_MyExtension {
-    void init(EScript::Namespace & minsg);
-    }
-    }
-    #endif
-<!---END_CODESECTION--->
-
-The init function will get the MinSG namespace as the parameter. Inside of your actual init function, you should first define your own namespace. This is advised, because it prevents the MinSG namespace from being polluted. Afterwards you will initialize all of your wrapper classes, by just calling their init functions, with your own namespace as a parameter.
+The init function will get your EScript namespace as the parameter. Afterwards you will initialize all of your wrapper classes, by just calling their init functions, with your own namespace as a parameter.
 ```
-#include "E_MyExtension.h"
-#include "E_Stack.h"
+// ...
 #include "E_BoundingBox2D.h"
 
-namespace E_MinSG {
-namespace E_MyExtension {
-/*! Initialize your namespace inside of the MinSG namespace.
- *  This init function must be called from the ELibMinSGExt.cpp file
- */
-void init(EScript::Namespace & minsg) {
-  // Define the MyExtension namespace as a child of the MinSG namespace
-  EScript::Namespace * ns = new EScript::Namespace();
-  declareConstant(&minsg, "MyExtension", ns);
-  // Call all your init functions:
-  E_BoundingBox2D::init(*ns);
-}
-}
+// ...
+
+// Initializes your EScript bindings
+void init(EScript::Namespace * lib) {
+  // initialize EScript objects	
+  E_BoundingBox2D::init(*lib);
+  // ...
 }
 ```
 
-Now this init function has to be called from the `PADrend/modules/E_MinSG/Ext/ELibMinSGExt.cpp` file.
-First of all you include your header file:
+The only thing that remains, is to add your new source files to your CMakeLists.txt and compile your library.
 ```
-/* ... */
-#include "ELibMinSGExt.h"
-#include "../ELibMinSG.h"
-#include <E_Util/E_Utils.h>
+# ...
+# Add your sources here
+add_library(${PROJECT_NAME} SHARED 
+  src/Main.cpp # The main entry point for the EScript library loader
+  src/ELibMyProject.cpp # Initialize your EScript bindings here
+  src/E_BoundingBox2D.cpp
+)
+# ...
+```
 
-#include "MyExtension/E_MyExtension.h"
+After loading your plugin library in EScript, you should be able to create a new 2D Bounding Box in your EScript plugin.
+
+```
+// ...
+var bb = new ExampleProject.BoundingBox2D(0,0,2,4);
+outln("2D BB Area: ", bb.getArea());
 // ...
 ```
-At the end of this file you then call your init function:
-```
-// ... hundreds of include lines...
-// around line 277:
-using namespace MinSG;
-using namespace E_Rendering;
-using namespace E_Geometry;
-
-namespace E_MinSG {
-  void init_ext(EScript::Namespace * /*globals*/,EScript::Namespace * lib) {
-    // hundreds of init lines ...
-    // around line 700:
-    // MY_EXTENSION
-    E_MyExtension::init(*lib);
-  }
-}
-```
-
-Now you can finally compile PADrend. If the compilation succeeds, you can run PADrend and use our new `BoundingBox2D` class like this:
-```
-var bb = new MinSG.MyExtension.BoundingBox2D();
-// ...
-```
-
-
-
 
 
