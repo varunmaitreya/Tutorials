@@ -20,15 +20,13 @@
 #include <EScript/Objects/ReferenceObject.h>
 
 // include your real class
-#include <MinSG/Ext/MyExtension/BoundingBox2D.h>
+#include "BoundingBox2D.h"
 
-// Typically the same namespace as your real class, but always pre concatenated with "E_"
-namespace E_MinSG {
-namespace E_MyExtension {
+namespace MyProject {
 /*! A binding class must inherit from EScript::ReferenceObject<T> where T is your actual class. 
  * If your class gets more complex, it might be better to use EScript::ReferenceObject<Util::Reference<BoundingBox2D>> (more on that in the bigger example)
  */
-class E_BoundingBox2D : public EScript::ReferenceObject<MinSG::MyExtension::BoundingBox2D> {
+class E_BoundingBox2D : public EScript::ReferenceObject<MyProject::BoundingBox2D> {
     //! The human readable name of this type
 	ES_PROVIDES_TYPE_NAME(BoundingBox2D)
 public:
@@ -43,14 +41,13 @@ public:
     virtual ~E_BoundingBox2D() {}
 };
 }
-}
 
 //! All conversions must be in the public namespace!
 //! Convert an EScript object to the real object, typically you just dereference it.
-ES_CONV_EOBJ_TO_OBJ(E_MinSG::E_MyExtension::E_BoundingBox2D, MinSG::MyExtension::BoundingBox2D&, **eObj)
-ES_CONV_EOBJ_TO_OBJ(E_MinSG::E_MyExtension::E_BoundingBox2D, MinSG::MyExtension::BoundingBox2D*, &**eObj)
+ES_CONV_EOBJ_TO_OBJ(MyProject::E_BoundingBox2D, MyProject::BoundingBox2D&, **eObj)
+ES_CONV_EOBJ_TO_OBJ(MyProject::E_BoundingBox2D, MyProject::BoundingBox2D*, &**eObj)
 //! Convert real classes to EScript binding class. typically you just create a new instance.
-ES_CONV_OBJ_TO_EOBJ(MinSG::MyExtension::BoundingBox2D&, E_MinSG::E_MyExtension::E_BoundingBox2D, new E_MinSG::E_MyExtension::E_BoundingBox2D(obj))
-ES_CONV_OBJ_TO_EOBJ(MinSG::MyExtension::BoundingBox2D*, E_MinSG::E_MyExtension::E_BoundingBox2D, new E_MinSG::E_MyExtension::E_BoundingBox2D(obj))
+ES_CONV_OBJ_TO_EOBJ(MyProject::BoundingBox2D&, MyProject::E_BoundingBox2D, new MyProject::E_BoundingBox2D(obj))
+ES_CONV_OBJ_TO_EOBJ(MyProject::BoundingBox2D*, MyProject::E_BoundingBox2D, new MyProject::E_BoundingBox2D(*obj))
 
 #endif

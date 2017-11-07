@@ -14,8 +14,7 @@
 #include "E_BoundingBox2D.h"
 #include <E_Geometry/E_Vec2.h>
 
-namespace E_MinSG {
-namespace E_MyExtension {
+namespace MyProject {
 //! returns an instance to an EScript::Type
 EScript::Type * E_BoundingBox2D::getTypeObject() {
     // you want to have this static in order to return always the same instance
@@ -30,8 +29,6 @@ void E_BoundingBox2D::init(EScript::Namespace& lib) {
 	// first define the class type in EScript
 	declareConstant(&lib, getClassName(), typeObject);
 	
-	// We're lazy and we only want to write BoundingBox2D instead of the fully qualified name
-	using MinSG::MyExtension::BoundingBox2D;
 	// now you should define all functions for your new type
 	// this is done by several macros
 	//! BoundingBox2D new BoundingBox2D([otherBB | min2D, max2D | minX, minY, maxX, maxY])
@@ -46,9 +43,9 @@ void E_BoundingBox2D::init(EScript::Namespace& lib) {
             // case 0: return new E_BoundingBox2D();
             
             // Copy constructor: BoundingBox2(BoundingBox2D otherBB)
-            case 1: return EScript::create(new BoundingBox2D( parameter[0].to<BoundingBox2D*>(rt) ));
+            case 1: return EScript::create(new BoundingBox2D( parameter[0].to<BoundingBox2D&>(rt) ));
             // Constructor using the extreme points: BoundingBox2D(Vec2 min, Vec2 max)
-            case 2: return EScript::create(new BoundingBox2D( parameter[0].to<Vec2*>(rt), parameter[1].to<Vec2*>(rt) ));
+            case 2: return EScript::create(new BoundingBox2D( parameter[0].to<Geometry::Vec2&>(rt), parameter[1].to<Geometry::Vec2&>(rt) ));
             // float constructor: BoundingBox2D(float minX, float minY, float maxX, float maxY)
             case 4: return EScript::create(new BoundingBox2D( parameter[0].toFloat(), parameter[1].toFloat(), parameter[2].toFloat(), parameter[3].toFloat() ));
             // Something went wrong!
@@ -88,15 +85,14 @@ void E_BoundingBox2D::init(EScript::Namespace& lib) {
 	ES_MFUN(typeObject, BoundingBox2D, "getArea", 0, 0, thisObj->getArea())
 	
 	ES_MFUN(typeObject, BoundingBox2D, "getMin", 0, 0, EScript::create(thisObj->getMin()))
-	ES_MFUN(typeObject, BoundingBox2D, "setMin", 1, 1, (thisObj->setMin(parameter[0].to<Vec2>(rt)), thisEObj) )
+	ES_MFUN(typeObject, BoundingBox2D, "setMin", 1, 1, (thisObj->setMin(parameter[0].to<Geometry::Vec2>(rt)), thisEObj) )
 	ES_MFUN(typeObject, BoundingBox2D, "getMax", 0, 0, EScript::create(thisObj->getMax()))
-	ES_MFUN(typeObject, BoundingBox2D, "setMax", 1, 1, (thisObj->setMin(parameter[0].to<Vec2>(rt)), thisEObj) )
+	ES_MFUN(typeObject, BoundingBox2D, "setMax", 1, 1, (thisObj->setMin(parameter[0].to<Geometry::Vec2>(rt)), thisEObj) )
 	ES_MFUN(typeObject, BoundingBox2D, "getCenter", 0, 0, EScript::create(thisObj->getCenter()))
 	
-	ES_MFUN(typeObject, BoundingBox2D, "contains", 1, 1, thisObj->contains(parameter[0].to<Vec2>(rt)))
+	ES_MFUN(typeObject, BoundingBox2D, "contains", 1, 1, thisObj->contains(parameter[0].to<Geometry::Vec2>(rt)))
 	ES_MFUN(typeObject, BoundingBox2D, "intersects", 1, 1, thisObj->intersects(parameter[0].to<BoundingBox2D*>(rt)))
 }
 
-}
 }
 	

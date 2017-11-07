@@ -4,11 +4,11 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
  Author: Stanislaw Eppinger (eppinger@mail.uni-paderborn.de)
  PADrend Version 1.0.0
 */
-#ifndef MINSG_EXT_E_MYSTATE_H
-#define MINSG_EXT_E_MYSTATE_H
+#ifndef MYPROJECT_E_MYSTATE_H
+#define MYPROJECT_E_MYSTATE_H
 
-#include <MinSG/Ext/MyState/MyState.h>
-#include "../../Core/States/E_State.h"
+#include "MyState.h"
+#include <E_MinSG/Core/States/E_State.h>
 
 namespace EScript {
 class Namespace;
@@ -16,11 +16,11 @@ class Runtime;
 class Type;
 }
 
-namespace E_MinSG {
+namespace MyProject {
 /***
  **   E_MyState ---|> E_State ---|> Object
  **/
-class E_MyState : public E_State {
+class E_MyState : public E_MinSG::E_State {
 		ES_PROVIDES_TYPE_NAME(MyState)
 	public:
 		template<class, class, class> friend class Util::PolymorphicWrapperCreator;
@@ -30,16 +30,15 @@ class E_MyState : public E_State {
 
 		virtual ~E_MyState();
 
-		const MinSG::MyState * operator*()const	{	return static_cast<const MinSG::MyState*>(ref().get());	}
-		MinSG::MyState * operator*()	{	return static_cast<MinSG::MyState*>(ref().get());	}
+		const MyState * operator*()const	{	return static_cast<const MyState*>(ref().get());	}
+		MyState * operator*()	{	return static_cast<MyState*>(ref().get());	}
 
 	protected:
-		E_MyState(MinSG::MyState * obj, EScript::Type * type=nullptr);
+		E_MyState(MyState * obj, EScript::Type * type=nullptr);
 };
 
 }
 
-ES_CONV_EOBJ_TO_OBJ(E_MinSG::E_MyState, MinSG::MyState*, **eObj)
+ES_CONV_EOBJ_TO_OBJ(MyProject::E_MyState, MyProject::MyState*, **eObj)
 
-
-#endif /* MINSG_EXT_E_MYSTATE_H */
+#endif /* MYPROJECT_E_MYSTATE_H */

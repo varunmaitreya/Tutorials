@@ -3,8 +3,7 @@
 # Tutorial Index
 * 1 Installation Guide
     * 1.1 [Installation Guide](1_Installation_Guide/1_Installation_Guide.html)
-    * 1.2 [Student Project Guide](1_Installation_Guide/2_Student_Project_Guide/Student_Project_Guide.html)
-    * 1.3 [SyntaxHighlighting](1_Installation_Guide/3_EScript_Syntax_Highlighting/SyntaxHighlighting.html)
+    * 1.2 [SyntaxHighlighting](1_Installation_Guide/2_EScript_Syntax_Highlighting/SyntaxHighlighting.html)
 * 2 User Guide
     * 2.1 [Scene loading and navigation](2_User_Guide/1_Scene_loading_and_navigation/Scene_loading_and_navigation.html)
     * 2.2 [Scene Building](2_User_Guide/2_Scene_Building/Scene_Building.html)
@@ -76,8 +75,8 @@
                 * 3.1.7.2.1 [Network](3_Development_Guide/1_EScript/7_Libs/2_Util/1_Network.html)
                 * 3.1.7.2.2 [Folder Traversal](3_Development_Guide/1_EScript/7_Libs/2_Util/2_Folder_Traversal/Folder_Traversal.html)
     * 3.2 C++
-        * 3.2.1 [CppPlugin](3_Development_Guide/2_C++/1_CppPlugin.html)
+        * 3.2.1 [Creating a C++ Plugin](3_Development_Guide/2_C++/1_Creating_a_C++_Plugin/Creating_a_C++_Plugin.html)
         * 3.2.2 [Macros for EScript Bindings](3_Development_Guide/2_C++/2_Macros_for_EScript_Bindings.html)
-        * 3.2.3 [SimpleExample](3_Development_Guide/2_C++/3_SimpleExample/SimpleExample.html)
-        * 3.2.4 [State](3_Development_Guide/2_C++/4_State/State.html)
+        * 3.2.3 [Creating Object Bindings](3_Development_Guide/2_C++/3_Creating_Object_Bindings/Creating_Object_Bindings.html)
+        * 3.2.4 [Extending MinSG States](3_Development_Guide/2_C++/4_Extending_MinSG_States/Extending_MinSG_States.html)
 <div>
