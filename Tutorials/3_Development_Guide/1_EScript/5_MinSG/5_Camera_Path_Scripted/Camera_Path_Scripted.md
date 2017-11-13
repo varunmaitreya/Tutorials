@@ -12,7 +12,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
     * 3.1.5.2 Node States
     * 3.1.5.3 [ObserverTraits](../../../../3_Development_Guide/1_EScript/5_MinSG/3_ObserverTraits.md)
     * 3.1.5.4 [TreeQueries](../../../../3_Development_Guide/1_EScript/5_MinSG/4_Tree_Queries/TreeQueries.md)
-    * 3.1.5.5 [Camera Path Scripted](../../../../3_Development_Guide/1_EScript/5_MinSG/5_Camera_Path_Scripted/Camera_Path_Scripted.md)
+    * 3.1.5.5 **Camera Path Scripted**
     * 3.1.5.6 Evaluation
 <!---END_INDEXSECTION--->
 

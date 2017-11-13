@@ -9,7 +9,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 # Overview
 * 3.1.3 GUI Example
     * 3.1.3.1 Image Viewer
-    * 3.1.3.2 [UI Events](../../../3_Development_Guide/1_EScript/3_GUI_Example/2_UI_Events.md)
+    * 3.1.3.2 **UI Events**
     * 3.1.3.3 [GUI Items and DataWrappers](../../../3_Development_Guide/1_EScript/3_GUI_Example/3_GUI_and_DataWrapper/GUI_Items_and_DataWrappers.md)
 <!---END_INDEXSECTION--->
 

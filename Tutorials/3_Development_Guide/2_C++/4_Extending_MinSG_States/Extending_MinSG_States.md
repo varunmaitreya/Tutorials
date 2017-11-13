@@ -11,7 +11,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
     * 3.2.1 [Creating a C++ Plugin](../../../3_Development_Guide/2_C++/1_Creating_a_C++_Plugin/Creating_a_C++_Plugin.md)
     * 3.2.2 [Macros for EScript Bindings](../../../3_Development_Guide/2_C++/2_Macros_for_EScript_Bindings.md)
     * 3.2.3 [Creating Object Bindings](../../../3_Development_Guide/2_C++/3_Creating_Object_Bindings/Creating_Object_Bindings.md)
-    * 3.2.4 [Extending MinSG States](../../../3_Development_Guide/2_C++/4_Extending_MinSG_States/Extending_MinSG_States.md)
+    * 3.2.4 **Extending MinSG States**
 <!---END_INDEXSECTION--->
 
 # State
@@ -49,7 +49,36 @@ In this example we will implement the same state as in the EScript example, i.e.
 
 In the same folder we'll add the source file `MyState.cpp`, which implements our overridden methods and the actual logic:
 
-<!---INCLUDE src=MinSG/NodeStates/State/MyState.cpp, start=7, end=32--->
+<!---INCLUDE src=files/MyState.cpp, start=7, end=32--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+    #include "MyState.h"
+    
+    #include <MinSG/Core/FrameContext.h>
+    #include <MinSG/Core/Nodes/CameraNode.h>
+    
+    namespace MyProject {
+    
+    using namespace MinSG;
+      
+    State::stateResult_t MyState::doEnableState(FrameContext & context, Node * node, const RenderParam & rp){
+      auto camPos = context.getCamera()->getWorldOrigin();
+      auto nodePos = node->getWorldOrigin();
+      auto diff = (camPos - nodePos).length();
+      if (diff > 20) return State::stateResult_t::STATE_SKIP_RENDERING;
+      return State::stateResult_t::STATE_OK;
+    }
+    
+    void MyState::doDisableState(FrameContext & context, Node * node, const RenderParam & rp) {
+      //Clean up everything you have done in doEnableState, e.g. popping shaders from the rendering context
+    }
+    
+    MyState * MyState::clone() const {
+      return new MyState(*this);
+    }
+    
+    }
+<!---END_CODESECTION--->
 
 The logic of the `doEnableState()` is the same as in the EScript version. We compute the distance between the camera and the node and if it's higher than 20 we return `STATE_SKIP_RENDERING` and the node will not be rendered. Otherwise `STATE_OK` will be returned and the node will be rendered.  
 The next step is to provide the EScript bindings in order to use our state in EScript.

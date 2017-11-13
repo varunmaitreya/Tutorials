@@ -15,7 +15,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
     * 2.5 [Functional Objects Pointing Joint](../../2_User_Guide/5_Functional_Objects_Pointing_Joint/Functional_Objects_Pointing_Joint.md)
     * 2.6 [Using Scripts](../../2_User_Guide/6_Using_Scripts/Using_Scripts.md)
     * 2.7 [Object Factories](../../2_User_Guide/7_Object_Factories/Object_Factories.md)
-    * 2.8 [Camera Path](../../2_User_Guide/8_Camera_Path/Camera_Path.md)
+    * 2.8 **Camera Path**
 <!---END_INDEXSECTION--->
 
 # Creating camera paths using the user interface

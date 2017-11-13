@@ -9,7 +9,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 # Overview
 * 3.1.1.4 Operators
     * 3.1.1.4.1 [Operator Precedence](../../../../3_Development_Guide/1_EScript/1_EScript_Basics/4_Operators/1_Operator_Precedence.md)
-    * 3.1.1.4.2 [Operator Overloading](../../../../3_Development_Guide/1_EScript/1_EScript_Basics/4_Operators/2_Operator_Overloading.md)
+    * 3.1.1.4.2 **Operator Overloading**
 <!---END_INDEXSECTION--->
 
 # Operator overloading

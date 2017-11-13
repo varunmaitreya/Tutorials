@@ -9,7 +9,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 # Overview
 * 3.1.2 PADrend Basics
     * 3.1.2.1 [Important Extensions](../../../../3_Development_Guide/1_EScript/2_PADrend_Basics/1_Important_Extensions.md)
-    * 3.1.2.2 [EScript Plugin](../../../../3_Development_Guide/1_EScript/2_PADrend_Basics/2_EScript_Plugin/EScript_Plugin.md)
+    * 3.1.2.2 **EScript Plugin**
 <!---END_INDEXSECTION--->
 
 # Extending PADrend

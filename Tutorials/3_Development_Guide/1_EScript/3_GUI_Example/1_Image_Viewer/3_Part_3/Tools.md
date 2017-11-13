@@ -10,7 +10,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 * 3.1.3.1 Image Viewer
     * 3.1.3.1.1 [Builing UI](../../../../../3_Development_Guide/1_EScript/3_GUI_Example/1_Image_Viewer/1_Part_1/Builing_UI.md)
     * 3.1.3.1.2 [ImageLoading](../../../../../3_Development_Guide/1_EScript/3_GUI_Example/1_Image_Viewer/2_Part_2/ImageLoading.md)
-    * 3.1.3.1.3 [Tools](../../../../../3_Development_Guide/1_EScript/3_GUI_Example/1_Image_Viewer/3_Part_3/Tools.md)
+    * 3.1.3.1.3 **Tools**
 <!---END_INDEXSECTION--->
 
 # Building an image viewer. Part 3: The interaction tools

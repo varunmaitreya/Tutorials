@@ -11,7 +11,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
     * 2.1 [Scene loading and navigation](../../2_User_Guide/1_Scene_loading_and_navigation/Scene_loading_and_navigation.md)
     * 2.2 [Scene Building](../../2_User_Guide/2_Scene_Building/Scene_Building.md)
     * 2.3 [Basic Animation](../../2_User_Guide/3_Basic_Animation/Basic_Animation.md)
-    * 2.4 [Functional Objects and Physics](../../2_User_Guide/4_Functional_Objects_and_Physics/Functional_Objects_and_Physics.md)
+    * 2.4 **Functional Objects and Physics**
     * 2.5 [Functional Objects Pointing Joint](../../2_User_Guide/5_Functional_Objects_Pointing_Joint/Functional_Objects_Pointing_Joint.md)
     * 2.6 [Using Scripts](../../2_User_Guide/6_Using_Scripts/Using_Scripts.md)
     * 2.7 [Object Factories](../../2_User_Guide/7_Object_Factories/Object_Factories.md)

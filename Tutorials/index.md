@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="main.css"/>
+<div class = "index">
 # Tutorial Index
 * 1 Installation Guide
     * 1.1 [Installation Guide](1_Installation_Guide/1_Installation_Guide.md)
@@ -77,3 +79,4 @@
         * 3.2.2 [Macros for EScript Bindings](3_Development_Guide/2_C++/2_Macros_for_EScript_Bindings.md)
         * 3.2.3 [Creating Object Bindings](3_Development_Guide/2_C++/3_Creating_Object_Bindings/Creating_Object_Bindings.md)
         * 3.2.4 [Extending MinSG States](3_Development_Guide/2_C++/4_Extending_MinSG_States/Extending_MinSG_States.md)
+<div>
