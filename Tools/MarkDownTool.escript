@@ -72,27 +72,27 @@ MarkDownTool.createGUI := fn(){
 			GUI.TOOLTIP : "Parse Documents",
 			GUI.ON_CLICK : fn(){
 				if(createIndexFile()){
-					static IndexBuilder = load(__DIR__ + "/IndexBuilder.escript");
+					static IndexBuilder = load(__DIR__ + "/lib/IndexBuilder.escript");
 					if(IndexBuilder){
 						var indexTree = IndexBuilder.createTree(rootFolder());
 						IndexBuilder.createAndSaveIndex(indexTree, true, rootFolder());
 					}
 					else
-						outln("ERROR: Could not find IndexBuilder at " + __DIR__);
+						outln("ERROR: Could not find IndexBuilder at " + __DIR__ + "/lib");
 				}
 				
-				static CodeSectionParser = load(__DIR__ + "/CodeSectionParser.escript");
+				static CodeSectionParser = load(__DIR__ + "/lib/CodeSectionParser.escript");
 				if(CodeSectionParser)
 					CodeSectionParser.recurseFolderAndParse(rootFolder(), parseToHTML());
 				else
-					outln("ERROR: Could not find CodeSectionParser at " + __DIR__);
+					outln("ERROR: Could not find CodeSectionParser at " + __DIR__ + "/lib");
 			
 				if(addMenuToHTML()){
-					static MenuAdder = load(__DIR__ + "/MenuAdder.escript");
+					static MenuAdder = load(__DIR__ + "/lib/MenuAdder.escript");
 					if(MenuAdder)
 						MenuAdder.recurseFiles(rootFolder());
 					else
-						outln("ERROR: Could not find MenuAdder at " + __DIR__);
+						outln("ERROR: Could not find MenuAdder at " + __DIR__ + "/lib");
 				}
 	
 				outln("Parsing done");

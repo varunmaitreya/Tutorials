@@ -12,7 +12,7 @@
  */
  
 static IndexTool = new Type();
-static IndexBuilder = load(__DIR__ + '/IndexBuilder.escript');
+static IndexBuilder = load(__DIR__ + '/lib/ExtendedIndexBuilder.escript');
 static TutorialCreatorDialog = new Type();
 
 TutorialCreatorDialog.createContent := fn(){

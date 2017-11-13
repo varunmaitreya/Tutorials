@@ -15,9 +15,9 @@
 static codesectionBeginTag = "<!---BEGINN_CODESECTION--->";
 static codesectionEndTag = "<!---END_CODESECTION--->";
 static includeTag = "<!---INCLUDE";
-static	fileAttribute = "src=";
+static fileAttribute = "src=";
 static startLineAttribute = "start=";
-static	endLineAttribute = "end=";
+static endLineAttribute = "end=";
 static endTag = "--->";
  
 static CodeSectionParser = new Type();
@@ -65,7 +65,6 @@ CodeSectionParser.removeWasteSpaces ::= fn(lines){
 	
 	return returnText;
 };
-
 
 CodeSectionParser.collectLinesFromSourceCodeFile ::= fn(file, start = 0, end = -1){	
 	if(end == 0 || (end > 0 && start > end))
@@ -158,6 +157,70 @@ CodeSectionParser.parseIncludeTag ::= fn(String line, lineNumber){
 		throw new Exception("Error in line " + (lineNumber) + ": Line attribute could not be found or is corrupt");
 
 	return parameterSet;
+};
+
+CodeSectionParser.replaceMarkDownLinksByHTMLLinks ::= fn(document){
+	var retDocument = "";
+	var lines = document.split("\n");
+	
+	var findAll = fn(str, searchString){
+		var ret = [];
+	
+		for(var i = 0; i < str.length(); i++)
+			if(str.substr(i, searchString.length()) == searchString)
+				ret += i;
+		
+		return ret;
+	};
+	
+	foreach(lines as var line){
+		//format:
+		//[description](URL) => link
+		//![description](URL) => image
+		//find all ](
+		//last opening bracket [ before ]( is the one belonging to it
+		//if char before is ! => image, otherwise it is a link 
+		
+		var possibleLinks = findAll(line, "](");
+		var possibleOpenings = findAll(line, "[");
+		var lineCopy = new String(line);
+		
+		while(possibleLinks.size() > 0){
+			var pl = possibleLinks.popFront();
+			var pose = -1;
+			var found = false;
+			
+			while(!possibleOpenings.empty() && possibleOpenings[0] < pl)
+				pose = possibleOpenings.popFront();
+			
+			//not am image if: first element in line or char before not !
+			if(pose == 0 || (pose > 0 && line.substr(pose-1, 1) != "!")){
+				var urlStart = pl+2;
+				var urlLength = 0;
+				var i = urlStart;
+				
+				while(i < line.length() && line.substr(i,1) != ")"){
+					i++;
+					urlLength++;
+				}
+				
+				if(urlStart +urlLength < line.length())
+				{
+					var url = line.substr(urlStart, urlLength);
+					url = url.lTrim();
+					if(url.endsWith(".md")){
+						var urlHTML = url.substr(0, url.length()-3);
+						urlHTML += ".html";
+						lineCopy = lineCopy.replaceAll(url, urlHTML);
+					}
+				}
+			}
+		}
+		retDocument += lineCopy + "\n";	
+	}
+	
+	
+	return retDocument;
 };
 
 CodeSectionParser.parseDocument ::= fn(file, parseHTML){
@@ -264,6 +327,9 @@ CodeSectionParser.parseDocument ::= fn(file, parseHTML){
 		return;
 	}
 	
+	//replace all markdown links by html ones
+	outDocument = replaceMarkDownLinksByHTMLLinks(outDocument);
+	
 	var parser = new Parser();
 	var html = parser.convertDocument(outDocument);
 	var htmlFilePath = file.replace(".md", ".html");
@@ -278,7 +344,6 @@ CodeSectionParser.parseDocument ::= fn(file, parseHTML){
 	if(oldHtml != html && html != ""){
 		try{
 			IO.saveTextFile(htmlFilePath, html);
-			outln("Wrote HTML file: " + htmlFilePath);
 		}catch(e){
 			Runtime.warn("Could not save html file" + htmlFilePath);
 			return;

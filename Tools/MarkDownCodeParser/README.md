@@ -1,1 +1,0 @@
-To start the parser, execute the file MarkDownTool.escript (e.g. in PADrend file -> load script). If you copy the files to your PADrends main folder, make sure to copy all files to the same directory. Otherwise they will not be found.
