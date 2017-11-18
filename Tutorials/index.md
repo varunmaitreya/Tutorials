@@ -1,5 +1,15 @@
 <link rel="stylesheet" type="text/css" href="main.css"/>
-<div class = "index">
+<div class = "index"
+><!---This file will not be parsed to HTML, but will be used as a prequel in the auto generated file index.md--->
+
+# Welcome to PADrend
+Whether you come her for a bachelor or master thesis, want to use PADrend for work or just want to use it for fun, feel welcome.
+This tutorials should help you getting started with PADrend on its graphical user interface and on developing and running your own code.
+Depending on your level and interest you can either work through the tutorials one by one or use them to get knowledge in a specific aspect.
+Not much left to say here.
+Get started and have fun.
+
+
 # Tutorial Index
 * 1 Installation Guide
     * 1.1 [Installation Guide](1_Installation_Guide/1_Installation_Guide.md)
