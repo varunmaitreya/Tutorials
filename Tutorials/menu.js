@@ -1,6 +1,5 @@
 function openMenu(){
-	document.getElementById("MainMenu").style.width = "75%";
-	//document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+	document.getElementById("MainMenu").style.width = "auto";
 	return 0;
 }
 

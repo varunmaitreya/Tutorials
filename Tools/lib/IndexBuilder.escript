@@ -491,8 +491,8 @@ IndexBuilder.createNode ::= fn(file, root){
 				if(!parent){
 					//this is okay for the root node, since it does not have a parent
 					//for each other node output a warning, since the tutorial structure may be corrupt
-					if(root.folderPath != path) 
-						outln("WARNING: parent node with path " + path + " could not be found!");
+					if(root.folderPath != (path + "/")) 
+						outln("WARNING: parent node with path " + path + " could not be found!" + root.folderPath);
 					return void;
 				}
 				
@@ -603,9 +603,23 @@ IndexBuilder.createAndSaveIndex ::= fn(rootNode, createRelative = false, current
 	var index = IndexBuilder.getIndex(rootNode, createRelative, currentFolder);	
 	
 	static indexPrequel = 
-	"<link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\"/>\n<div class = \"index\">\n# Tutorial Index\n";
+	"<link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\"/>\n<div class = \"index\"\n>";
 	
-	index = indexPrequel + index + "<\div>";
+
+	var welcomeText = "";
+	if(rootNode){
+		var welcomeFile = rootNode.folderPath + "/welcome.txt";
+		try{
+			welcomeText = IO.loadTextFile(welcomeFile) + "\n";
+		}
+		catch(e){
+			Runtime.warn("Could not load file " + welcomeFile );
+		}
+	}
+	
+	welcomeText += "\n# Tutorial Index\n";
+	
+	index = indexPrequel + welcomeText + index + "<\div>";
 
 	if(index)
 		IO.saveTextFile(rootNode.folderPath + "/index.md", index);

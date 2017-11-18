@@ -43,9 +43,12 @@ if(!rootFolder){
 	outln("ERROR: Arguments do not contain root folder");
 }
 
+outln("Parsing...");
+
 if(makeIndex){
 	static IndexBuilder = load(__DIR__ + "/lib/IndexBuilder.escript");
 	if(IndexBuilder){
+		outln("Creating index file...");
 		var indexTree = IndexBuilder.createTree(rootFolder);
 		IndexBuilder.createAndSaveIndex(indexTree, true, rootFolder);
 	}
@@ -54,15 +57,19 @@ if(makeIndex){
 }
 				
 static CodeSectionParser = load(__DIR__ + "/lib/CodeSectionParser.escript");
-if(CodeSectionParser)
+if(CodeSectionParser){
+	outln("Including code sections" + (parseHTML ? " and parsing to HTML..." :  "..."));
 	CodeSectionParser.recurseFolderAndParse(rootFolder, parseHTML);
+}
 else
 	outln("ERROR: Could not find CodeSectionParser at " + __DIR__  + "/lib");
 			
 if(addNavigation){
 	static MenuAdder = load(__DIR__ + "/lib/MenuAdder.escript");
-	if(MenuAdder)
+	if(MenuAdder){
+		outln("Adding menu to HTML files...");
 		MenuAdder.recurseFiles(rootFolder);
+	}
 	else
 		outln("ERROR: Could not find MenuAdder at " + __DIR__ + "/lib");
 }

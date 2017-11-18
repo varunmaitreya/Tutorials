@@ -2,7 +2,8 @@
  * This file is part of the open source part of the
  * Platform for Algorithm Development and Rendering (PADrend).
  * Web page: http://www.padrend.de/
- * Copyright (C) 2016-207 Claudius Jähn <claudius@uni-paderborn.de>
+ * Copyright (C) 2016-2017 Claudius Jähn <claudius@uni-paderborn.de>
+ * Copyright (C) 2017 Florian Pieper <fpieper@uni-paderborn.de>
  * 
  * PADrend consists of an open source part and a proprietary part.
  * The open source part of PADrend is subject to the terms of the Mozilla
@@ -75,6 +76,62 @@ static isOrderedListItem = fn(String tLine){
 };
 static isWordCharOrDigit = fn(c){
 	return (c>='a'&&c<='z') || (c>='A'&&c<='Z') || (c>='0'&&c<='9') || ord(c)>128;
+};
+static readTabelHeader = fn(String tline){
+	var lineNoWS = tline.replaceAll(" ", "");
+	lineNoWS = lineNoWS.replaceAll("\t", "");
+	
+	if(lineNoWS.beginsWith("|"))
+		lineNoWS = lineNoWS.substr(1, lineNoWS.length()-1);
+		
+	if(lineNoWS.endsWith("|"))
+		lineNoWS = lineNoWS.substr(0, lineNoWS.length()-1);
+		
+	var columnCount = 1;
+	var align = [];
+	var startOfCol = true;
+	var minusCount = 0;
+	
+	for(var i = 0; i < lineNoWS.length(); i++){
+		if(lineNoWS.substr(i,1) == "|"){
+			if(minusCount < 3){ //no table since we need at least three -
+				return false;
+			}
+				
+			if(align.size() < columnCount)//no explecite alignment in last column, so we go with left by default		
+				align += "left";
+				
+			minusCount = 0;
+			columnCount ++;
+			startOfCol = true;
+		}
+		else if(lineNoWS.substr(i,1) == ":"){
+			if(startOfCol)
+				align += "left";
+			else if(i == lineNoWS.length()-1 || lineNoWS.substr(i+1,1) == "|"){ //eol or next is |	
+				if(align.size() == columnCount)			//we had already added a left alignment because of a leading :
+					align[columnCount-1] = "center"; 	//since we found one more : this means a center alignment 
+				else
+					align += "right";					//otherwise the alignment is set to right
+			}
+			else
+				return false; //: not at valid position
+			
+			startOfCol = false;	
+		}
+		else if(lineNoWS.substr(i,1) == "-"){
+			minusCount++;
+			startOfCol = false;
+		}
+		else{//char not accepted
+			return false;
+		}			
+	}
+	
+	if(align.size() < columnCount) //left alignment of last column
+		align += "left";
+
+	return (align.size == 0) ? false : align;
 };
 static MarkdownParser = new Type;
 MarkdownParser.DEFAULT_TEMPLATE := "<!DOCTYPE html>\n"
@@ -206,6 +263,85 @@ MarkdownParser.getBlocks @(private) ::= fn(String text){
 				line = lines.popFront();
 			}while (!lines.empty());
 			continue;
+		}
+		
+		//tabel
+		if(tLine.contains("|")){
+			//possible table, count | and \|, if difference >0 we have a table
+			var numberOf = fn(str, searchStr){
+				var count = 0;
+				for(var i = 0; i < str.length() - searchStr.length() - 1; i++)
+					if(str.substr(i, searchStr.length()) == searchStr)
+						count++;
+				return count;
+			};
+			var processLine = fn(tLine, alignment, wsLevel, tag){
+				var nodes = [];
+				
+				var split = tLine.split("|");
+				
+				if(split[0] == "");
+					split.popFront();
+				if(split[split.size()-1] == "")
+					split.popBack();
+				
+				if(!split.empty()){
+					var node = new Node("tr", wsLevel + 1, false);
+					node.requiredParent = "table";
+					nodes += node;
+				}
+				//if we have fewer columns than alignments, we fill up with empty fields
+				//the other way around we ignore all extra columns
+				foreach(alignment as var columnAlignment){
+					var content = (split.empty()) ? "" : split.popFront();
+					var node = new Node(tag, wsLevel + 2, true);
+					node.requiredParent = "tr";
+					node.content = content;
+					node.attributes = " align='" + columnAlignment + "'";
+					node.alignment := alignment;
+					nodes += node;
+				}
+				
+				return (nodes.size() > 0) ? nodes : false; 
+			};
+				
+			if(currentBlock && (currentBlock.tag == "td"||currentBlock.tag == "th")){
+				//previous node was part of a table
+				blocks += currentBlock;
+				var alignment = currentBlock.alignment;
+				var nodes = processLine(tLine, alignment, wsLevel, "td");
+				if(nodes){
+					foreach(nodes as var node)
+						blocks += node;
+				}
+				currentBlock = blocks.popBack();
+				continue;
+			}
+			else{
+				var alignment = readTabelHeader(tLine);
+				if(alignment){//we have a table
+					var firstLine = currentBlock.content;
+					firstLine = firstLine.trim();
+					var nodes = processLine(firstLine, alignment, wsLevel, "th");
+					if(nodes && !nodes.empty()){
+						var tableNode = new Node("table", wsLevel, false);
+						tableNode.attributes = " style='width:auto' border='1' rules='all' cellpadding='6'";
+						blocks += tableNode;
+						foreach(nodes as var node)
+							blocks += node;
+						currentBlock = blocks.popBack();
+						continue;
+					}
+				}else{
+					if(currentBlock)
+						blocks += currentBlock;
+				
+					currentBlock = new Node("p", wsLevel, true);
+					currentBlock.content = line.lTrim() + "\n";
+					continue;
+					//nodestack is empty, we are not sure if this gets a table (we have not read the |---|... line yet) so we process the node as normal text
+				}	
+			}
 		}
 				
 		// unordered list item?
@@ -373,7 +509,7 @@ MarkdownParser.formatStyles @(private) ::= fn(String text){
 	{
 		// text formatting
 		var lines = text.split("\n");
-		foreach ([["**","<strong>","</strong>"], ["__","<strong>","</strong>"], ["*", "<emph>", "</emph>"], ["_", "<emph>", "</emph>"]] as var markerAndTags){
+		foreach ([["**","<strong>","</strong>"], ["__","<strong>","</strong>"], ["*", "<emph>", "</emph>"], ["_", "<emph>", "</emph>"], ["`", "<code>", "</code>"]] as var markerAndTags){
 			[var marker, var startTag, var endTag] = markerAndTags;
 			var markerLength = marker .length();
 			var linesInput = lines;

@@ -71,9 +71,12 @@ MarkDownTool.createGUI := fn(){
 			GUI.LABEL : "Parse Documents",
 			GUI.TOOLTIP : "Parse Documents",
 			GUI.ON_CLICK : fn(){
+				outln("Parsing...");
+				
 				if(createIndexFile()){
 					static IndexBuilder = load(__DIR__ + "/lib/IndexBuilder.escript");
 					if(IndexBuilder){
+						outln("Creating index file...");
 						var indexTree = IndexBuilder.createTree(rootFolder());
 						IndexBuilder.createAndSaveIndex(indexTree, true, rootFolder());
 					}
@@ -82,15 +85,19 @@ MarkDownTool.createGUI := fn(){
 				}
 				
 				static CodeSectionParser = load(__DIR__ + "/lib/CodeSectionParser.escript");
-				if(CodeSectionParser)
+				if(CodeSectionParser){
+					outln("Including code sections" + (parseToHTML() ? " and parsing to HTML..." :  "..."));
 					CodeSectionParser.recurseFolderAndParse(rootFolder(), parseToHTML());
+				}
 				else
 					outln("ERROR: Could not find CodeSectionParser at " + __DIR__ + "/lib");
 			
 				if(addMenuToHTML()){
 					static MenuAdder = load(__DIR__ + "/lib/MenuAdder.escript");
-					if(MenuAdder)
+					if(MenuAdder){
+						outln("Adding menu to HTML files...");
 						MenuAdder.recurseFiles(rootFolder());
+					}
 					else
 						outln("ERROR: Could not find MenuAdder at " + __DIR__ + "/lib");
 				}

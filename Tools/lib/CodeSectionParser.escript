@@ -206,9 +206,12 @@ CodeSectionParser.replaceMarkDownLinksByHTMLLinks ::= fn(document){
 				
 				if(urlStart +urlLength < line.length())
 				{
-					var url = line.substr(urlStart, urlLength);
-					url = url.lTrim();
-					if(url.endsWith(".md")){
+					var linkTarget = line.substr(urlStart, urlLength);
+					linkTarget = linkTarget.lTrim();
+					var targetSplit = linkTarget.split(" ");
+					var url = targetSplit[0];
+				
+					if(url.endsWith(".md") && !url.contains("://")){ //only replace local urls linking to MarkDown files
 						var urlHTML = url.substr(0, url.length()-3);
 						urlHTML += ".html";
 						lineCopy = lineCopy.replaceAll(url, urlHTML);
