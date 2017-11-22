@@ -1,6 +1,5 @@
 <link rel="stylesheet" type="text/css" href="main.css"/>
-<div class = "index"
-><!---This file will not be parsed to HTML, but will be used as a prequel in the auto generated file index.md--->
+<div class = "index"><!---This file will not be parsed to HTML, but will be used as a prequel in the auto generated file index.md--->
 
 # Welcome to PADrend
 Whether you come her for a bachelor or master thesis, want to use PADrend for work or just want to use it for fun, feel welcome.
@@ -89,4 +88,4 @@ Get started and have fun.
         * 3.2.2 [Macros for EScript Bindings](3_Development_Guide/2_C++/2_Macros_for_EScript_Bindings.md)
         * 3.2.3 [Creating Object Bindings](3_Development_Guide/2_C++/3_Creating_Object_Bindings/Creating_Object_Bindings.md)
         * 3.2.4 [Extending MinSG States](3_Development_Guide/2_C++/4_Extending_MinSG_States/Extending_MinSG_States.md)
-<div>
+</div>
