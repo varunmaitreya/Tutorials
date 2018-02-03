@@ -9,7 +9,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 # Overview
 * 1 Installation Guide
     * 1.1 [Installation Guide](../../1_Installation_Guide/1_Installation_Guide.md)
-    * 1.2 **SyntaxHighlighting**
+    * 1.2 **EScript Syntax Highlighting**
 <!---END_INDEXSECTION--->
 
 # Syntax Highlighting for EScript

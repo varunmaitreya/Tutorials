@@ -7,11 +7,9 @@
 <!---BEGINN_INDEXSECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
 # Overview
-* 3.2 C++
-    * 3.2.1 **Creating a C++ Plugin**
-    * 3.2.2 [Macros for EScript Bindings](../../../3_Development_Guide/2_C++/2_Macros_for_EScript_Bindings.md)
-    * 3.2.3 [Creating Object Bindings](../../../3_Development_Guide/2_C++/3_Creating_Object_Bindings/Creating_Object_Bindings.md)
-    * 3.2.4 [Extending MinSG States](../../../3_Development_Guide/2_C++/4_Extending_MinSG_States/Extending_MinSG_States.md)
+* 3.3 PADrend Plugins
+    * 3.3.1 [Creating Plugins using EScript](../../../3_Development_Guide/3_PADrend_Plugins/1_Creating_Plugins_using_EScript/Creating_Plugins_using_EScript.md)
+    * 3.3.2 **Extending your Plugin with C++**
 <!---END_INDEXSECTION--->
 
 # Creating a C++ Plugin

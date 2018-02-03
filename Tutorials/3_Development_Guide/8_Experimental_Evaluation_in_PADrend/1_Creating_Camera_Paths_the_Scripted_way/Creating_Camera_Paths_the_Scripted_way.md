@@ -7,13 +7,10 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 <!---BEGINN_INDEXSECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
 # Overview
-* 3.1.5 MinSG
-    * 3.1.5.1 [SceneCreation](../../../../3_Development_Guide/1_EScript/5_MinSG/1_Scene_Creation/SceneCreation.md)
-    * 3.1.5.2 Node States
-    * 3.1.5.3 [ObserverTraits](../../../../3_Development_Guide/1_EScript/5_MinSG/3_ObserverTraits.md)
-    * 3.1.5.4 [TreeQueries](../../../../3_Development_Guide/1_EScript/5_MinSG/4_Tree_Queries/TreeQueries.md)
-    * 3.1.5.5 **Camera Path Scripted**
-    * 3.1.5.6 Evaluation
+* 3.8 Experimental Evaluation in PADrend
+    * 3.8.1 **Creating Camera Paths the Scripted way**
+    * 3.8.2 [Evaluating Image Quality](../../../3_Development_Guide/8_Experimental_Evaluation_in_PADrend/2_Evaluating_Image_Quality/Evaluating_Image_Quality.md)
+    * 3.8.3 [Evaluating Frame Time](../../../3_Development_Guide/8_Experimental_Evaluation_in_PADrend/3_Evaluating_Frame_Time/Evaluating_Frame_Time.md)
 <!---END_INDEXSECTION--->
 
 # Creating camera paths using EScript
@@ -22,6 +19,8 @@ You should read the tutorial first, since it is a good starting point to get in 
 This tutorial is about creating camera paths by using EScript.
 
 ## Class hierarchy
+
+![Class hierarchy](path_class_diagramm.png)
 
 The image above shows the class hierarchy of all classes involved in camera paths.
 There are mainly two classes which are important.

@@ -3,7 +3,7 @@
 # Overview
 * 1 Installation Guide
     * 1.1 **Installation Guide**
-    * 1.2 [SyntaxHighlighting](../1_Installation_Guide/2_EScript_Syntax_Highlighting/SyntaxHighlighting.md)
+    * 1.2 [EScript Syntax Highlighting](../1_Installation_Guide/2_EScript_Syntax_Highlighting/EScript_Syntax_Highlighting.md)
 <!---END_INDEXSECTION--->
 # Building PADrend from source
 This tutorial describes how to build PADrend from source code. 

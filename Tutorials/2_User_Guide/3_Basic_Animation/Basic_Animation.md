@@ -8,7 +8,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 <!---Automaticly generated section. Do not edit!!!--->
 # Overview
 * 2 User Guide
-    * 2.1 [Scene loading and navigation](../../2_User_Guide/1_Scene_loading_and_navigation/Scene_loading_and_navigation.md)
+    * 2.1 [Scene Loading and Navigation](../../2_User_Guide/1_Scene_Loading_and_Navigation/Scene_Loading_and_Navigation.md)
     * 2.2 [Scene Building](../../2_User_Guide/2_Scene_Building/Scene_Building.md)
     * 2.3 **Basic Animation**
     * 2.4 [Functional Objects and Physics](../../2_User_Guide/4_Functional_Objects_and_Physics/Functional_Objects_and_Physics.md)
