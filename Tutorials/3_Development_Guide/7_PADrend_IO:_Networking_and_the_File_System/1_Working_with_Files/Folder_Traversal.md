@@ -7,9 +7,9 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 <!---BEGINN_INDEXSECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
 # Overview
-* 3.1.7.2 Util
-    * 3.1.7.2.1 [Network](../../../../../3_Development_Guide/1_EScript/7_Libs/2_Util/1_Network.md)
-    * 3.1.7.2.2 **Folder Traversal**
+* 3.7 PADrend IO: Networking and the File System
+    * 3.7.1 **Folder Traversal**
+    * 3.7.2 [A Simple Client-Server Program](../../../3_Development_Guide/7_PADrend_IO:_Networking_and_the_File_System/2_A_Simple_Client-Server_Program/A_Simple_Client-Server_Program.md)
 <!---END_INDEXSECTION--->
 
 # Folder Traversal

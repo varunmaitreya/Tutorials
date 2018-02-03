@@ -7,11 +7,13 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 <!---BEGINN_INDEXSECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
 # Overview
-* 3.2 C++
-    * 3.2.1 [Creating a C++ Plugin](../../../3_Development_Guide/2_C++/1_Creating_a_C++_Plugin/Creating_a_C++_Plugin.md)
-    * 3.2.2 [Macros for EScript Bindings](../../../3_Development_Guide/2_C++/2_Macros_for_EScript_Bindings.md)
-    * 3.2.3 [Creating Object Bindings](../../../3_Development_Guide/2_C++/3_Creating_Object_Bindings/Creating_Object_Bindings.md)
-    * 3.2.4 **Extending MinSG States**
+* 3.5 MinSG: Minimalist Scene Graph
+    * 3.5.1 [What is a scene graph](../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/1_What_is_a_scene_graph.md)
+    * 3.5.2 [Creating a Scene using MinSG](../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/2_Creating_a_Scene_using_MinSG/Creating_a_Scene_using_MinSG.md)
+    * 3.5.3 Node States
+    * 3.5.4 **Extending MinSG States using C++**
+    * 3.5.5 [Using Observer Traits: Listen to Node Changes](../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/5_Using_Observer_Traits:_Listen_to_Node_Changes.md)
+    * 3.5.6 [Using TreeQueries to query MinSG Nodes](../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/6_Using_TreeQueries_to_query_MinSG_Nodes/Using_TreeQueries_to_query_MinSG_Nodes.md)
 <!---END_INDEXSECTION--->
 
 # State

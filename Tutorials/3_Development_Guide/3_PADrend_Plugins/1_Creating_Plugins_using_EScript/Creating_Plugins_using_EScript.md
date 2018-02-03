@@ -7,9 +7,9 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 <!---BEGINN_INDEXSECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
 # Overview
-* 3.1.2 PADrend Basics
-    * 3.1.2.1 [Important Extensions](../../../../3_Development_Guide/1_EScript/2_PADrend_Basics/1_Important_Extensions.md)
-    * 3.1.2.2 **EScript Plugin**
+* 3.3 PADrend Plugins
+    * 3.3.1 **Creating Plugins using EScript**
+    * 3.3.2 [Extending your Plugin with C++](../../../3_Development_Guide/3_PADrend_Plugins/2_Extending_your_Plugin_with_C++/Extending_your_Plugin_with_C++.md)
 <!---END_INDEXSECTION--->
 
 # Extending PADrend

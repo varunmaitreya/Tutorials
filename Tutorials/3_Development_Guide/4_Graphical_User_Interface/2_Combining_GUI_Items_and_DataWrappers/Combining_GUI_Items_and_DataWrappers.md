@@ -7,10 +7,12 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 <!---BEGINN_INDEXSECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
 # Overview
-* 3.1.3 GUI Example
-    * 3.1.3.1 Image Viewer
-    * 3.1.3.2 [UI Events](../../../../3_Development_Guide/1_EScript/3_GUI_Example/2_UI_Events.md)
-    * 3.1.3.3 **GUI Items and DataWrappers**
+* 3.4 Graphical User Interface
+    * 3.4.1 [Handling User Interface Events](../../../3_Development_Guide/4_Graphical_User_Interface/1_Handling_User_Interface_Events.md)
+    * 3.4.2 **Combining GUI Items and DataWrappers**
+    * 3.4.3 [A Simple Image Viewer - Part 1: The Basic UI](../../../3_Development_Guide/4_Graphical_User_Interface/3_A_Simple_Image_Viewer_-_Part 1:_The Basic_UI/A_Simple_Image_Viewer_-_Part 1:_The Basic_UI.md)
+    * 3.4.4 [A Simple Image Viewer - Part 2: Loading and Displaying Images](../../../3_Development_Guide/4_Graphical_User_Interface/4_A_Simple_Image_Viewer_-_Part_2:_Loading_and_Displaying_Images/A_Simple_Image_Viewer_-_Part_2:_Loading_and_Displaying_Images.md)
+    * 3.4.5 [A Simple Image Viewer - Part 3: Simple Image Manipulation](../../../3_Development_Guide/4_Graphical_User_Interface/5_A_Simple_Image_Viewer_-_Part_3:_Simple_Image_Manipulation/A_Simple_Image_Viewer_-_Part_3:_Simple_Image_Manipulation.md)
 <!---END_INDEXSECTION--->
 
 # GUI Items and DataWrappers

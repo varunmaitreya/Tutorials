@@ -7,9 +7,10 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 <!---BEGINN_INDEXSECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
 # Overview
-* 3.1.5.6 Evaluation
-    * 3.1.5.6.1 **Image Compare**
-    * 3.1.5.6.2 [Frame Time Measurement](../../../../../3_Development_Guide/1_EScript/5_MinSG/6_Evaluation/2_Frame_Time_Measurement/Frame_Time_Measurement.md)
+* 3.8 Experimental Evaluation in PADrend
+    * 3.8.1 [Creating Camera Paths the Scripted way](../../../3_Development_Guide/8_Experimental_Evaluation_in_PADrend/1_Creating_Camera_Paths_the_Scripted_way/Creating_Camera_Paths_the_Scripted_way.md)
+    * 3.8.2 **Evaluating Image Quality**
+    * 3.8.3 [Evaluating Frame Time](../../../3_Development_Guide/8_Experimental_Evaluation_in_PADrend/3_Evaluating_Frame_Time/Evaluating_Frame_Time.md)
 <!---END_INDEXSECTION--->
 
 # Image Compare

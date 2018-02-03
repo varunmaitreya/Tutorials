@@ -548,20 +548,13 @@ IndexBuilder.absoluteToRelativePath ::= fn(absolute, currentDir, rootFolder){
 	if(currentNoRoot.endsWith("/"))
 		currentNoRoot = currentNoRoot.substr(0, currentNoRoot.length()-1);
 	else{
-		if(!currentNoRoot){
-			outln("#######");
-			outln(absolute);
-			outln(currentDir);
-			outln(currentNoRoot);
-			outln("--------");
-		
+		 if(IO.isFile(currentNoRoot) || currentNoRoot.endsWith(".md") || currentNoRoot.endsWith(".html")){
+			var split = currentNoRoot.split("/");
+			currentNoRoot = split[0];
+			for(var i = 1; i < split.size()-1; i++)
+				currentNoRoot += "/" + split[i];
 		}
-	 if(IO.isFile(currentNoRoot) || currentNoRoot.endsWith(".md") || currentNoRoot.endsWith(".html")){
-		var split = currentNoRoot.split("/");
-		currentNoRoot = split[0];
-		for(var i = 1; i < split.size()-1; i++)
-			currentNoRoot += "/" + split[i];
-	}}
+	}
 	
 	currentNoRoot = currentNoRoot.replace(rootFolder.endsWith("/") ? rootFolder.substr(0, rootFolder.length()-1) : rootFolder, "");
 	
@@ -613,7 +606,7 @@ IndexBuilder.createAndSaveIndex ::= fn(rootNode, createRelative = false, current
 			welcomeText = IO.loadTextFile(welcomeFile) + "\n";
 		}
 		catch(e){
-			Runtime.warn("Could not load file " + welcomeFile );
+			Runtime.warn("Could not find welcome file: " + welcomeFile +"\nThere will be no welcome section in the index file." );
 		}
 	}
 	

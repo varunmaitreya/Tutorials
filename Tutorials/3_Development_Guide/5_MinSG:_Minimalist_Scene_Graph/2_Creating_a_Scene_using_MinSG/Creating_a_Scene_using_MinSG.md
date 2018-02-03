@@ -7,13 +7,13 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 <!---BEGINN_INDEXSECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
 # Overview
-* 3.1.5 MinSG
-    * 3.1.5.1 **SceneCreation**
-    * 3.1.5.2 Node States
-    * 3.1.5.3 [ObserverTraits](../../../../3_Development_Guide/1_EScript/5_MinSG/3_ObserverTraits.md)
-    * 3.1.5.4 [TreeQueries](../../../../3_Development_Guide/1_EScript/5_MinSG/4_Tree_Queries/TreeQueries.md)
-    * 3.1.5.5 [Camera Path Scripted](../../../../3_Development_Guide/1_EScript/5_MinSG/5_Camera_Path_Scripted/Camera_Path_Scripted.md)
-    * 3.1.5.6 Evaluation
+* 3.5 MinSG: Minimalist Scene Graph
+    * 3.5.1 [What is a scene graph](../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/1_What_is_a_scene_graph.md)
+    * 3.5.2 **Creating a Scene using MinSG**
+    * 3.5.3 Node States
+    * 3.5.4 [Extending MinSG States using C++](../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/4_Extending_MinSG_States_using_C++/Extending_MinSG_States_using_C++.md)
+    * 3.5.5 [Using Observer Traits: Listen to Node Changes](../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/5_Using_Observer_Traits:_Listen_to_Node_Changes.md)
+    * 3.5.6 [Using TreeQueries to query MinSG Nodes](../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/6_Using_TreeQueries_to_query_MinSG_Nodes/Using_TreeQueries_to_query_MinSG_Nodes.md)
 <!---END_INDEXSECTION--->
 
 # Goal of this tutorial

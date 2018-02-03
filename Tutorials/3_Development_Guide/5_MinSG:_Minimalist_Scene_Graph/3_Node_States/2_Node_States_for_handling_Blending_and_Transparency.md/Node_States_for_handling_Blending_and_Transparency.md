@@ -4,6 +4,18 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
  Author: Stanislaw Eppinger (eppinger@mail.uni-paderborn.de), Florian Pieper (fpieper@mail.uni-paderborn.de)
  PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
+<!---BEGINN_INDEXSECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+# Overview
+* 3.5.3 Node States
+    * 3.5.3.1 [Introduction to States](../../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/3_Node_States/1_Introduction_to_States.md)
+    * 3.5.3.1 [Changing  n objects appearance using node states](../../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/3_Node_States/1_Changing _n_objects_appearance_using_node_states/Changing _n_objects_appearance_using_node_states.md)
+    * 3.5.3.2 **Node States for handling Blending and Transparency**
+    * 3.5.3.3 [LightingState](../../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/3_Node_States/3_Lighting_State/LightingState.md)
+    * 3.5.3.4 [Using Scripts to alter the Rendering of Nodes](../../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/3_Node_States/4_Using_Scripts_to_alter_the_Rendering_of_Nodes/Using_Scripts_to_alter_the_Rendering_of_Nodes.md)
+    * 3.5.3.5 [Shaders in Node States](../../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/3_Node_States/5_Shaders_in_Node_States/Shaders_in_Node_States.md)
+    * 3.5.3.6 [GroupState](../../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/3_Node_States/6_Group_State/GroupState.md)
+<!---END_INDEXSECTION--->
 # Node States for handling Blending and Transparency
 This tutorial is all about rendering of transparent objects and how to handel them with node states.
 
@@ -13,7 +25,7 @@ The *TransparencyRenderer* is a NodeRendererState which handles transparency of 
 ### Simple Example
 In this example we will create three quads with different color, an alpha value of 0.5 to be transparent and put them in front of each other. To create these quads we take the `buildMesh()` method from the ShaderState tutorial and provide a parameter for each color channel, to create quads with different colors.
 
-<!---INCLUDE src=TransparencyRenderer.escript, start=17, end=17--->
+<!---INCLUDE src=resources/TransparencyRenderer.escript, start=17, end=17--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     var buildMesh = fn(r, g, b) {
@@ -21,7 +33,7 @@ In this example we will create three quads with different color, an alpha value 
 
 We create a red, green and blue quad and displace them along the z-axis.
 
-<!---INCLUDE src=TransparencyRenderer.escript, start=48, end=53--->
+<!---INCLUDE src=resources/TransparencyRenderer.escript, start=48, end=53--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     var geo = new MinSG.GeometryNode(buildMesh(1,0,0));
@@ -34,7 +46,7 @@ We create a red, green and blue quad and displace them along the z-axis.
 
 Now we need to be careful where to put the TransparencyRenderer. It is a NodeRendererState and handels the rendering of all the nodes in the subtree. Therefore it needs to be places at our list node which then contains the quad's geometry node as children.
 
-<!---INCLUDE src=TransparencyRenderer.escript, start=56, end=60--->
+<!---INCLUDE src=resources/TransparencyRenderer.escript, start=56, end=60--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     var sceneNode = new MinSG.ListNode();
@@ -46,11 +58,11 @@ Now we need to be careful where to put the TransparencyRenderer. It is a NodeRen
 
 When we don't insert the TransparencyRenderer then the result will look like this:
 
-![No Transparency](NoTransparency.png)
+![No Transparency](resources/NoTransparency.png)
 
 The quads are simply overlapping each other without transparency, although everyone of them has an alpha value of 0.5. When we insert the TransparencyRenderer at the list node we will see the transparency effect:
 
-![Transparency](Transparency.png)
+![Transparency](resources/Transparency.png)
 
 ## Blending State
 As you may know when rendering colors are set in the frame buffer.
@@ -120,7 +132,7 @@ Each quad has a unique color and gains a alpha value of 0.5, so that there is so
 There are two settings of blending functions in the code.
 You can switch between them by changing the value of the boolean variable _useConstantAlpha_.
 
-<!---INCLUDE src=BlendingState.escript, start=14, end=15--->
+<!---INCLUDE src=resources/BlendingState.escript, start=14, end=15--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     //This variable is used to switch between two blending functions.
@@ -129,7 +141,7 @@ You can switch between them by changing the value of the boolean variable _useCo
 
 The code for creating the quads is provided by a function so that it can be reused.
 
-<!---INCLUDE src=BlendingState.escript, start=17, end=38--->
+<!---INCLUDE src=resources/BlendingState.escript, start=17, end=38--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     //Creates a quad with a specific color. The function returns a
@@ -160,7 +172,7 @@ First we need to create the three quads.
 We use the z-parameter to position the quads along the z-axis.
 Next up we create a _ListNode_ that combines the three nodes to a scene graph.
 
-<!---INCLUDE src=BlendingState.escript, start=40, end=49--->
+<!---INCLUDE src=resources/BlendingState.escript, start=40, end=49--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     //Three quads
@@ -182,7 +194,7 @@ Depending on the used blending function you may also need to call _setBlendConst
 Use _setBlendEquation_ to change the blending equation.
 You can find the constants of the blending equations in the namespace _Rendering.BlendEquation_.
 
-<!---INCLUDE src=BlendingState.escript, start=54, end=64--->
+<!---INCLUDE src=resources/BlendingState.escript, start=54, end=64--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     //Two setting two different blending functions. The boolean variable
@@ -201,15 +213,15 @@ You can find the constants of the blending equations in the namespace _Rendering
 Below you find two images that show the difference between the blending functions set in the code.
 The first image shows the constant alpha blending function, the second shows the combination of SRC_ALPHA and ONE_MINUS_SRC_ALPHA.
 
-![Constant alpha](const_alpha.png)
+![Constant alpha](resources/const_alpha.png)
 
-![SRC_ALPHA and ONE_MINUS_SRC_ALPHA](alpha.png)
+![SRC_ALPHA and ONE_MINUS_SRC_ALPHA](resources/alpha.png)
 
 Feel free to experiment with different functions and equations.
 You can also use PADrend's main window to manipulate the values.
 You need to navigate to the scenes root node to access the state.
 
-![Blending state in main window](blending_state.png)
+![Blending state in main window](resources/blending_state.png)
 
 ## AlphaTestState
 The AlphaTestState deals with alpha values and decides whether to display it or not. To understand this state it's best to take a look at a simple example.
@@ -217,7 +229,7 @@ The AlphaTestState deals with alpha values and decides whether to display it or 
 ### Simple Example
 For this example we will take the example from the TransparencyRenderer and create three different quads displaced from each other with different alpha values.
 
-<!---INCLUDE src=AlphaTestState.escript, start=49, end=51--->
+<!---INCLUDE src=resources/AlphaTestState.escript, start=49, end=51--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     var geo = new MinSG.GeometryNode(buildMesh(1,0,0,0.5));
@@ -227,7 +239,7 @@ For this example we will take the example from the TransparencyRenderer and crea
 
 To make it more interesting we set the color of the upper left corner of our quads to be (1, 1, 1, 0), i.e. a white color without transparency.
 
-<!---INCLUDE src=AlphaTestState.escript, start=36, end=40--->
+<!---INCLUDE src=resources/AlphaTestState.escript, start=36, end=40--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     
@@ -239,12 +251,12 @@ To make it more interesting we set the color of the upper left corner of our qua
 
 The result will look like this:
 
-![Three semitransparent quads](semi_transparent_quads.png)
+![Three semitransparent quads](resources/semi_transparent_quads.png)
 
 Due to interpolation of the color value across the quad performed by the GPU, the alpha value decreases from the upper left corner to the bottem right corner of the quads.   
 The AlphaTestState is added before the TransparencyRenderer to take effect:
 
-<!---INCLUDE src=AlphaTestState.escript, start=59, end=60--->
+<!---INCLUDE src=resources/AlphaTestState.escript, start=59, end=60--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
     sceneNode += new MinSG.AlphaTestState();
@@ -253,5 +265,5 @@ The AlphaTestState is added before the TransparencyRenderer to take effect:
 
 Now you can go ahead and play around with the Reference Value and the options in the AlphaTestState. In our example we take the GREATER option and set the Reference Value to 0.17 telling the AlphaTestState to only draw pixels with an alpha value higher than 0.17. We can see how the upper left corner of all three quads isn't drawn because the interpolated alpha values are below our Reference Value. You can try out other options and see how the state changes the rendering
 
-![Light states activated](quads_with_alpha_test.png)
+![Light states activated](resources/quads_with_alpha_test.png)
 

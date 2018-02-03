@@ -5,6 +5,18 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
          Stanislaw Eppinger (eppinger@mail.uni-paderborn.de)
  PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
+<!---BEGINN_INDEXSECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+# Overview
+* 3.5.3 Node States
+    * 3.5.3.1 [Introduction to States](../../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/3_Node_States/1_Introduction_to_States.md)
+    * 3.5.3.1 [Changing  n objects appearance using node states](../../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/3_Node_States/1_Changing _n_objects_appearance_using_node_states/Changing _n_objects_appearance_using_node_states.md)
+    * 3.5.3.2 [Node States for handling Blending and Transparency](../../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/3_Node_States/2_Node_States_for_handling_Blending_and_Transparency.md/Node_States_for_handling_Blending_and_Transparency.md)
+    * 3.5.3.3 [LightingState](../../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/3_Node_States/3_Lighting_State/LightingState.md)
+    * 3.5.3.4 **Using Scripts to alter the Rendering of Nodes**
+    * 3.5.3.5 [Shaders in Node States](../../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/3_Node_States/5_Shaders_in_Node_States/Shaders_in_Node_States.md)
+    * 3.5.3.6 [GroupState](../../../../3_Development_Guide/5_MinSG:_Minimalist_Scene_Graph/3_Node_States/6_Group_State/GroupState.md)
+<!---END_INDEXSECTION--->
 # Using Scripts to alter the Rendering of Nodes
 
 ## ScriptedState
@@ -90,7 +102,7 @@ Now we create our own NodeRendererState and overload the `displayNode` method.
         return MinSG.FrameContext.NODE_HANDLED;
         
     };
-    var flickerRenderer = new MyRendererState(return MinSG.FrameContext.APPROXMATION_CHANNEL);
+    var flickerRenderer = new MyRendererState(MinSG.FrameContext.DEFAULT_CHANNEL);
 <!---END_CODESECTION--->
 
 The method has two parameters: `(Node owner, RenderParam params)`. The `node` parameter is the node on which the method is called and `param` contains further information about the rendering, e.g. the current rendering channel in which this node is in.  
