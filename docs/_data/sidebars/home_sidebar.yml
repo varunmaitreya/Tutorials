@@ -1,0 +1,15 @@
+entries:
+- title: Sidebar
+  levels: one
+  folders:
+
+  - title: Installation Guide
+    output: web
+    folderitems:
+    - title: Building from Source
+      url: /installation_guide
+      output: web
+    - title: EScript Syntax Highlighting
+      url: /syntax_highlighting
+      output: web
+      
