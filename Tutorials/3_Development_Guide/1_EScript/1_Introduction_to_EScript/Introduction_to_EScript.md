@@ -161,7 +161,7 @@ map[42] = "some Value";
 EScript supports the typical set of control structures.
 
 ### if/else
-```
+```javascript
 var result = someFunction ();
 if(result) {
   out("Success");
@@ -178,12 +178,12 @@ else
 ```
 
 ### Ternary Operator ? :
-```
+```javascript
 var abs = value >=0 ? value : -value;
 ```
 
 ### while and do-while
-```
+```javascript
 var i = 0;
 while(i<10) {
   out(i++, " ");
@@ -195,7 +195,7 @@ do {
 ```
 
 ### Looping with for
-```
+```javascript
 var sum = 0;
 for(var i = 0; i < 100; ++i) {
   sum += i;
@@ -205,7 +205,7 @@ outln("Sum of numbers: ", sum);
 
 ### Collection Iteration with foreach
 The general syntax of the foreach loop is: `foreach(<container> as <key>, <value>) <statement>` or if you're only interested in the values: `foreach(<container> as <value>) <statement>`
-```
+```javascript
 var chars = [’a’, ’c’, ’k’, ’b’, ’d’, ’x’, ’j’];
 foreach(chars as var index, var currentChar) {
   if(currentChar === ’x’) {
@@ -223,7 +223,7 @@ foreach(chars as var currentChar) {
 
 ### Exception Handling
 Exceptions can be caught by using a try-catch statement:
-```
+```javascript
 try {
   outln(42/0); // will throw a division by zero exception
 } catch(e) {
@@ -233,13 +233,13 @@ try {
 You can throw any object as an exception like this: `throw 42;` or `throw new Exception();`
 
 But in order to get a full stacktrace you should throw an exception by calling the `Runtime.exception(msg)` function:
-```
+```javascript
 Runtime.exception("some message");
 ```
 
 ## Functions
 One important difference to C is, that in EScript functions are first class objects and that they don't have a name. Functions are defined with the `fn` keyword and because a function is just another object, the definition is a statement and therefore it must end with a semicolon.
-```
+```javascript
 var square = fn(num) {
   return num * num;
 }; // don't forget this semicolon!
@@ -249,7 +249,7 @@ outln( a ); // Outputs: 25
 
 ### Recursion
 Remember local variables are only visible inside the surrounding scope, but *excluding* nested functions. Therefore the following code wouldn't work, because the `factorial` variable is not visible inside the function.
-```
+```javascript
 var factorial = fn(Number x){
 	if(x>1)
 		return x*factorial(x-1); // Warning: Variable 'factorial' not found
@@ -258,7 +258,7 @@ var factorial = fn(Number x){
 out( factorial(4) );
 ```
 To overcome this issue you must define the factorial variable static or you can use the special `thisFn` keyword, which is a reference to the current function:
-```
+```javascript
 var factorial = fn(Number x){
 	if(x>1)
 		return x*thisFn(x-1);
@@ -269,7 +269,7 @@ out( factorial(4) ); // Output: 24
 
 ### Type Restrictions
 The parameters of a function can be restricted to specific types. An exception is thrown if the type does not match.
-```
+```javascript
 var square = fn(Number num) {
   return num * num;
 };
@@ -277,7 +277,7 @@ square(5); // ok
 square("foo"); // runtime error
 ```
 It is also possible to allow multiple types for a single parameter. Furthermore it is important to know, that void is an independent type!
-```
+```javascript
 var print = fn([Number, String] value) {
   outln(value);
 };
@@ -292,7 +292,7 @@ print(void); // ok
 
 ### Default Values
 Parameters can have default values. If a type restriction is specified, the default value must also be of that type!
-```
+```javascript
 var print = fn(value = "no value") {
   outln(value);
 };
@@ -306,7 +306,7 @@ print2(); // runtime error
 
 ### Varargs
 The last parameter of a function definition can be used for a variable argument list. The function can then accept arbitrary many values that are stored as an array in the last parameter.
-```
+```javascript
 var sum = fn( numbers... ) { // all arguments are automatically passed as an array
   var sum = 0;
   foreach( numbers as var n)
@@ -318,7 +318,7 @@ outln( sum( 10,100,1000,4 ) ); // Output: 1114
 
 ### Multiple Return Values
 EScript does not support multiple return values directly, but it has some syntactic sugar to automatically assign multiple values to the content of an array: `[ lValue* ] = Array`
-```
+```javascript
 var calc = fn() {
   return [17, 42]; // returns an array
 };
@@ -329,7 +329,7 @@ outln("a:", a, " b:", b); // Output: a:17 b:42
 ### Parameter Binding
 You can set the first parameters of a function to fixed values by using a so called function binder (*FnBinder*): `Array => Function`
 The result of this expression is a FnBinder object that is used as a wrapper around the function. You can use this object like a normal function, but it will always call the underlying function with the first parameters fixed:
-```
+```javascript
 var myFun = fn(a, b, c) {
   out("a:", a, "b:", b, " c:", c );
 };
@@ -341,7 +341,7 @@ myBoundFun( 300 ); // Output: a:100 b:200 c:300
 
 Furthermore the *FnBinder* is used to combine an object with a function: `Object -> Function`
 The result of this expression is again a FnBinder object. The bound object will be the `this` object of the function.
-```
+```javascript
 var print = fn() {
 	outln(this);
 };
@@ -352,7 +352,7 @@ boundedPrint(); // Output: 42
 
 ## EScript OOP
 One of EScript's many similarities to JavaScript is the handling of types. EScript is not a class based language, but instead a prototype based language. The easiest way to get started with user defined objects is by using the `ExtObject`. You can create a new instance of an `ExtObject` and define new attributes for it. You can afterwards access and modify the attributes as you like.
-```
+```javascript
 var car = new ExtObject;
 car.color := "red"; // := creates a new member
 car.speed := 190;
@@ -365,13 +365,13 @@ car.outputDesc();
 ```
 As you can see object attributes are defined with this syntax: `object.attribute := value;`. You can change the value of an attribute afterwards by using the normal assignment syntax: `object.attribute = value;`.
 If there is already an attribute with this name defined, EScript won't give a warning. If on the other hand an attribute is accessed that was not defined earlier, EScript will give warning:
-```
+```javascript
 car.acceleration = 0; // Warning: Attribute not found 'acceleration'
 ```
 
 ### Types and Inheritance
 As already mentioned, EScript is not a class based language, but a prototype based one. But it is possible to achieve something similar to a class, by instantiating a new `Type`:
-```
+```javascript
 var Shape = new Type;
 Shape.color := "white"; // Define object attribute with value "white"
 
@@ -389,7 +389,7 @@ circle.color = "red";
 circle.radius = 5;
 ```
 Here one must be careful, because every attribute of a new instance will be set to the specified value. If the value is a value type, like a number or a string, the value is copied. But if it is a reference type, every instance will point to the same object!
-```
+```javascript
 Polygon.vertices := [];
 var a = new Polygon;
 a.vertices[0] = 42;
@@ -398,7 +398,7 @@ outln(b.vertices[0]); // Output: 42
 ```
 This code will output the value `42`, because both instances are refering to the same array!
 To overcome this issue you can provide attributes with annotations: `object.attribute @(<list of annotations) := value;`. In this case we look at the `init` annotation:
-```
+```javascript
 Polygon.vertices @(init) := Array;
 var a = new Polygon;
 a.vertices[0] = 42;
@@ -410,7 +410,7 @@ If you instanciate a new Polygon, the `vertices` attribute will be now set to a 
 Other useful annotations are the `private` and `const` annotations. A *private* attribute can be only accessed by the `this` object. The value of a *const* attribute cannot be changed afterwards.
 
 Another annotation is used to denote that a function is overiding the parent function:
-```
+```javascript
 var Parent = new Type;
 Parent.print ::= fn() {
   outln("I'm the parent!");
@@ -421,7 +421,7 @@ Child.print @(override) ::= fn() {
 };
 ```
 You can overide a function without using this annotation, but it is recommended to use this annotation, because EScript will give a warning if there is no function to override:
-```
+```javascript
 // Warning: Attribute marked with @(override) does not override.
 Child.println @(override) ::= fn() {
   outln("I'm the child!");  
@@ -431,7 +431,7 @@ As you can see, this annotation will give you a hint if you accidentally try to 
 
 #### Static Attributes
 You can define static attributes by using `::=` instead of `:=`. In many cases you can define your object functions statically, because they are the same for all instances.
-```
+```javascript
 var T = new Type;
 T.value := 42;
 T.print ::= fn() {
@@ -446,7 +446,7 @@ Because EScript is prototype based, the `this` object of the *Type* object will 
 
 #### Constructor
 It is also possible to define an own constructor. This is done by implementing an attribute with the special name `_constructor`. If a new instance of the type is instanciated with the `new` keyword, this attribute is called:
-```
+```javascript
 var Animal = new Type;
 Animal.name := void;
 Animal._constructor ::= fn(n){
@@ -460,7 +460,7 @@ a.print();
 ```
 Before the body of a constructor is executed, the constructor of the super type is executed. If you want to give some parameters to the super constructor, you have to use the following syntax:
 `Type._constructor ::= fn(constructorParams) @(super(constructorParams)) { ... }`
-```
+```javascript
 var Animal = new Type;
 Animal.name := void;
 Animal.canFly := void;
@@ -516,7 +516,7 @@ The following table summarizes the operator precendence from highest (0) to lowe
 
 ### Operator Overloading
 In EScript it is also possible to overload several operators. This happens on a 'per instance' level. This means that an overloaded operator is a function that is called on the object. For unary operators this means that the operator function doesn't have a parameter and the operand is the `this` object. For binary operators, the function has a single argument, which is the operand to the right of the operator. The left operand is the `this` object. The following code shows a simple example class, which overrides the `+` operator:
-```
+```javascript
 static T = new Type;
 T.value := 0;
 T._constructor ::= fn(value) {
@@ -529,7 +529,7 @@ T."+" ::= fn(other) {
 
 One special thing in EScript is that you can overload most operators as unary and binary operators. If it is the binary version, you just write the corresponding operator in quotes, like in the example above. If you want to define the operator as an unary operator in front of the operand, you append `_pre` to it, like `"+_pre"`. If you want to define an unary operator that comes after the operand you append `_post`, like `"+_post"`. One special thing here is the unary minus, which is defined by `"_-_pre"`.
 The following operators exist and can be overloaded with the pattern described earlier. Exceptions and additional notes are described afterwards.
-```
+```javascript
 + - * / %
 & | ^
 += -= *= /= %= &= |= ^= ~=
@@ -552,7 +552,7 @@ Of course you could do many cool and strange things, but it is also advised to n
 
 #### Simple Example
 This simple hand made point class shows you how you could use operator overloading.
-```
+```javascript
 static Point = new Type;
 Point.x := 0;
 Point.y := 0;
@@ -589,16 +589,16 @@ outln( "a : ", a.toString() );
 ```
 
 You could also do funny things, like this:
-```
+```javascript
 Number."%_post" ::= fn() { return this / 100; };
 ```
 And now you can simply calculate with percentages:
-```
+```javascript
 outln(420 * 10%); // Output: 42
 ```
 
 You can even define a factorial function:
-```
+```javascript
 Number."!_post" ::= fn() {
 	var result = 1;
 	for(var i=1; i <= this; i++)
@@ -615,7 +615,7 @@ EScript does not only allow operator overloading for 'simple' operators, like + 
 EScript distinguishes between setting and getting a value via the index operator. In order to get a value via the index operator you define a function called `_get` with a single parameter, which is the given index. In order to set a value, you define a function called `_set` with two parameters, the key and the value.
 
 The following example defines a new type, which can be used like an array, but which uses negative indices to access the content 'backwards', so -1 refers to the last item of the underlying array:
-```
+```javascript
 var MyArray = new Type;
 MyArray.array @(private) := void;
 MyArray._constructor ::= fn([Array, void] content) {
@@ -638,7 +638,7 @@ outln(arr[-1]); // last item
 
 #### Call Operator
 EScript also allows us to override the call operator. Therefore it is possible to use an object just like a function. This is done by defining a function called `_call`. This function must have at least one parameter, which is the `caller`. The rest of the parameters can be arbitrary. Example:
-```
+```javascript
 static MyType = new Type;
 MyType._call ::= fn(caller) {
 	outln("caller = ", caller);
