@@ -59,8 +59,8 @@ CodeSectionParser.removeWasteSpaces ::= fn(lines){
 		minSpaces = 0;
 		
 	foreach(linesWOTabs as var line){
-		//throwing away waste spaces and adding four spaces to indicate a codesection (MarkDown convention) 
-		returnText += "    " + line.substr(minSpaces) +"\n"; 
+		//throwing away waste spaces 
+		returnText += line.substr(minSpaces) +"\n"; 
 	}
 	
 	return returnText;
@@ -69,8 +69,17 @@ CodeSectionParser.removeWasteSpaces ::= fn(lines){
 CodeSectionParser.collectLinesFromSourceCodeFile ::= fn(file, start = 0, end = -1){	
 	if(end == 0 || (end > 0 && start > end))
 		return "";
+    
+  var codestyle = "";
+  if(file.endsWith(".escript"))
+    codestyle = "js"; // best fit for escript
+  else if(file.endsWith(".h") || file.endsWith(".cpp"))
+    codestyle = "cpp";
+  else if(file.endsWith("CMakeLists.txt"))
+    codestyle = "cmake";
 		
 	var readLines = codesectionBeginTag + "\n<!---Automaticly generated section. Do not edit!!!--->\n";
+  readLines += "```" + codestyle + "\n"; // begin markdown code section
 
 	var src = "";
 	try{
@@ -96,7 +105,8 @@ CodeSectionParser.collectLinesFromSourceCodeFile ::= fn(file, start = 0, end = -
 	}
 	
 	readLines += removeWasteSpaces(lineList);
-	
+  
+  readLines += "```\n"; // end markdown code section
 	readLines += codesectionEndTag + "\n";
 	return readLines;
 };
@@ -226,7 +236,7 @@ CodeSectionParser.replaceMarkDownLinksByHTMLLinks ::= fn(document){
 	return retDocument;
 };
 
-CodeSectionParser.parseDocument ::= fn(file, parseHTML){
+CodeSectionParser.parseDocument ::= fn(file){
 	if(!file.endsWith(".md"))
 		return;
 	
@@ -239,7 +249,7 @@ CodeSectionParser.parseDocument ::= fn(file, parseHTML){
 	try{
 		inDocument = IO.loadTextFile(file);
 	}catch(e){
-		Runtime.warn("Could not load file" + file);
+		Runtime.warn("CodeSectionParser: Could not load file " + file);
 		return;
 	}
 	
@@ -249,17 +259,14 @@ CodeSectionParser.parseDocument ::= fn(file, parseHTML){
 	var changeFound = false;
 	var oldCode = "";
 	var codeSection = "";
-	var lineNumber = 0;
 	
-	foreach(lines as var line){
-		lineNumber ++;
-		
-		if(line.contains(codesectionBeginTag)){
+	foreach(lines as var lineNumber, var line) {		
+		if(line.contains(codesectionBeginTag)) {
 			skipOldCode = true;
 			oldCode = "";
 			checkNextLineForOldCodeSection = false;
-		}else if(checkNextLineForOldCodeSection){
-			if(codeSection != ""){
+		} else if(checkNextLineForOldCodeSection) {
+			if(codeSection != "") {
 				outDocument += codeSection;
 				changeFound = true;
 			}
@@ -272,12 +279,12 @@ CodeSectionParser.parseDocument ::= fn(file, parseHTML){
 		else
 			oldCode += line + "\n";
 		
-		if(line.contains(includeTag)){
+		if(line.contains(includeTag)) {
 			checkNextLineForOldCodeSection = true;
 			try{
 				var includeTag = parseIncludeTag(line, lineNumber);
 				
-				if(!includeTag.srcFile.empty()){
+				if(!includeTag.srcFile.empty()) {
 					//src files have to be given relative to the markdown file
 					codeSection = collectLinesFromSourceCodeFile(folder + "/" + includeTag.srcFile, includeTag.startLine, includeTag.endLine); 
 					if(codeSection == ""){
@@ -304,7 +311,7 @@ CodeSectionParser.parseDocument ::= fn(file, parseHTML){
 		}
 	}
 	
-	if(changeFound){
+	if(changeFound) {
 		if(outDocument[outDocument.length()-1]=="\n")//remove last line break. Otherwise they would accumulate
 			outDocument = outDocument.substr(0, outDocument.length()-1); 
 			
@@ -316,62 +323,7 @@ CodeSectionParser.parseDocument ::= fn(file, parseHTML){
 			return;
 		}
 	}
-	/*else{
-		outln("File "+ file + ":no changes found.");
-	}*/
 	
-	
-	if(!parseHTML)
-		return;
-	
-	static Parser = load(__DIR__ + "/MarkdownParser.escript");
-	if(!Parser){
-		outln("Could not load MarkDownParser");
-		return;
-	}
-	
-	//replace all markdown links by html ones
-	outDocument = replaceMarkDownLinksByHTMLLinks(outDocument);
-	
-	var parser = new Parser();
-	var html = parser.convertDocument(outDocument);
-	var htmlFilePath = file.replace(".md", ".html");
-	var oldHtml = void;
-		
-	try{
-		oldHtml = IO.loadTextFile(htmlFilePath);
-	}catch(e){
-		oldHtml = "";
-	}
-	
-	if(oldHtml != html && html != ""){
-		try{
-			IO.saveTextFile(htmlFilePath, html);
-		}catch(e){
-			Runtime.warn("Could not save html file" + htmlFilePath);
-			return;
-		}
-	}
-};
-
-CodeSectionParser.recurseFolderAndParse ::= fn(root, parseHTML){
-	var stack = [root];
-	
-	while(!stack.empty()){
-		var currentFolder = stack.popFront();
-		
-		if(IO.isDir(currentFolder)){
-			var folderContent = IO.dir(currentFolder, IO.DIR_BOTH);
-			foreach(folderContent as var file){
-				if(IO.isFile(file)){
-					if(file.endsWith(".md"))
-						parseDocument(file, parseHTML);
-				}
-				else if(IO.isDir(file))
-					stack.pushBack(file);
-			} 
-		}
-	}
 };
 
 return CodeSectionParser;

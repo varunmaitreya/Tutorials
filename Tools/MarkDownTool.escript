@@ -54,20 +54,16 @@ static parseFolder = fn(rootFolder, buildTOC, buildCodeSections) {
   
   var files = collectMarkdownFiles(rootFolder);  
   var tocBuilder = new TOCBuilder;
+	var codeSectionParser = new CodeSectionParser;
   
   outln("Parsing...");
   
-  foreach(files as var file) {
-    var fileContents;
-  	try{
-  		fileContents = IO.loadTextFile(file);
-  	}catch(e){
-  		Runtime.warn("Could not load file" + file);
-  		continue;
-  	}
-    
+  foreach(files as var file) {    
     if(buildTOC)
-      tocBuilder.parseFrontmatter(file, fileContents);
+      tocBuilder.addToTOC(file);
+			
+		if(buildCodeSections)
+			codeSectionParser.parseDocument(file);
   }
   
   if(buildTOC) {

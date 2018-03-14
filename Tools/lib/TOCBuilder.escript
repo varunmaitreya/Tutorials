@@ -14,20 +14,36 @@ static T = new Type;
 
 T.entries @(init) := Array;
 
-T.parseFrontmatter ::= fn(String filename, String input) {
+T.addToTOC ::= fn(String file) {
+  var fileContents;
+  try{
+    fileContents = IO.loadTextFile(file);
+  }catch(e){
+    Runtime.warn("TOCBuilder: Could not load file '" + file + "'");
+    return false;
+  }
+  var frontmatter = parseFrontmatter(fileContents);
+  if(!frontmatter)
+    return false;
+  
+  frontmatter["file"] = file;
+  entries += new ExtObject(frontmatter);
+  return true;
+};
+
+T.parseFrontmatter @(private) ::= fn(String input) {
   if(!input.beginsWith("---"))
-    return;
+    return false;
   
   var start = 4;
   var end = input.find("---", start);
   if(!end) {
     outln("TOCBuilder: missing final '---' in frontmatter.");
-    return;
+    return false;
   }
   
   var lines = input.substr(start, end-start).trim().split("\n");
   var frontmatter = new Map;
-  frontmatter["file"] = filename;
   // simple yaml parsing. Only supports "key: value" entries.
   foreach(lines as var line) {
     line = line.trim();
@@ -35,8 +51,8 @@ T.parseFrontmatter ::= fn(String filename, String input) {
       continue;
     [var key, var value] = line.split(":");
     frontmatter[key.trim()] = value.trim();
-  }  
-  entries += new ExtObject(frontmatter);
+  }
+  return frontmatter;
 };
 
 T.checkFields @(private) ::= fn(entry) {
