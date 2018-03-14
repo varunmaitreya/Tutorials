@@ -1,6 +1,9 @@
 ---
 title: Creating Plugins using EScript
 permalink: creating_plugins_using_escript
+author: Henrik Heine
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: PADrend Plugins@3
 order: 1

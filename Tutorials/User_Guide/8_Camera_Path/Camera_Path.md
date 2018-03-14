@@ -2,6 +2,9 @@
 title: Camera Path
 permalink: camera_path
 category: User Guide
+author: Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 order: 8
 ---
 <!------------------------------------------------------------------------------------------------

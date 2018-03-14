@@ -2,6 +2,8 @@
 title: Building PADrend from source
 summary: This tutorial describes how to build PADrend from source code.
 permalink: installation_guide
+author: Benjamin Eikel, Claudius Jähn, Ralf Petring
+last_updated: July 7, 2014
 category: Installation Guide@0
 order: 0
 ---

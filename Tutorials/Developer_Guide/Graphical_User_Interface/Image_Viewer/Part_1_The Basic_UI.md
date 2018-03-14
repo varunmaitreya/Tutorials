@@ -1,6 +1,9 @@
 ---
 title: A Simple Image Viewer - Part 1 The Basic UI
 permalink: a_simple_image_viewer_-_part_1_the_basic_ui
+author: Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: Graphical User Interface
 order: 3.1

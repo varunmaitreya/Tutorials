@@ -2,6 +2,10 @@
 title: Functional Objects and Physics
 permalink: functional_objects_and_physics
 category: User Guide
+author: Florian Pieper
+last_updated: 2017
+license: cc-by-sa 4.0
+order: 4
 ---
 <!------------------------------------------------------------------------------------------------
 This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.

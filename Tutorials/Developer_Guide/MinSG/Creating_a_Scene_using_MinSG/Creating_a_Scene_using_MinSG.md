@@ -1,6 +1,9 @@
 ---
 title: Creating a Scene using MinSG
 permalink: creating_a_scene_using_minsg
+author: Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: MinSG - A Minimalist Scene Graph@3
 order: 2

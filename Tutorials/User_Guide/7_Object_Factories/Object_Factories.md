@@ -2,6 +2,9 @@
 title: Object Factories
 permalink: object_factories
 category: User Guide
+author: Henrik Heine
+license: cc-by-sa 4.0
+last_updated: 2017
 order: 7
 ---
 <!------------------------------------------------------------------------------------------------

@@ -1,6 +1,9 @@
 ---
 title: Geometry
 permalink: geometry
+author: Henrik Heine
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: PADrend Basics
 order: 2

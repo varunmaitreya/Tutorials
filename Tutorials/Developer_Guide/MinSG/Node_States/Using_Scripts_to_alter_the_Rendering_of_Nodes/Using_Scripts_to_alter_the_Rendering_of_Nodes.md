@@ -1,6 +1,9 @@
 ---
 title: Using Scripts to alter the Rendering of Nodes
 permalink: using_scripts_to_alter_the_rendering_of_nodes
+author: Henrik Heine, Stanislaw Eppinger
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: MinSG - A Minimalist Scene Graph
 order: 3.4

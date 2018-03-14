@@ -2,6 +2,9 @@
 title: Introduction to States
 permalink: introduction_to_states
 category: Developer Guide
+author: Henrik Heine, Stanislaw Eppinger
+last_updated: 2017
+license: cc-by-sa 4.0
 subcategory: MinSG - A Minimalist Scene Graph
 order: 3
 ---

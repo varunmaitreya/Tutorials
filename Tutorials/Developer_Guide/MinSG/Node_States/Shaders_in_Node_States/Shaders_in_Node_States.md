@@ -1,6 +1,9 @@
 ---
 title: Shaders in Node States
 permalink: shaders_in_node_states
+author: Henrik Heine, Stanislaw Eppinger
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: MinSG - A Minimalist Scene Graph
 order: 3.5

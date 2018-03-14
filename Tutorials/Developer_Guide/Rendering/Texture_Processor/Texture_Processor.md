@@ -1,6 +1,9 @@
 ---
 title: Modifying Textures with Texture Processors
 permalink: texture_processor
+author: Henrik Heine
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: Rendering
 order: 3

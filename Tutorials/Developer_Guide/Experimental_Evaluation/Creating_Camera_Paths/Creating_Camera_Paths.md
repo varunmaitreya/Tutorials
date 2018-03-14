@@ -1,6 +1,9 @@
 ---
-title: Creating Camera Paths the Scripted Way
+title: Creating Camera Paths
 permalink: creating_camera_paths
+author: Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: Experimental Evaluation@8
 order: 1
@@ -12,9 +15,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
  PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
 
-
-# Creating camera paths using EScript
-In a previous tutorial we discussed how to create a  camera path by using the user interface.
+In a previous tutorial we discussed how to create a camera path by using the user interface.
 You should read the tutorial first, since it is a good starting point to get in touch with camera paths.  
 This tutorial is about creating camera paths by using EScript.
 

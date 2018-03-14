@@ -14,27 +14,30 @@ entries:
   - title: User Guide
     output: web
     folderitems:
+    - title: User Interface Shortcuts
+      output: web
+      url: /shortcuts
     - title: Scene Loading and Navigation
       output: web
       url: /scene_loading_and_navigation
+    - title: Scene Building
+      output: web
+      url: /scene_building
     - title: Basic Animation
       output: web
       url: /basic_animation
     - title: Functional Objects and Physics
       output: web
       url: /functional_objects_and_physics
-    - title: Using Scripts
-      output: web
-      url: /using_scripts
     - title: Functional Objects Pointing Joint
       output: web
       url: /functional_objects_pointing_joint
+    - title: Using Scripts
+      output: web
+      url: /using_scripts
     - title: Object Factories
       output: web
       url: /object_factories
-    - title: Scene Building
-      output: web
-      url: /scene_building
     - title: Camera Path
       output: web
       url: /camera_path
@@ -161,7 +164,7 @@ entries:
     - title: Experimental Evaluation
       output: web
       subfolderitems:
-      - title: Creating Camera Paths the Scripted Way
+      - title: Creating Camera Paths
         output: web
         url: /creating_camera_paths
       - title: Evaluating Image Quality

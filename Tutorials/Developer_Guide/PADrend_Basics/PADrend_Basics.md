@@ -1,17 +1,20 @@
 ---
 title: PADrend Basics
 permalink: padrend_basics
+author: Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: PADrend Basics@2
 order: 0
 ---
 
-# TODO
+## TODO
 
 * ... Extension Points ( + "Important Extensions")?
 * ... Evtl. Geometry Library Tutorials hier? (gemerged in einem Tutorial?)
 
-# PADrend
+## PADrend
 PADrend stands for Platform for Algorithm Development and Rendering – a software system for virtual walkthroughs through complex virtual three dimensional scenes.
 PADrend is developed since 2007 in the research group Algorithms and Complexity at the Heinz Nixdorf Institute, University of Paderborn.
 The goals of PADrend are the harmonization of development efforts, the establishment of a basis to compare 3D rendering algorithms, and the provision of an adequate basis for research and teaching.

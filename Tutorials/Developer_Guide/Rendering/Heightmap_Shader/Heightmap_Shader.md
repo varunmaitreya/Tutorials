@@ -1,6 +1,9 @@
 ---
 title: Generating Terrains using a Heightmap Shader
 permalink: heightmap_shader
+author: Henrik Heine
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: Rendering
 order: 4

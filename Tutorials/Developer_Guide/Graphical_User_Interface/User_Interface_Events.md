@@ -2,6 +2,9 @@
 title: Handling User Interface Events
 permalink: handling_user_interface_events
 category: Developer Guide
+author: Henrik Heine
+last_updated: 2017
+license: cc-by-sa 4.0
 subcategory: Graphical User Interface@4
 order: 1
 ---
@@ -12,8 +15,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
  PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
 
-
-# UI Events
+## UI Events
 An `Util.UI.Event` object represents a single UI event. Each instance has a `type` attribute, which determines the kind of event and several different other attributes depending on this type.
 The `type` attribute is a number representing the actual type of event and is equal to one of the following constants:
 * `Util.UI.EVENT_RESIZE`

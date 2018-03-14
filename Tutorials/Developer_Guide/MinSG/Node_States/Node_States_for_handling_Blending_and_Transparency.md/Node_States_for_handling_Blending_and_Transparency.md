@@ -1,6 +1,9 @@
 ---
 title: Node States for handling Blending and Transparency
 permalink: node_states_for_handling_blending_and_transparency
+author: Stanislaw Eppinger, Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: MinSG - A Minimalist Scene Graph
 order: 3.2

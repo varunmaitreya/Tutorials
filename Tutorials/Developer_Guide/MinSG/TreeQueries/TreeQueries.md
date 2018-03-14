@@ -1,6 +1,9 @@
 ---
 title: Using TreeQueries to query MinSG Nodes
 permalink: tree_queries
+author: Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: MinSG - A Minimalist Scene Graph
 order: 6

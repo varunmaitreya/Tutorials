@@ -1,7 +1,11 @@
 ---
 title: Scene Building
 permalink: scene_building
+author: Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 category: User Guide
+order: 2
 ---
 <!------------------------------------------------------------------------------------------------
 This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.

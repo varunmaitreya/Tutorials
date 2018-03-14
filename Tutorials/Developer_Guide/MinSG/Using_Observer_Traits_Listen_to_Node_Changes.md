@@ -1,6 +1,9 @@
 ---
 title: Using Observer Traits Listen to Node Changes
 permalink: using_observer_traits_listen_to_node_changes
+author: Henrik Heine
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: MinSG - A Minimalist Scene Graph
 order: 5

@@ -1,6 +1,9 @@
 ---
 title: Extending MinSG States using C++
 permalink: extending_minsg_states_using_c++
+author: Stanislaw Eppinger
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: MinSG - A Minimalist Scene Graph
 order: 4

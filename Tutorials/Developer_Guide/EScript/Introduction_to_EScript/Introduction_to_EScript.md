@@ -1,7 +1,10 @@
 ---
 title: Introduction to EScript
 permalink: introduction_to_escript
+author: Henrik Heine
+license: cc-by-sa 4.0
 category: Developer Guide
+last_updated: 2017
 subcategory: EScript@1
 order: 1
 ---

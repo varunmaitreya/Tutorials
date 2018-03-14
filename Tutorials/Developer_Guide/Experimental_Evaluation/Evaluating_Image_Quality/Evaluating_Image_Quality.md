@@ -1,6 +1,9 @@
 ---
 title: Evaluating Image Quality
 permalink: evaluating_image_quality
+author: Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: Experimental Evaluation
 order: 2

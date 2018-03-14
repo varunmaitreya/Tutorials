@@ -1,6 +1,9 @@
 ---
 title: Scene Loading and Navigation
 permalink: scene_loading_and_navigation
+author: Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 category: User Guide@1
 order: 1
 ---

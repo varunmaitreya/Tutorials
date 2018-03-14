@@ -2,6 +2,9 @@
 title: LightingState
 permalink: lightingstate
 category: Developer Guide
+author: Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 subcategory: MinSG - A Minimalist Scene Graph
 order: 3.3
 ---

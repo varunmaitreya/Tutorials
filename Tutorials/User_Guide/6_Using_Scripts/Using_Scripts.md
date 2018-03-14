@@ -2,6 +2,9 @@
 title: Using Scripts
 permalink: using_scripts
 category: User Guide
+author: Henrik Heine
+last_updated: 2017
+license: cc-by-sa 4.0
 order: 6
 ---
 <!------------------------------------------------------------------------------------------------

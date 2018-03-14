@@ -2,6 +2,9 @@
 title: Syntax Highlighting for EScript
 permalink: escript_syntax_highlighting
 category: Installation Guide
+author: Henrik Heine, Sascha Brandt
+license: cc-by-sa 4.0
+last_updated: 2017
 order: 1
 ---
 <!------------------------------------------------------------------------------------------------

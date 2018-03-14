@@ -1,6 +1,9 @@
 ---
 title: Extending your Plugin with C++
 permalink: extending_your_plugin_with_c++
+author: Sascha Brandt
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: PADrend Plugins
 order: 2
@@ -11,9 +14,6 @@ order: 2
  Author: Sascha Brandt (sascha@brandt.graphics)
  PADrend Version 1.0.0
 ------------------------------------------------------------------------------------------------->
-
-
-# Creating a C++ Plugin
 
 In this guide, it is shown how to properly setup a C++ Plugin Project, i.e., how to create a C++ Plugin library and load it from within an EScript Plugin.
 There are two possibilities to create a Plugin Project. 

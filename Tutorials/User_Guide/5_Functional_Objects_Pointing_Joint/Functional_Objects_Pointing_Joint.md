@@ -2,6 +2,10 @@
 title: Functional Objects Pointing Joint
 permalink: functional_objects_pointing_joint
 category: User Guide
+author: Florian Pieper
+last_updated: 2017
+license: cc-by-sa 4.0
+order: 5
 ---
 <!------------------------------------------------------------------------------------------------
 This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.

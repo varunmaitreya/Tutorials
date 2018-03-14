@@ -1,6 +1,9 @@
 ---
 title: Working with Meshes
 permalink: working_with_meshes
+author: Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: Rendering@6
 order: 1

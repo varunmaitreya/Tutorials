@@ -2,6 +2,9 @@
 title: Working with Files
 permalink: working_with_files
 category: Developer Guide
+author: Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 subcategory: Networking and the File System@7
 order: 1
 ---

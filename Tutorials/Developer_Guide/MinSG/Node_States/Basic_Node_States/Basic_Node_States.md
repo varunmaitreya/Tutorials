@@ -1,6 +1,9 @@
 ---
 title: Basic Node States
 permalink: basic_node_states
+author: Florian Pieper, Henrik Heine
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: MinSG - A Minimalist Scene Graph
 order: 3.1

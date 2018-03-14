@@ -1,6 +1,9 @@
 ---
 title: Post Process Effects - Edge Enhancement
 permalink: post_process_effects
+author: Florian Pieper
+license: cc-by-sa 4.0
+last_updated: 2017
 category: Developer Guide
 subcategory: Rendering
 order: 5
