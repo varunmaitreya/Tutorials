@@ -2,7 +2,7 @@
 title: Creating a Scene using MinSG
 permalink: creating_a_scene_using_minsg
 category: Developer Guide
-subcategory: MinSG Minimalist Scene Graph@3
+subcategory: MinSG - A Minimalist Scene Graph@3
 order: 2
 ---
 <!------------------------------------------------------------------------------------------------
@@ -149,17 +149,19 @@ It is not important to understand the mesh creation, since it will be the main t
 <!---INCLUDE src=SceneCreation.escript, start=14, end=24--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-    //building nodes
-    var rootNode = new MinSG.ListNode();
-    var listNode = new MinSG.ListNode();
-    
-    var mesh1 = Rendering.MeshBuilder.createBox(new Geometry.Box(-2, 0, 0, 1, 1, 1));
-    var mesh2 = Rendering.MeshBuilder.createBox(new Geometry.Box(2, 0, 0, 1, 1, 1));
-    var mesh3 = Rendering.MeshBuilder.createBox(new Geometry.Box(0, 0, -2, 1, 1, 1));
-    
-    var geometryNode1 = new MinSG.GeometryNode(mesh1);
-    var geometryNode2 = new MinSG.GeometryNode(mesh2);
-    var geometryNode3 = new MinSG.GeometryNode(mesh3);
+```js
+//building nodes
+var rootNode = new MinSG.ListNode();
+var listNode = new MinSG.ListNode();
+
+var mesh1 = Rendering.MeshBuilder.createBox(new Geometry.Box(-2, 0, 0, 1, 1, 1));
+var mesh2 = Rendering.MeshBuilder.createBox(new Geometry.Box(2, 0, 0, 1, 1, 1));
+var mesh3 = Rendering.MeshBuilder.createBox(new Geometry.Box(0, 0, -2, 1, 1, 1));
+
+var geometryNode1 = new MinSG.GeometryNode(mesh1);
+var geometryNode2 = new MinSG.GeometryNode(mesh2);
+var geometryNode3 = new MinSG.GeometryNode(mesh3);
+```
 <!---END_CODESECTION--->
 
 First we need to create the nodes themselves.
@@ -177,12 +179,14 @@ Afterwards the two other geometry nodes are connected to the list node.
 <!---INCLUDE src=SceneCreation.escript, start=34, end=39--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-    //Building the scene graph
-    rootNode.addChild(geometryNode1);
-    rootNode.addChild(listNode);
-    
-    listNode += geometryNode2;
-    listNode += geometryNode3;
+```js
+//Building the scene graph
+rootNode.addChild(geometryNode1);
+rootNode.addChild(listNode);
+
+listNode += geometryNode2;
+listNode += geometryNode3;
+```
 <!---END_CODESECTION--->
 
 ## Giving the nodes an id
@@ -192,13 +196,15 @@ This id's will show up in the _Node Editor_ and can help identifying specific no
 <!---INCLUDE src=SceneCreation.escript, start=26, end=32--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-    //giving nodes a unique id
-    PADrend.getSceneManager().registerNode("root", rootNode);
-    PADrend.getSceneManager().registerNode("some_list_node", listNode);
-    
-    PADrend.getSceneManager().registerNode("geometry_node_1", geometryNode1);
-    PADrend.getSceneManager().registerNode("geometry_node_2", geometryNode2);
-    PADrend.getSceneManager().registerNode("geometry_node_3", geometryNode3);
+```js
+//giving nodes a unique id
+PADrend.getSceneManager().registerNode("root", rootNode);
+PADrend.getSceneManager().registerNode("some_list_node", listNode);
+
+PADrend.getSceneManager().registerNode("geometry_node_1", geometryNode1);
+PADrend.getSceneManager().registerNode("geometry_node_2", geometryNode2);
+PADrend.getSceneManager().registerNode("geometry_node_3", geometryNode3);
+```
 <!---END_CODESECTION--->
 
 You can give an id to a node by calling PADrend.getSceneManager().registerNode(_ID_, _NODE_).
@@ -220,7 +226,9 @@ Before we can set the meta data we first need to load the module containing the 
 <!---INCLUDE src=SceneCreation.escript, start=42, end=42--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-    var NodeMetaInfo = Std.module('LibMinSGExt/NodeMetaInfo');
+```js
+var NodeMetaInfo = Std.module('LibMinSGExt/NodeMetaInfo');
+```
 <!---END_CODESECTION--->
 
 For setting the current date, we first need to fetch it.
@@ -228,7 +236,9 @@ For setting the current date, we first need to fetch it.
 <!---INCLUDE src=SceneCreation.escript, start=43, end=43--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-    var date = getDate();
+```js
+var date = getDate();
+```
 <!---END_CODESECTION--->
 
 For each field the class _NodeMetaInfo_ contains a function to access it.
@@ -239,11 +249,13 @@ We want to attach the meta data to the root node of our scene (_rootNode_).
 <!---INCLUDE src=SceneCreation.escript, start=45, end=49--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-    NodeMetaInfo.accessMetaInfo_CreationDate(rootNode)("" + date["year"] + "-"+ date["mon"] + "-" + date["mday"] );
-    NodeMetaInfo.accessMetaInfo_Title(rootNode)("Test Scene");
-    NodeMetaInfo.accessMetaInfo_Author(rootNode)("Max Mustermann");
-    NodeMetaInfo.accessMetaInfo_License(rootNode)("free");
-    NodeMetaInfo.accessMetaInfo_Note(rootNode)("Some info about the scene.");
+```js
+NodeMetaInfo.accessMetaInfo_CreationDate(rootNode)("" + date["year"] + "-"+ date["mon"] + "-" + date["mday"] );
+NodeMetaInfo.accessMetaInfo_Title(rootNode)("Test Scene");
+NodeMetaInfo.accessMetaInfo_Author(rootNode)("Max Mustermann");
+NodeMetaInfo.accessMetaInfo_License(rootNode)("free");
+NodeMetaInfo.accessMetaInfo_Note(rootNode)("Some info about the scene.");
+```
 <!---END_CODESECTION--->
 
 ## Registering the scene to PADrend
@@ -254,10 +266,12 @@ We simply call first register and then select and pass the root node of our scen
 <!---INCLUDE src=SceneCreation.escript, start=51, end=54--->
 <!---BEGINN_CODESECTION--->
 <!---Automaticly generated section. Do not edit!!!--->
-    //Register the root node of the scene graph
-    PADrend.registerScene(rootNode);
-    //Selecting the root node to be the active scene
-    PADrend.selectScene(rootNode);
+```js
+//Register the root node of the scene graph
+PADrend.registerScene(rootNode);
+//Selecting the root node to be the active scene
+PADrend.selectScene(rootNode);
+```
 <!---END_CODESECTION--->
 
 The scenes geometry will now be displayed.

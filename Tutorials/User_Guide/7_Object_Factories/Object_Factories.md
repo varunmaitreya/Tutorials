@@ -2,6 +2,7 @@
 title: Object Factories
 permalink: object_factories
 category: User Guide
+order: 7
 ---
 <!------------------------------------------------------------------------------------------------
 This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
