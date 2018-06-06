@@ -122,6 +122,18 @@ meshBuilder.addQuad(4,5,6,7);
 ```
 <!---END_CODESECTION--->
 
+## Finalizing the mesh
+After we are done adding all our vertices and triangles to our mesh builder, we can finalize our mesh.
+This can be simply done by calling _buildMesh_.
+<!---INCLUDE src=MeshBuilderTut.escript, start=94, end=95--->
+<!---BEGINN_CODESECTION--->
+<!---Automaticly generated section. Do not edit!!!--->
+```js
+//Build the mesh
+var mesh = meshBuilder.buildMesh();
+```
+<!---END_CODESECTION--->
+
 ## Displaying mesh
 To display the mesh we first need to register a scene.
 Therefore we need a scene graph.
@@ -140,7 +152,7 @@ After the scene graph was build, we register the root node at the PADrend instan
 //Create a list node holding the scene
 var sceneNode = new MinSG.ListNode();
 //Create a geometry node holding the mesh
-var node = new MinSG.GeometryNode();
+var node = new MinSG.GeometryNode(mesh);
 //Adding the geometry node to the scene node
 sceneNode += node;
     

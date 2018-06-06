@@ -18,7 +18,7 @@ var clipSphere = fn(node){
 	//Cutting the mesh
 	Rendering.eliminateTrianglesBehindPlane(mesh, new Geometry.Vec3(0.0, 0.0, 0.0), new Geometry.Vec3(-1.0, 0.0, 0.0));
 	
-	node.setMesh(mesh);
+	return mesh;
 };
 
 var createThreeConesWithDifferentDrawState = fn(rootNode){
@@ -93,13 +93,13 @@ var createBox = fn(node, r, g, b){
 	
 	//Build the mesh
 	var mesh = meshBuilder.buildMesh();
-	node.setMesh(mesh);
+	return mesh;
 };
-
+var mesh = createBox(node, 0, 1, 0);
 //Create a list node holding the scene
 var sceneNode = new MinSG.ListNode();
 //Create a geometry node holding the mesh
-var node = new MinSG.GeometryNode();
+var node = new MinSG.GeometryNode(mesh);
 //Adding the geometry node to the scene node
 sceneNode += node;
 	
@@ -110,5 +110,5 @@ PADrend.selectScene(sceneNode);
 
 //createBox(node, 0, 1, 0);
 //createThreeConesWithDifferentDrawState(sceneNode);
-clipSphere(node);
+//clipSphere(node);
 
