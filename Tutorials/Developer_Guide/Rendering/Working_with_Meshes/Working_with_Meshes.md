@@ -1,9 +1,9 @@
 ---
 title: Working with Meshes
 permalink: working_with_meshes
-author: Florian Pieper
+author: Florian Pieper, Sascha Brandt
 license: cc-by-sa 4.0
-last_updated: 2017
+last_updated: June 6, 2018
 category: Developer Guide
 subcategory: Rendering@6
 order: 1
@@ -123,7 +123,7 @@ meshBuilder.addQuad(4,5,6,7);
 <!---END_CODESECTION--->
 
 ## Finalizing the mesh
-After we are done adding all our vertices and triangles to our mesh builder, we can finalize our mesh.
+After we are done adding all our vertices and triangles to the mesh builder, we can build the actual mesh.
 This can be simply done by calling _buildMesh_.
 <!---INCLUDE src=MeshBuilderTut.escript, start=94, end=95--->
 <!---BEGINN_CODESECTION--->
