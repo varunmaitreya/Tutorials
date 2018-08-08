@@ -2,8 +2,8 @@
 title: Building PADrend from source
 summary: This tutorial describes how to build PADrend from source code.
 permalink: installation_guide
-author: Benjamin Eikel, Claudius Jähn, Ralf Petring
-last_updated: July 7, 2014
+author: Benjamin Eikel, Claudius Jähn, Ralf Petring, Sascha Brandt
+last_updated: August 8, 2018
 category: Installation Guide@0
 order: 0
 ---
@@ -48,23 +48,23 @@ __Please check and update this work flow continuously!__
 * Install it and and check the option _Add CMake too the system PATH for current user_ (for convenience).
 
 #### GIT 
-* Best way of getting the source is to use GIT (using SVN is also possible, see below).
-* A Git-Client for windows is available [here](http://msysgit.github.io/). 
+* You need GIT to get the source.
+* A Git-Client for windows is available [here](https://gitforwindows.org/).
 	* The _Windows Explorer integration_ is not necessary.
 	* The recommended _line ending conversion_ is _Checkout as-is, commit as-is_. (Note: Only use Unix-style line endings!)
 * (optional) Install a graphical git user interface (e.g. [Toritoise-GIT](https://code.google.com/p/tortoisegit/)).
 
+#### Choose your IDE
+* Visual Studio does not work (if you manage to make it work, please contact us).
+* Other than that, you can use any C++ IDE you like (that supports GCC).
+* We recommend using [Atom](https://atom.io/) with the plugins [autocomplete-clang](https://atom.io/packages/autocomplete-clang), [linter-clang](https://atom.io/packages/linter-clang) and [language-escript](https://atom.io/packages/language-escript) (a detailed guide how to set up Atom is in the works).
+
 ### Download source 
 __For compiling the external libraries, PADrend must be located in a short path without any white spaces, like `C:\PADrend`.__
 
-* (Public open source part using git) Clone the repository `https://github.com/PADrend/PADrendComplete.git` into `c:\PADrend` using the `--recursive` option (See a git manual for details.).
+* (Public open source part) Clone the repository `https://github.com/PADrend/PADrendComplete.git` into `c:\PADrend` using the `--recursive` option (See a git manual for details.).
  All required (Open Source) repositories are embedded as submodules.
-* (Closed source part using SVN) Checkout the repository `https://macabeo.cs.uni-paderborn.de/svn/PADrend/trunk/extPlugins` into the `C:\PADrend\extPlugins` folder.
-
-__Or__
-
-* (Complete project using SVN) Checkout the repository `https://macabeo.cs.uni-paderborn.de/svn/PADrend/complete` into the `c:\PADrend` folder.
- All required repositories (including the extPlugins), are included using SVN-externals.
+* (Closed source part; optional; needs permission to access) Clone the repository `https://git.cs.upb.de/algoCG/extPlugins.git` into the `C:\PADrend\extPlugins` folder.
 
 ### Build third party libraries
 * Open CMake-GUI (_best from within the MSYS shell_)
@@ -109,6 +109,8 @@ To build PADrend:
 * Start the build process: `ninja`
 
 ### Build PADrend (CodeBlocks IDE)
+**Note: This method is deprecated and might not work anymore.**
+
 One possible IDE for developing PADrend is CodeBlocks.
 To setup CodeBlocks:
 
