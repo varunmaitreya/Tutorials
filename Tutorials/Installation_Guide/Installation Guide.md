@@ -203,7 +203,6 @@ For building PADrend (not the libraries!) the [Ninja](https://github.com/martine
 
 #### Choose your IDE
 * We recommend using [Atom](https://atom.io/) with the plugins [autocomplete-clang](https://atom.io/packages/autocomplete-clang), [linter-clang](https://atom.io/packages/linter-clang) and [language-escript](https://atom.io/packages/language-escript) (a detailed guide how to set up Atom is in the works).
-----
 
 ### Getting the source
 * You need GIT to get the source.
@@ -211,7 +210,6 @@ For building PADrend (not the libraries!) the [Ninja](https://github.com/martine
 * (Public open source part) Clone the repository `https://github.com/PADrend/PADrendComplete.git` into `~/PADrend` using the `--recursive` option (See a git manual for details.).
  All required (Open Source) repositories are embedded as submodules.
 * (Closed source part; optional; needs permission to access) Clone the repository `https://git.cs.upb.de/algoCG/extPlugins.git` into the `~/PADrend/extPlugins` folder.
-----
 
 ### Building the external libraries
 Some of the external libraries are required.
