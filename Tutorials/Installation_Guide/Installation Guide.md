@@ -198,31 +198,19 @@ CMake creates a project for your IDE, or a Makefile, that uses the C++ compiler 
 Install CMake by [downloading it](http://www.cmake.org/cmake/resources/software.html) or by using your package manager (e.g. the [package cmake-qt-gui for Debian](http://packages.debian.org/cmake-qt-gui)).
 Currently, you need at least CMake in version 2.8.11 to build PADrend.
 
-#### Subversion (or GIT)
-You need a [Subversion](http://subversion.apache.org/) client to get the source code.
-For example, you can use one of the Subversion clients for Eclipse ([Subversive](http://www.eclipse.org/subversive/), [Subclipse](http://subclipse.tigris.org/)).
-For Windows, [TortoiseSVN](http://tortoisesvn.tigris.org/) is a good choice.
-On GNU/Linux, you can use your package manager again (e.g. the [package subversion for Debian](http://packages.debian.org/subversion)).
-
 #### (optional) Ninja build system
 For building PADrend (not the libraries!) the [Ninja](https://github.com/martine/ninja) build system can be used.
 
-----
-
-### Automatic build
-You can try the attached script [attachment:bootstrapPADrend.sh] to automatically download the source, build the external libraries, build and execute PADrend.<!--TODO: No idea how to handle the attachment -->
-Except the problem with `OPENAL_INCLUDE_DIR` (see below), on 2013-07-01 the script was executed successfully on `cairon.cs.uni-paderborn.de` (IRB pool PC) with a working PADrend as result.
-
+#### Choose your IDE
+* We recommend using [Atom](https://atom.io/) with the plugins [autocomplete-clang](https://atom.io/packages/autocomplete-clang), [linter-clang](https://atom.io/packages/linter-clang) and [language-escript](https://atom.io/packages/language-escript) (a detailed guide how to set up Atom is in the works).
 ----
 
 ### Getting the source
-To get PADrend completely with all libraries, resources, and scripts, use your Subversion client to check out [https://macabeo.cs.uni-paderborn.de/svn/PADrend/complete](https://macabeo.cs.uni-paderborn.de/svn/PADrend/complete).
-Use your [IMT](http://imt.uni-paderborn.de/) account to authenticate yourself.
-If you want to use the command-line interface, you can do it as follows:
-
-	svn co https://macabeo.cs.uni-paderborn.de/svn/PADrend/complete PADrend
-	cd PADrend
-
+* You need GIT to get the source.
+* If it is not already installed on your machine you should be able to simply install it using your favorite package manager (e.g., `apt-get install git`)
+* (Public open source part) Clone the repository `https://github.com/PADrend/PADrendComplete.git` into `~/PADrend` using the `--recursive` option (See a git manual for details.).
+ All required (Open Source) repositories are embedded as submodules.
+* (Closed source part; optional; needs permission to access) Clone the repository `https://git.cs.upb.de/algoCG/extPlugins.git` into the `~/PADrend/extPlugins` folder.
 ----
 
 ### Building the external libraries
