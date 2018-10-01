@@ -216,7 +216,20 @@ Some of the external libraries are required.
 Others are optional and add additional functionality to PADrend.
 
 On GNU/Linux, there are packaged versions of the required libraries.
-For example, for Debian you should install [libcurl4-openssl-dev](http://packages.debian.org/libcurl4-openssl-dev), [libglew-dev](http://packages.debian.org/libglew-dev), [libopenal-dev](http://packages.debian.org/libopenal-dev), [libpng12-dev](http://packages.debian.org/libpng12-dev), [libsdl1.2-dev](http://packages.debian.org/libsdl1.2-dev), [libsdl-image1.2-dev](http://packages.debian.org/libsdl-image1.2-dev), [libsdl-net1.2-dev](http://packages.debian.org/libsdl-net1.2-dev), [libsqlite3-dev](http://packages.debian.org/libsqlite3-dev), [libxml2-dev](http://packages.debian.org/libxml2-dev), [libzip-dev](http://packages.debian.org/libzip-dev), [mesa-common-dev](http://packages.debian.org/mesa-common-dev), and [zlib1g-dev](http://packages.debian.org/zlib1g-dev).
+For example, for Debian you should install 
+[libcurl4-openssl-dev](http://packages.debian.org/libcurl4-openssl-dev), 
+[libglew-dev](http://packages.debian.org/libglew-dev), 
+[libopenal-dev](http://packages.debian.org/libopenal-dev), 
+[libpng-dev](http://packages.debian.org/libpng-dev), 
+[libsdl2-dev](http://packages.debian.org/libsdl2-dev), 
+[libsdl2-image-dev](http://packages.debian.org/libsdl-image1.2-dev), 
+[libsdl2-net-dev](http://packages.debian.org/libsdl-net1.2-dev), 
+[libsqlite3-dev](http://packages.debian.org/libsqlite3-dev), 
+[libxml2-dev](http://packages.debian.org/libxml2-dev), 
+[libzip-dev](http://packages.debian.org/libzip-dev), 
+[libfreetype6-dev](http://packages.debian.org/libfreetype6-dev), 
+[libarchive-dev](http://packages.debian.org/libarchive-dev), 
+and [zlib1g-dev](http://packages.debian.org/zlib1g-dev).
 
 When using OS X, you can check if there are development packages of the required libraries that you can install (e.g. by using [Fink](http://www.finkproject.org/) or [MacPorts](http://www.macports.org/)).
 Otherwise, you have to compile the external libraries yourself.
