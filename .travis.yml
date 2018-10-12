@@ -6,6 +6,7 @@ addons:
   apt:
     packages:
       - doxygen
+      - graphviz
 before_script: cd Site
 script: bash build_site.sh
 deploy:
