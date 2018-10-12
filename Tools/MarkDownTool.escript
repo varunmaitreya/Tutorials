@@ -189,8 +189,8 @@ for(var i = 2; i < args.size(); i++){
 		buildCodeSections = true;
 	else if(IO.isDir(args[i]))
 		rootFolder = args[i];
-	else if(IO.isFile(args[i]))
-		tocFile = args[i];
+	else if(args[i].beginsWith("-o="))
+		tocFile = args[i].substr(3).trim();
 	else{
 		outln("ERROR: Unkown argument " + args[i]);
 		return;
