@@ -20,40 +20,54 @@ cd tmp
 # --------------
 
 # clone & build escript
-git clone https://github.com/EScript/EScript.git escript && cd escript
-cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_ESCRIPT_APPLICATION=ON -DBUILD_ESCRIPT_TEST=OFF . && make && cd ..
+echo "Building EScript..."
+git clone https://github.com/EScript/EScript.git escript &> /dev/null && cd escript
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_ESCRIPT_APPLICATION=ON -DBUILD_ESCRIPT_TEST=OFF . && make &> /dev/null && cd ..
+echo "done"
 
 # build table of contents & update code sections
+echo "Building TOC..."
 ./escript/EScript/escript ../../Tools/MarkDownTool.escript -t -c ../Tutorials ../_data/sidebars/home_sidebar.yml
+echo "done"
 
 # --------------
 # build api docs
 # --------------
 
 # Geometry
-git clone https://github.com/PADrend/Geometry.git Geometry
-doxygen Geometry/doc/Doxyfile
+echo "Building Geometry doc..."
+git clone https://github.com/PADrend/Geometry.git Geometry &> /dev/null
+doxygen Geometry/doc/Doxyfile &> /dev/null
 mv doc/html ../API/Geometry
+echo "done"
 
 # GUI
-git clone https://github.com/PADrend/GUI.git GUI
-doxygen GUI/doc/Doxyfile
+echo "Building GUI doc..."
+git clone https://github.com/PADrend/GUI.git GUI &> /dev/null
+doxygen GUI/doc/Doxyfile &> /dev/null
 mv doc/html ../API/GUI
+echo "done"
 
 # Rendering
-git clone https://github.com/PADrend/Rendering.git Rendering
-doxygen Rendering/doc/Doxyfile
+echo "Building Rendering doc..."
+git clone https://github.com/PADrend/Rendering.git Rendering &> /dev/null
+doxygen Rendering/doc/Doxyfile &> /dev/null
 mv doc/html ../API/Rendering
+echo "done"
 
 # Util
-git clone https://github.com/PADrend/Util.git Util
-doxygen Util/doc/Doxyfile
+echo "Building Util doc..."
+git clone https://github.com/PADrend/Util.git Util &> /dev/null
+doxygen Util/doc/Doxyfile &> /dev/null
 mv doc/html ../API/Util
+echo "done"
 
 # MinSG
-git clone https://github.com/PADrend/MinSG.git MinSG
-doxygen MinSG/doc/Doxyfile
+echo "Building MinSG doc..."
+git clone https://github.com/PADrend/MinSG.git MinSG &> /dev/null
+doxygen MinSG/doc/Doxyfile &> /dev/null
 mv doc/html ../API/MinSG
+echo "done"
 
 # cleanup
 cd ..
