@@ -1,0 +1,13 @@
+os: linux
+dist: trusty
+compiler: gcc
+language: cpp
+before_script: cd Site
+script: bash build_site.sh
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local-dir: Site
+  github-token: $GH_REPO_TOKEN
+  on:
+    branch: master
