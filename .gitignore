@@ -1,4 +1,5 @@
 build
+tmp
 _site
 Gemfile
 Gemfile.lock
