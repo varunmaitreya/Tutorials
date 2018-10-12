@@ -46,7 +46,7 @@ if(!CodeSectionParser) {
   return;
 }
 
-static parseFolder = fn(rootFolder, buildTOC, buildCodeSections) {
+static parseFolder = fn(rootFolder, buildTOC, buildCodeSections, tocFile) {
   if(!rootFolder || rootFolder.empty()) {
   	outln("ERROR: invalid root folder");
     return;
@@ -58,7 +58,7 @@ static parseFolder = fn(rootFolder, buildTOC, buildCodeSections) {
   
   outln("Parsing...");
   
-  foreach(files as var file) {    
+  foreach(files as var file) {
     if(buildTOC)
       tocBuilder.addToTOC(file);
 			
@@ -66,20 +66,19 @@ static parseFolder = fn(rootFolder, buildTOC, buildCodeSections) {
 			codeSectionParser.parseDocument(file);
   }
   
-  if(buildTOC) {
+  if(buildTOC && tocFile) {
 		// ------------------
 		// add static links
-		tocBuilder.addEntry("EScript", "API Reference@99999", "API/EScript");
 		tocBuilder.addEntry("Geometry", "API Reference@99999", "API/Geometry");
 		tocBuilder.addEntry("GUI", "API Reference@99999", "API/GUI");
 		tocBuilder.addEntry("MinSG", "API Reference@99999", "API/MinSG");
 		tocBuilder.addEntry("Rendering", "API Reference@99999", "API/Rendering");
-		tocBuilder.addEntry("Utils", "API Reference@99999", "API/Utils");
+		tocBuilder.addEntry("Util", "API Reference@99999", "API/Util");
 		// ------------------
 		
     var toc = tocBuilder.buildTOC();
     var yaml = tocBuilder.toYAML(toc);
-		IO.saveTextFile("./_data/sidebars/home_sidebar.yml", yaml);
+		IO.saveTextFile(tocFile, yaml);
   }
   	
   outln("done.");
@@ -181,6 +180,7 @@ if(args[2] == "--help" || args[2] == "-h") {
 var buildTOC = false;
 var buildCodeSections = false;
 var rootFolder = void;
+var tocFile = void;
 
 for(var i = 2; i < args.size(); i++){
 	if(args[i] == "-t")
@@ -189,10 +189,12 @@ for(var i = 2; i < args.size(); i++){
 		buildCodeSections = true;
 	else if(IO.isDir(args[i]))
 		rootFolder = args[i];
+	else if(IO.isFile(args[i]))
+		tocFile = args[i];
 	else{
 		outln("ERROR: Unkown argument " + args[i]);
 		return;
 	}
 }
 
-parseFolder(rootFolder, buildTOC, buildCodeSections);
+parseFolder(rootFolder, buildTOC, buildCodeSections, tocFile);

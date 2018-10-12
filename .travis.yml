@@ -2,6 +2,10 @@ os: linux
 dist: trusty
 compiler: gcc
 language: cpp
+addons:
+  apt:
+    packages:
+      - doxygen
 before_script: cd Site
 script: bash build_site.sh
 deploy:
