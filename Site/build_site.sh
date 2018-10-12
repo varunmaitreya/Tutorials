@@ -3,7 +3,7 @@
 # cleanup
 rm -rf Tutorials
 rm -rf API
-rm index.md
+#rm index.md
 
 # copy folders & files
 cp -r ../Tutorials .
@@ -22,12 +22,12 @@ cd tmp
 # clone & build escript
 echo "Building EScript..."
 git clone https://github.com/EScript/EScript.git escript &> /dev/null && cd escript
-cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_ESCRIPT_APPLICATION=ON -DBUILD_ESCRIPT_TEST=OFF . && make &> /dev/null && cd ..
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_ESCRIPT_APPLICATION=ON -DBUILD_ESCRIPT_TEST=OFF . && make && cd ..
 echo "done"
 
 # build table of contents & update code sections
 echo "Building TOC..."
-./escript/EScript/escript ../../Tools/MarkDownTool.escript -t -c ../Tutorials ../_data/sidebars/home_sidebar.yml
+./escript/EScript/escript ../../Tools/MarkDownTool.escript -t -c -o=../_data/sidebars/home_sidebar.yml ../Tutorials
 echo "done"
 
 # --------------
