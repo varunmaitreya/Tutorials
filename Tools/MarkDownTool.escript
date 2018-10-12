@@ -67,36 +67,20 @@ static parseFolder = fn(rootFolder, buildTOC, buildCodeSections) {
   }
   
   if(buildTOC) {
+		// ------------------
+		// add static links
+		tocBuilder.addEntry("EScript", "API Reference@99999", "API/EScript");
+		tocBuilder.addEntry("Geometry", "API Reference@99999", "API/Geometry");
+		tocBuilder.addEntry("GUI", "API Reference@99999", "API/GUI");
+		tocBuilder.addEntry("MinSG", "API Reference@99999", "API/MinSG");
+		tocBuilder.addEntry("Rendering", "API Reference@99999", "API/Rendering");
+		tocBuilder.addEntry("Utils", "API Reference@99999", "API/Utils");
+		// ------------------
+		
     var toc = tocBuilder.buildTOC();
     var yaml = tocBuilder.toYAML(toc);
 		IO.saveTextFile("./_data/sidebars/home_sidebar.yml", yaml);
   }
-  
-  /*if(buildTOC) {
-  		outln("Creating index file...");
-  		var indexTree = IndexBuilder.createTree(rootFolder);
-  		IndexBuilder.createAndSaveIndex(indexTree, true, rootFolder);
-  	} else {
-  		outln("ERROR: Could not find IndexBuilder at " + __DIR__ + "/lib");
-  }
-  				
-  static CodeSectionParser = load(__DIR__ + "/lib/CodeSectionParser.escript");
-  if(CodeSectionParser){
-  	outln("Including code sections" + (parseHTML ? " and parsing to HTML..." :  "..."));
-  	CodeSectionParser.recurseFolderAndParse(rootFolder, parseHTML);
-  }
-  else
-  	outln("ERROR: Could not find CodeSectionParser at " + __DIR__  + "/lib");
-  			
-  if(addNavigation) {
-  	static MenuAdder = load(__DIR__ + "/lib/MenuAdder.escript");
-  	if(MenuAdder){
-  		outln("Adding menu to HTML files...");
-  		MenuAdder.recurseFiles(rootFolder);
-  	}
-  	else
-  		outln("ERROR: Could not find MenuAdder at " + __DIR__ + "/lib");
-  }*/
   	
   outln("done.");
 };

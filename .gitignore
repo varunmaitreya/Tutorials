@@ -1,3 +1,8 @@
+build
 _site
 Gemfile
 Gemfile.lock
+Site/API
+Site/Tutorials
+Site/index.md
+Site/_data/sidebars/home_sidebar.yml

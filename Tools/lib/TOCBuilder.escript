@@ -31,6 +31,21 @@ T.addToTOC ::= fn(String file) {
   return true;
 };
 
+T.addEntry ::= fn(title, category, link, subcategory=void, order=void, published=void) {
+  var entry = new ExtObject({
+      $title : title,
+      $category : category,
+      $permalink : link
+  });
+  if(subcategory)
+    entry.subcategory := subcategory;
+  if(order)
+    entry.order := order;
+  if(published!=void)
+    entry.published := published;
+  entries += entry;
+};
+
 T.parseFrontmatter @(private) ::= fn(String input) {
   if(!input.beginsWith("---"))
     return false;
@@ -65,7 +80,7 @@ T.checkFields @(private) ::= fn(entry) {
   }
   // update optional fields  
   if(!entry.isSet($order))
-    entry.order := 1e+50;
+    entry.order := 10000;
   if(!entry.isSet($subcategory))
     entry.subcategory := void;
   if(!entry.isSet($published))
@@ -87,14 +102,14 @@ T.buildTOC ::= fn() {
     if(!entry.published)
       continue;
     
-    var catOrder = 1e+50;
+    var catOrder = 10000;
     var category = entry.category;
     if(category.contains("@")) {
       [category, catOrder] = category.split("@");
       catOrder = catOrder.toNumber();
     }
   
-    var subCatOrder = 1e+50;
+    var subCatOrder = 10000;
     var subcategory = entry.subcategory;
     if(subcategory && subcategory.contains("@")) {
       [subcategory, subCatOrder] = subcategory.split("@");
@@ -130,12 +145,12 @@ T.buildTOC ::= fn() {
       catEntry.entries += entry;
     }
   }
-  toc.sort(fn(a,b) { return a.order < b.order; });
+  toc.sort(fn(a,b) { return a.order < b.order || (a.order == b.order && a.title < b.title); });
   foreach(toc as var cat) {
-    cat.entries.sort(fn(a,b) { return a.order < b.order; });
+    cat.entries.sort(fn(a,b) { return a.order < b.order || (a.order == b.order && a.title < b.title); });
     foreach(cat.entries as var entry) {
       if(entry.isSet($entries))
-        entry.entries.sort(fn(a,b) { return a.order < b.order; });
+        entry.entries.sort(fn(a,b) { return a.order < b.order || (a.order == b.order && a.title < b.title); });
     }
   }
   
