@@ -37,38 +37,38 @@ echo "done"
 # Geometry
 echo "Building Geometry doc..."
 git clone https://github.com/PADrend/Geometry.git Geometry &> /dev/null
-doxygen Geometry/doc/Doxyfile &> /dev/null
-mv doc/html ../API/Geometry
+cd Geometry && doxygen doc/Doxyfile | grep error
+cd .. && mv Geometry/doc/html ../API/Geometry
 echo "done"
 
 # GUI
 echo "Building GUI doc..."
 git clone https://github.com/PADrend/GUI.git GUI &> /dev/null
-doxygen GUI/doc/Doxyfile &> /dev/null
-mv doc/html ../API/GUI
+cd GUI && doxygen doc/Doxyfile | grep error
+cd .. && mv GUI/doc/html ../API/GUI
 echo "done"
 
 # Rendering
 echo "Building Rendering doc..."
 git clone https://github.com/PADrend/Rendering.git Rendering &> /dev/null
-doxygen Rendering/doc/Doxyfile &> /dev/null
-mv doc/html ../API/Rendering
+cd Rendering && doxygen doc/Doxyfile | grep error
+cd .. && mv Rendering/doc/html ../API/Rendering
 echo "done"
 
 # Util
 echo "Building Util doc..."
 git clone https://github.com/PADrend/Util.git Util &> /dev/null
-doxygen Util/doc/Doxyfile &> /dev/null
-mv doc/html ../API/Util
+cd Util && doxygen doc/Doxyfile | grep error
+cd .. && mv Util/doc/html ../API/Util
 echo "done"
 
 # MinSG
 echo "Building MinSG doc..."
 git clone https://github.com/PADrend/MinSG.git MinSG &> /dev/null
-doxygen MinSG/doc/Doxyfile &> /dev/null
-mv doc/html ../API/MinSG
+cd MinSG && doxygen doc/Doxyfile | grep error
+cd .. && mv MinSG/doc/html ../API/MinSG
 echo "done"
 
 # cleanup
 cd ..
-rm -rf tmp
+#rm -rf tmp
