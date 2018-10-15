@@ -229,7 +229,9 @@ For example, for Debian you should install
 [libzip-dev](http://packages.debian.org/libzip-dev), 
 [libfreetype6-dev](http://packages.debian.org/libfreetype6-dev), 
 [libarchive-dev](http://packages.debian.org/libarchive-dev), 
-and [zlib1g-dev](http://packages.debian.org/zlib1g-dev).
+and [zlib1g-dev](http://packages.debian.org/zlib1g-dev):
+
+	sudo apt install libcurl4-openssl-dev libglew-dev libopenal-dev libpng-dev libsdl2-dev libsdl2-image-dev libsdl2-net-dev libsqlite3-dev libxml2-dev libzip-dev libfreetype6-dev libarchive-dev zlib1g-dev
 
 When using OS X, you can check if there are development packages of the required libraries that you can install (e.g. by using [Fink](http://www.finkproject.org/) or [MacPorts](http://www.macports.org/)).
 Otherwise, you have to compile the external libraries yourself.
