@@ -40,13 +40,19 @@ if(!TOCBuilder) {
   return;
 }
 
+static HeaderUpdater = load(__DIR__ + "/lib/HeaderUpdater.escript");
+if(!HeaderUpdater) {
+  outln("ERROR: Could not find 'HeaderUpdater.escript' at " + __DIR__ + "/lib");
+  return;
+}
+
 static CodeSectionParser = load(__DIR__ + "/lib/CodeSectionParser.escript");
 if(!CodeSectionParser) {
   outln("ERROR: Could not find 'CodeSectionParser.escript' at " + __DIR__ + "/lib");
   return;
 }
 
-static parseFolder = fn(rootFolder, buildTOC, buildCodeSections, tocFile) {
+static parseFolder = fn(rootFolder, buildTOC, buildCodeSections, tocFile, timestampFile) {
   if(!rootFolder || rootFolder.empty()) {
   	outln("ERROR: invalid root folder");
     return;
@@ -55,10 +61,22 @@ static parseFolder = fn(rootFolder, buildTOC, buildCodeSections, tocFile) {
   var files = collectMarkdownFiles(rootFolder);  
   var tocBuilder = new TOCBuilder;
 	var codeSectionParser = new CodeSectionParser;
+	var headerUpdater = new HeaderUpdater;
   
   outln("Parsing...");
-  
+	
+	var timestamps = void;
+	var updateHeader = false;
+	if(timestampFile) {
+		timestamps = parseJSON(IO.loadTextFile(timestampFile));
+		headerUpdater.setTimestamps(timestamps);
+		updateHeader = true;
+	}
+	
   foreach(files as var file) {
+		if(updateHeader)
+			headerUpdater.update(file);
+		
     if(buildTOC)
       tocBuilder.addToTOC(file);
 			
@@ -160,7 +178,7 @@ if(args.size() <= 2){ //std arguments, no file
 	return;
 }
 
-if(args.size() > 6){
+if(args.size() > 7){
 	outln("\nToo many arguments. Enter --help for more information\n");
 	return;
 }
@@ -171,8 +189,10 @@ if(args[2] == "--help" || args[2] == "-h") {
 		"Usage: escript MarkDownTool.escript [options] folder\n\n"+
 		"Options:\n"+
 		"\t-t\tgenerate TOC for navigation\n" + 
+		"\t-o=<file>\tupdate file for toc (.yml)\n" +
 		"\t-c\tupdate code sections\n" +
 		"\t-h\tshow this information.\n" +
+		"\t-s=<file>\tinput timestamp file (.json)\n" +
 	);
   return;
 }
@@ -181,6 +201,7 @@ var buildTOC = false;
 var buildCodeSections = false;
 var rootFolder = void;
 var tocFile = void;
+var timestampFile = void;
 
 for(var i = 2; i < args.size(); i++){
 	if(args[i] == "-t")
@@ -191,10 +212,12 @@ for(var i = 2; i < args.size(); i++){
 		rootFolder = args[i];
 	else if(args[i].beginsWith("-o="))
 		tocFile = args[i].substr(3).trim();
+	else if(args[i].beginsWith("-s="))
+		timestampFile = args[i].substr(3).trim();
 	else{
 		outln("ERROR: Unkown argument " + args[i]);
 		return;
 	}
 }
 
-parseFolder(rootFolder, buildTOC, buildCodeSections, tocFile);
+parseFolder(rootFolder, buildTOC, buildCodeSections, tocFile, timestampFile);

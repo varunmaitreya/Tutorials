@@ -25,9 +25,18 @@ git clone https://github.com/EScript/EScript.git escript &> /dev/null && cd escr
 cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_ESCRIPT_APPLICATION=ON -DBUILD_ESCRIPT_TEST=OFF . && make && cd ..
 echo "done"
 
+echo "Collecting Timestamps..."
+export LC_TIME="en_US.UTF-8"
+echo "{" > timestamps.json
+git ls-tree -r --name-only HEAD ../../Tutorials | while read filename; do
+  echo "\"${filename:3}\": \"$(git log -1 --date=format:"%B %d, %Y" --format="%ad" -- "$filename")\"," >> timestamps.json
+done
+echo "}" >> timestamps.json
+echo "done"
+
 # build table of contents & update code sections
 echo "Building TOC..."
-./escript/EScript/escript ../../Tools/MarkDownTool.escript -t -c -o=../_data/sidebars/home_sidebar.yml ../Tutorials
+./escript/EScript/escript ../../Tools/MarkDownTool.escript -t -c -o=../_data/sidebars/home_sidebar.yml -s=timestamps.json ../Tutorials
 echo "done"
 
 # --------------

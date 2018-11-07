@@ -319,7 +319,7 @@ CodeSectionParser.parseDocument ::= fn(file){
 		try{
 			IO.saveTextFile(file, outDocument);
 		}catch(e){
-			Runtime.warn("Could not load file" + file);
+			Runtime.warn("Could not save file" + file);
 			return;
 		}
 	}
