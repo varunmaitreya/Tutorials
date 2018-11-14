@@ -7,7 +7,6 @@ company_name: Benjamin Eikel, Claudius Jähn, Ralf Petring, Sascha Brandt
 exclude:
 - .gitignore
 - Tools/
-- "*.escript"
 
 feedback_disable: true
 
