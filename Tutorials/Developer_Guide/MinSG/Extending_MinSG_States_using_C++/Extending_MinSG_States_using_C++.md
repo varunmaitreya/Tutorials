@@ -20,7 +20,7 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 
 This chapter provides an example of how to implement a State in C++ with bindings to EScript and how to use this state in EScript. This tutorial is the addition to the description of PADrend's States. 
 
-This tutorial assumes, that you have a working C++ plugin project according to the tutorial [Creating a C++ Plugin](../../../3_Development_Guide/2_C++/1_Creating_a_C++_Plugin/Creating_a_C++_Plugin.md)
+This tutorial assumes, that you have a working C++ plugin project according to the tutorial [Creating a C++ Plugin](extending_your_plugin_with_c++)
 
 ## Implementing a State in C++
 
