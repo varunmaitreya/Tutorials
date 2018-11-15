@@ -18,13 +18,13 @@ __Please check and update this work flow continuously!__
 #### Compiler: MinGW
 * Download MinGW 64 bit version (e.g. [mingw-w64-install.exe](http://sourceforge.net/projects/mingw-w64/files/), see 'Compiler versions' section below).
 * Install settings: 
-	* Version: >= 4.9.0
+	* Version: 8.1.0 (at least 5.1.0)
 	* Architecture: x86_64
-	* Threads: posix (?)
-	* Exception: sjlj
+	* Threads: posix
+	* Exception: seh
 	* Build revision: largest available
-	* Destination folder: `c:\MinGW-w64` (the actual MinGW will then be installed in c:\MinGW-w64\mingw64).
-* Copy a version of the __libiconv-2.dll__ into the `c:\MinGW-w64\mingw64\bin` folder. 
+	* Destination folder: `c:\mingw-w64` (the actual MinGW will then be installed in c:\mingw-w64\mingw64).
+* Copy a version of the __libiconv-2.dll__ into the `c:\mingw-w64\mingw64\bin` folder. 
  The file is shipped with many different software packages -- just search in your programs folder and you will probably find one. The windows GIT-client (see below) contains the file in its ''bin'' folder.
  (If this file can not be found while compiling the third party libraries, libXML2 fails to build.)
 
@@ -37,10 +37,10 @@ __Please check and update this work flow continuously!__
 
 #### MSYS (shell required for building third-party libs)
 * Download __MSYS-20111123.zip__ from  [here](http://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/).
-* Expand it to `C:\MinGW-w64\msys`.
-* Open a MSYS shell: `C:\MinGW-w64\msys\msys.bat`.
+* Expand it to `C:\mingw-w64\msys`.
+* Open a MSYS shell: `C:\mingw-w64\msys\msys.bat`.
 * Connect the MSYS installation with your compiler by running the following command and following the wizard:
- `sh /postinstall/pi.sh`. The path to your MinGW installation should be `c:/MinGW-w64/mingw64` .
+ `sh /postinstall/pi.sh`. The path to your MinGW installation should be `c:/mingw-w64/mingw64` .
 * To check if everything is working, enter `gcc --version`, which should give you the installed compiler version.
 
 #### CMake (>=2.8.11)
@@ -69,8 +69,8 @@ __For compiling the external libraries, PADrend must be located in a short path 
 ### Build third party libraries
 * Open CMake-GUI (_best from within the MSYS shell_)
 * Set the source path to `C:\PADrend\ThirdParty` and the build path to `C:\PADrend\ThirdParty\build`.
-* _Configure_ -> Target: _MSYS Makefile_ -> _Specify native compilers_ -> C: `c:\MinGW-w64\mingw64\bin\gcc.exe`; C++ `c:\MinGW-w64\mingw64\bin\g++.exe`
-* If CMake reports a missing build program, enable the __Advanced__ configuration settings -> Set __CMAKE_MAKE_PROGRAM__ to `c:/MinGW-w64/msys/bin/make.exe` -> _Configure_.
+* _Configure_ -> Target: _MSYS Makefile_ -> _Specify native compilers_ -> C: `c:\mingw-w64\mingw64\bin\gcc.exe`; C++ `c:\mingw-w64\mingw64\bin\g++.exe`
+* If CMake reports a missing build program, enable the __Advanced__ configuration settings -> Set __CMAKE_MAKE_PROGRAM__ to `c:/mingw-w64/msys/bin/make.exe` -> _Configure_.
 * If CMake-GUI fails to find the _winpthread-1.dll_, start CMake-GUI by calling `cmake-gui` from within the MSYS-console. This changes the paths variable to include the compiler installation folder.
 * You should now have a list of libraries you can build. Unselect the ones, you don't want to compile. The entries' tooltips provide hints if the libraries are important for you. 
 	* OpenCollada takes very long to build!
@@ -89,14 +89,14 @@ __For compiling the external libraries, PADrend must be located in a short path 
 For building PADrend (not the third party libraries!) the [Ninja](https://github.com/martine/ninja) build system can be used.
 
 * A binary release can be found here: [https://github.com/martine/ninja/releases](https://github.com/martine/ninja/releases)
-* Proposal: Copy the `ninja.exe` into your `MinGW-w64/mingw64/bin` folder, so that it can easily be found.
+* Proposal: Copy the `ninja.exe` into your `mingw-w64/mingw64/bin` folder, so that it can easily be found.
 
 To build PADrend:
 
 * Open CMake-GUI.
 * Set the source path to `C:\PADrend` and the build path to `C:\PADrend\build`.
-* _Configure_ -> Target: _Ninja_ -> _Specify native compilers_ -> C: `c:\MinGW-w64\mingw64\bin\gcc.exe`; C++ `c:\MinGW-w64\mingw64\bin\g++.exe`
-* If CMake reports a missing build program, enable the __Advanced__ configuration settings -> Set __CMAKE_MAKE_PROGRAM__ to `c:/MinGW-w64/msys/bin/make.exe` -> _Configure_.
+* _Configure_ -> Target: _Ninja_ -> _Specify native compilers_ -> C: `c:\mingw-w64\mingw64\bin\gcc.exe`; C++ `c:\mingw-w64\mingw64\bin\g++.exe`
+* If CMake reports a missing build program, enable the __Advanced__ configuration settings -> Set __CMAKE_MAKE_PROGRAM__ to `c:/mingw-w64/msys/bin/make.exe` -> _Configure_.
 * You should now have a list of MinSG-Extensions you can build. Select the ones to compile. The following list is a recommendation if you don't know which ones to choose:
 	* MINSG_EXT_BLUE_SURFELS, MINSG_EXT_COLORCUBES , MINSG_EXT_EVALUATORS , MINSG_EXT_IMAGECOMPARE,  MINSG_EXT_PARTICLES , MINSG_EXT_SVS , MINSG_EXT_TRIANGULATION, MINSG_EXT_WAYPOINTS, MINSG_EXT_VISIBILITY_SUBDIVISION.
 * Setting the following compiler flags (`CMAKE_CXX_FLAGS`) is recommended:
@@ -117,14 +117,14 @@ To setup CodeBlocks:
 * Download and install (=extract) the latest version from [here](http://forums.codeblocks.org/index.php/board,20.0.html).
   Make sure to follow the instructions on the download page regarding the additional dlls to install.
 	* To setup the MinGW compiler in CodeBlocks, open CodeBlocks -> _Settings_ -> _Compiler..._ -> _GNU GCC Compiler_ -> _Toolchain executables_
-		* Compiler's installation directory: `c:\MinGW-w64\mingw64`
+		* Compiler's installation directory: `c:\mingw-w64\mingw64`
 		* C Compiler: gcc.exe
 		* C++ Compiler: g++.exe
 		* Linker for dynamic libs: g++.exe
 	* To parallelize the build process: open CodeBlocks -> _Settings_ -> _Compiler..._ -> _GNU GCC Compiler_ -> _Build options_ -> _Number of processes for parallel builds_: number of your cpus.
 	* __Important:__ Configure line endings:  _Settings_ -> _Editor..._ -> _General settings_ -> _End-of-line mode_ : __LF__ (and disable _Strip trailing blanks_).
 * Download and install the build file generator for CodeBlocks: EkkiEkkiKateng from [here](https://github.com/ClaudiusJ/EkkiEkkiKateng/releases).
-	* Recommended installation folder: `c:\MinGW-w64\EkkiEkkiKateng`  
+	* Recommended installation folder: `c:\mingw-w64\EkkiEkkiKateng`  
 	* To install it into your _Program files_ folder, you have to run the installer with administrator privileges (right-click on the installer -> install as administrator).
 	* The EkkiEkkiKateng folder contains files for syntax highlighting EScript files in CodeBlocks.
      To enabled them, copy the files located in `???\EkkiEkkiKateng\resources\CodeBlocks\lexers` to `???\CodeBlocks\share\CodeBlocks\lexers`.
