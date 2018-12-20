@@ -5,7 +5,7 @@ category: Developer Guide
 author: Henrik Heine
 last_updated: 2017
 license: cc-by-sa 4.0
-subcategory: Graphical User Interface@4
+subcategory: Graphical User Interface
 order: 1
 ---
 <!------------------------------------------------------------------------------------------------
