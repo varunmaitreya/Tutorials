@@ -82,7 +82,8 @@ General attributes
 * `GUI.HOVER_PROPERTIES:` (optional) `[Property, 8bit-LayerBitMask, Bool Recursive]`  
   Array of hover-properties added to the component, e.g. 
   ```js
-  [ new GUI.ShapeProperty(GUI.PROPERTY_COMPONENT_BACKGROUND_SHAPE, gui._createRectShape(new Util.Color4f(0.9,0.3,0.3,0.5), new Util.Color4ub(0,0,0,0),true)), 1, false ]
+  [ new GUI.ShapeProperty(GUI.PROPERTY_COMPONENT_BACKGROUND_SHAPE, 
+    gui._createRectShape(new Util.Color4f(0.9,0.3,0.3,0.5), new Util.Color4ub(0,0,0,0),true)), 1, false ]
   ```
 
 * `GUI.LABEL:` (optional) label text (not supported by all components)
@@ -297,7 +298,7 @@ The header contains a +/- button to collapse or open the content area.
 * or `GUI.OPTIONS_PROVIDER:` function returning an array of options
 
 ### Dropdown (input)
-* `GUI.TYPE:` GUI.TYPE_SELECT
+* `GUI.TYPE: GUI.TYPE_SELECT`
 * `GUI.OPTIONS: [ [optionValue,optionText(,optionSelectedText(,optionTooltip)) ]* ]``
 
 ### File (input)
