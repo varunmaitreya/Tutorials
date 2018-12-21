@@ -4,7 +4,7 @@ permalink: from_c++_to_escript_bindings_and_macros
 author: Henrik Heine, Sascha Brandt
 license: cc-by-sa 4.0
 category: Developer Guide
-last_updated: 2017
+last_updated: 2018
 subcategory: EScript
 order: 3
 ---
@@ -17,12 +17,23 @@ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 Inte
 ------------------------------------------------------------------------------------------------->
 
 This chapter will show you a simple example how write EScript bindings for simple C++ objects.
-We will basically just add a very simple C++ class to PADrend. For the sake of simplicity we will just add a two dimensional bounding box, which will be described by two `Vec2` instances.
+We will basically just add a very simple C++ class to PADrend. 
+For the sake of simplicity we will just add a two dimensional bounding box, which will be described by two `Vec2` instances.
 
-This tutorial assumes, that you have a working C++ plugin project according to the tutorial [Creating a C++ Plugin](../../../3_Development_Guide/2_C++/1_Creating_a_C++_Plugin/Creating_a_C++_Plugin.md)
+This tutorial assumes, that you have a working C++ plugin project according to the tutorial [Extending your Plugin with C++](extending_your_plugin_with_c++)
 
 ## Macros
-The binding between C++ and EScript is done by C++ macros. In the following you find an overview of macros and what they are used for. Afterwards the tutorial continues with a simple example of a binding.
+The binding between C++ and EScript is done by C++ macros which are defined in `EScript/EScript.h`:
+```cpp
+ES_CONSTRUCTOR(...) // Type constructor
+ES_CTOR(...)        // Type constructor (short form)
+ES_FUNCTION(...)    // Function
+ES_FUN(...)         // Function (short form)
+ES_MFUNCTION(...)   // Type member function
+ES_MFUN(...)        // Type member function (short form)
+```
+In the following you find an overview of the macros and what they are used for. 
+Afterwards the tutorial continues with a simple example of a binding.
 
 ### Function definition macros
 In order to define a function, you have to use these macros. Each of them comes in two flavors: long and short
