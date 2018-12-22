@@ -7,10 +7,8 @@
 # required by CMake
 cmake_minimum_required(VERSION 3.1.0)
 
-# set the project name to the name of the current folder
-get_filename_component(ProjectId ${CMAKE_CURRENT_LIST_DIR} NAME)
-string(REPLACE " " "_" ProjectId ${ProjectId})
-project(${ProjectId})
+# set the project name
+project(MyProject)
 
 # ensures that the project is build with C++11 standard
 set(CMAKE_CXX_STANDARD 11)
@@ -20,13 +18,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # add C++ source files to the project
 add_library(${PROJECT_NAME} SHARED
 	src/Main.cpp
-	src/ExampleRenderer/ExampleRenderer.cpp
-	src/ExampleRenderer/E_ExampleRenderer.cpp
+	src/ELibMyProject.cpp.cpp
 	# add your own .cpp files here
 )
-
-# pass the project name to the Main.cpp file in form of the define 'LIBRARY_NAME'
-set_source_files_properties(src/Main.cpp PROPERTIES COMPILE_DEFINITIONS LIBRARY_NAME="${PROJECT_NAME}")
 
 # make sure that the built .dll or .so file is placed into the 'build' or 'bin' directory
 set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")

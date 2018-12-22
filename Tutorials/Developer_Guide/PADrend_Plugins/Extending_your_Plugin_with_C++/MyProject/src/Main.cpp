@@ -4,12 +4,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
 Author: Sascha Brandt <sascha@brandt.graphics>
 */
 
-#include "ExampleRenderer/E_ExampleRenderer.h" 
+#include "ELibMyProject.h" 
 #include <EScript/EScript.h>
 #include <iostream>
 
 #ifndef LIBRARY_NAME
-#define LIBRARY_NAME "Unknown" // Will be set by CMake
+#define LIBRARY_NAME "MyProject" // Set the library name
 #endif
 
 /**
@@ -29,7 +29,7 @@ extern "C" void initLibrary(EScript::Namespace* lib) {
 		auto * ns = new EScript::Namespace;
 		declareConstant(lib, LIBRARY_NAME, ns);
 		
-		// Initialize Example Renderer
-		E_ExampleRenderer::init(ns);
+		// Initialize EScript functions for our project
+		MyProject::init(ns);
 	}
 }
