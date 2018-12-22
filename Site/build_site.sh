@@ -43,14 +43,23 @@ echo "done"
 # build api docs
 # --------------
 
+
 # Geometry
 echo "Building Geometry doc..."
 git clone https://github.com/PADrend/Geometry.git Geometry &> /dev/null
 cd Geometry
 echo 'QUIET=YES' >> doc/Doxyfile
 echo 'WARN_LOGFILE=/dev/null' >> doc/Doxyfile
+echo 'GENERATE_XML=YES' >> doc/Doxyfile
 doxygen doc/Doxyfile
 cd .. && mv Geometry/doc/html ../API/Geometry
+echo "done"
+
+echo "Test moxygen"
+npm install eLod/moxygen\#ref-links-fix -g
+pushd Geometry
+moxygen -c -o doc/md/%s.md doc/xml
+popd
 echo "done"
 
 # GUI
@@ -95,4 +104,4 @@ echo "done"
 
 # cleanup
 cd ..
-rm -rf tmp
+#rm -rf tmp
