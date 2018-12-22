@@ -46,35 +46,50 @@ echo "done"
 # Geometry
 echo "Building Geometry doc..."
 git clone https://github.com/PADrend/Geometry.git Geometry &> /dev/null
-cd Geometry && doxygen doc/Doxyfile | grep error
+cd Geometry
+echo 'QUIET=YES' >> doc/Doxyfile
+echo 'WARN_LOGFILE=/dev/null' >> doc/Doxyfile
+doxygen doc/Doxyfile
 cd .. && mv Geometry/doc/html ../API/Geometry
 echo "done"
 
 # GUI
 echo "Building GUI doc..."
 git clone https://github.com/PADrend/GUI.git GUI &> /dev/null
-cd GUI && doxygen doc/Doxyfile | grep error
+cd GUI
+echo 'QUIET=YES' >> doc/Doxyfile
+echo 'WARN_LOGFILE=/dev/null' >> doc/Doxyfile
+doxygen doc/Doxyfile
 cd .. && mv GUI/doc/html ../API/GUI
 echo "done"
 
 # Rendering
 echo "Building Rendering doc..."
 git clone https://github.com/PADrend/Rendering.git Rendering &> /dev/null
-cd Rendering && doxygen doc/Doxyfile | grep error
+cd Rendering
+echo 'QUIET=YES' >> doc/Doxyfile
+echo 'WARN_LOGFILE=/dev/null' >> doc/Doxyfile
+doxygen doc/Doxyfile
 cd .. && mv Rendering/doc/html ../API/Rendering
 echo "done"
 
 # Util
 echo "Building Util doc..."
 git clone https://github.com/PADrend/Util.git Util &> /dev/null
-cd Util && doxygen doc/Doxyfile | grep error
+cd Util
+echo 'QUIET=YES' >> doc/Doxyfile
+echo 'WARN_LOGFILE=/dev/null' >> doc/Doxyfile
+doxygen doc/Doxyfile
 cd .. && mv Util/doc/html ../API/Util
 echo "done"
 
 # MinSG
 echo "Building MinSG doc..."
 git clone https://github.com/PADrend/MinSG.git MinSG &> /dev/null
-cd MinSG && doxygen doc/Doxyfile | grep error
+cd MinSG
+echo 'QUIET=YES' >> doc/Doxyfile
+echo 'WARN_LOGFILE=/dev/null' >> doc/Doxyfile
+doxygen doc/Doxyfile
 cd .. && mv MinSG/doc/html ../API/MinSG
 echo "done"
 
