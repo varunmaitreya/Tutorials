@@ -3,7 +3,7 @@ title: From C++ to EScript
 permalink: from_c++_to_escript_bindings_and_macros
 author: Henrik Heine, Sascha Brandt
 license: cc-by-sa 4.0
-category: Developer Guide
+category: Developer Guide@2
 last_updated: 2018
 subcategory: EScript
 order: 3

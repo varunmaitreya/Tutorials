@@ -87,6 +87,10 @@ T.checkFields @(private) ::= fn(entry) {
     entry.published := true;
   else
     entry.published := entry.published.toLower() == "true";
+  if(!entry.isSet($toc))
+    entry.toc := true;
+  else
+    entry.toc := entry.toc.toLower() == "true";
   return true;
 };
 
@@ -99,7 +103,7 @@ T.buildTOC ::= fn() {
     if(!checkFields(entry))
       continue;
     
-    if(!entry.published)
+    if(!entry.published || !entry.toc)
       continue;
     
     var catOrder = 10000;
@@ -129,14 +133,14 @@ T.buildTOC ::= fn() {
     catEntry.order = [catEntry.order, catOrder].min();
     
     if(subcategory) {
-      var subCatEntry = subcategories[subcategory];
+      var subCatEntry = subcategories[category+subcategory];
       if(!subCatEntry) {
         subCatEntry = new ExtObject({
           $title : subcategory,
           $order : subCatOrder,
           $entries : []
         });
-        subcategories[subcategory] = subCatEntry;
+        subcategories[category+subcategory] = subCatEntry;
         catEntry.entries += subCatEntry;
       }
       subCatEntry.order = [subCatEntry.order, subCatOrder].min();

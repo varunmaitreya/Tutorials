@@ -7,6 +7,7 @@ company_name: Benjamin Eikel, Claudius Jähn, Ralf Petring, Sascha Brandt
 exclude:
 - .gitignore
 - Tools/
+- tmp
 
 feedback_disable: true
 
