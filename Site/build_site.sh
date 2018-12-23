@@ -11,7 +11,6 @@ cp ../index.md .
 
 # create directories
 mkdir -p ./_data/sidebars
-mkdir -p API
 mkdir -p tmp
 cd tmp
 
@@ -39,69 +38,38 @@ echo "Building TOC..."
 ./escript/EScript/escript ../../Tools/MarkDownTool.escript -t -c -o=../_data/sidebars/home_sidebar.yml -s=timestamps.json ../Tutorials
 echo "done"
 
+npm install fast-xml-parser -g
+
 # --------------
 # build api docs
 # --------------
 
+echo "Checking out source..."
+git clone --recursive https://github.com/PADrend/PADrendComplete.git src &> /dev/null
+mkdir API
+mv src/modules/Geometry API
+mv src/modules/GUI API
+mv src/modules/Rendering API
+mv src/modules/MinSG API
+mv src/modules/Util API
+mv src/modules/Sound API
+mkdir E_API
+mv src/modules/EScript E_API
+mv src/modules/E_Geometry E_API
+mv src/modules/E_GUI E_API
+mv src/modules/E_Rendering E_API
+mv src/modules/E_MinSG E_API
+mv src/modules/E_Util E_API
+mv src/modules/E_Sound E_API
+echo "done"
 
 # Geometry
-echo "Building Geometry doc..."
-git clone https://github.com/PADrend/Geometry.git Geometry &> /dev/null
-cd Geometry
-echo 'QUIET=YES' >> doc/Doxyfile
-echo 'WARN_LOGFILE=/dev/null' >> doc/Doxyfile
-echo 'GENERATE_XML=YES' >> doc/Doxyfile
-doxygen doc/Doxyfile
-cd .. && mv Geometry/doc/html ../API/Geometry
-echo "done"
-
-echo "Test moxygen"
-npm install eLod/moxygen\#ref-links-fix -g
-pushd Geometry
-moxygen -c -o doc/md/%s.md doc/xml
-popd
-echo "done"
-
-# GUI
-echo "Building GUI doc..."
-git clone https://github.com/PADrend/GUI.git GUI &> /dev/null
-cd GUI
-echo 'QUIET=YES' >> doc/Doxyfile
-echo 'WARN_LOGFILE=/dev/null' >> doc/Doxyfile
-doxygen doc/Doxyfile
-cd .. && mv GUI/doc/html ../API/GUI
-echo "done"
-
-# Rendering
-echo "Building Rendering doc..."
-git clone https://github.com/PADrend/Rendering.git Rendering &> /dev/null
-cd Rendering
-echo 'QUIET=YES' >> doc/Doxyfile
-echo 'WARN_LOGFILE=/dev/null' >> doc/Doxyfile
-doxygen doc/Doxyfile
-cd .. && mv Rendering/doc/html ../API/Rendering
-echo "done"
-
-# Util
-echo "Building Util doc..."
-git clone https://github.com/PADrend/Util.git Util &> /dev/null
-cd Util
-echo 'QUIET=YES' >> doc/Doxyfile
-echo 'WARN_LOGFILE=/dev/null' >> doc/Doxyfile
-doxygen doc/Doxyfile
-cd .. && mv Util/doc/html ../API/Util
-echo "done"
-
-# MinSG
-echo "Building MinSG doc..."
-git clone https://github.com/PADrend/MinSG.git MinSG &> /dev/null
-cd MinSG
-echo 'QUIET=YES' >> doc/Doxyfile
-echo 'WARN_LOGFILE=/dev/null' >> doc/Doxyfile
-doxygen doc/Doxyfile
-cd .. && mv MinSG/doc/html ../API/MinSG
+echo "Building API doc..."
+cd API
+doxygen ../../../Tools/Doxyfile
+mv html ../../API
+cd ../..
 echo "done"
 
 # cleanup
-cd ..
 #rm -rf tmp

@@ -85,15 +85,6 @@ static parseFolder = fn(rootFolder, buildTOC, buildCodeSections, tocFile, timest
   }
   
   if(buildTOC && tocFile) {
-		// ------------------
-		// add static links
-		tocBuilder.addEntry("Geometry", "API Reference@99999", "API/Geometry");
-		tocBuilder.addEntry("GUI", "API Reference@99999", "API/GUI");
-		tocBuilder.addEntry("MinSG", "API Reference@99999", "API/MinSG");
-		tocBuilder.addEntry("Rendering", "API Reference@99999", "API/Rendering");
-		tocBuilder.addEntry("Util", "API Reference@99999", "API/Util");
-		// ------------------
-		
     var toc = tocBuilder.buildTOC();
     var yaml = tocBuilder.toYAML(toc);
 		IO.saveTextFile(tocFile, yaml);
