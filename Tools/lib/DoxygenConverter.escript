@@ -12,6 +12,8 @@
 */
 static T = new Type;
 
+//----------------------
+
 static objToJSON = fn(obj, var d=0) {
   if(!obj) {
     return "void";
@@ -37,9 +39,13 @@ static objToJSON = fn(obj, var d=0) {
   return s;
 };
 
+//----------------------
+
 static mdLink = fn(link, name) {
   return "[" + name + "](" + link + ")";
 };
+
+//----------------------
 
 static assureArrayAttr = fn(obj, name) {
   if(!obj.isSet(name))
@@ -48,11 +54,14 @@ static assureArrayAttr = fn(obj, name) {
     obj.setAttribute(name, [obj.getAttribute(name)]);
 };
 
+//----------------------
+
 static assureAttr = fn(obj, name, def) {
   if(!obj.isSet(name))
     obj.setAttribute(name, def);
 };
 
+//----------------------
 
 static cleanupCompound = fn(c) {
   assureArrayAttr(c, $innernamespace);
@@ -65,12 +74,19 @@ static cleanupCompound = fn(c) {
   assureAttr(c, $briefdescription, "");
   assureAttr(c, $detaileddescription, "");
   assureAttr(c, $location, false);
+  c.shortname := c.compoundname.split("::").back();
   return c;
 };
+
+//----------------------
 
 T.compounds @(init) := Map;
 T.namespaces @(init) := Map;
 T.classes @(init) := Map;
+T.structs @(init) := Map;
+T.unions @(init) := Map;
+
+//----------------------
 
 T.parseFiles ::= fn(files) {  
   foreach(files as var file) {
@@ -78,6 +94,8 @@ T.parseFiles ::= fn(files) {
   }
   setupHierarchy();
 };
+
+//----------------------
 
 T.parseFile ::= fn(file) {
   var json = false;
@@ -98,13 +116,23 @@ T.parseFile ::= fn(file) {
     return false;
     
   var compound = cleanupCompound(obj.compounddef);
-  compounds[compound.id] = compound;
+  
   if(compound.kind == 'namespace')
     namespaces[compound.id] = compound;
   else if(compound.kind == 'class')
-    classes[compound.id] = compound;    
+    classes[compound.id] = compound;
+  else if(compound.kind == 'struct')
+    structs[compound.id] = compound;
+  else if(compound.kind == 'union')
+    unions[compound.id] = compound;
+  else
+    return false;
+    
+  compounds[compound.id] = compound;
   return compound;
 };
+
+//----------------------
 
 T.buildObjTree ::= fn(json) {
   if(json.isA(Map)) {
@@ -126,20 +154,31 @@ T.buildObjTree ::= fn(json) {
   }
 };
 
+//----------------------
+
 T.setupHierarchy ::= fn() {
   foreach(namespaces as var id, var ns) {
     foreach(ns.innernamespace as var e) {
-      e.ref := namespaces[e.refid];
+      e.ref := compounds[e.refid];
       if(e.ref)
         e.ref.parentNamespace = ns;
     }
     foreach(ns.innerclass as var e) {
-      e.ref := classes[e.refid];
+      e.ref := compounds[e.refid];
       if(e.ref)
         e.ref.parentNamespace = ns;
     }
   }
+  foreach(classes as var id, var c) {
+    foreach(c.innerclass as var e) {
+      e.ref := compounds[e.refid];
+      if(e.ref)
+        e.ref.parentNamespace = c;
+    }
+  }
 };
+
+//----------------------
 
 T.writeDescription ::= fn(obj) {
   var s = "";
@@ -154,19 +193,66 @@ T.writeDescription ::= fn(obj) {
   return s;
 };
 
+//----------------------
+
+static sectionTitles = {
+  "public-func" : "Public Functions",
+  "public-static-func" : "Public Static Functions",
+  "public-type" : "Public Types",
+  "public-static-attrib" : "Public Static Attributes",
+  "public-attrib" : "Public Attributes",
+  "protected-func" : "Protected Functions",
+  "protected-static-func" : "Protected Static Functions",
+  "protected-type" : "Protected Types",
+  "protected-static-attrib" : "Protected Static Attributes",
+  "protected-attrib" : "Protected Attributes",
+};
+
+T.writeSection ::= fn(obj) {
+  var title = sectionTitles[obj.kind];
+  if(!title) {
+    if(obj.kind == "user-defined")
+      title = obj.header;
+    else
+      return false;
+  }
+  assureArrayAttr(obj, $memberdef);
+  var s = "## " + title + "\n\n";
+  foreach(obj.memberdef as var m) {
+    assureAttr(m, $argsstring, "");
+    assureAttr(m, $type, "");
+    s += "### *" + m.type + "* **" + m.name + "** " + m.argsstring + "\n\n";
+    s += writeDescription(m.detaileddescription);
+    s += "\n";
+  }
+  
+  return s;
+};
+
+//----------------------
+
 T.writeCompound ::= fn(c) {
+  if(c.compoundname.beginsWith("std"))
+    return false;
+  
   var top_ns = c;
-  while(top_ns.parentNamespace)
+  var breadcrumps = [];
+  while(top_ns.parentNamespace) {
     top_ns = top_ns.parentNamespace;
+    breadcrumps.pushFront(top_ns);
+  }
   var header = {
-    "title": c.compoundname.replaceAll(top_ns.compoundname + "::",""),
+    "title": "\"" + c.shortname + "\"",
     "permalink": c.id,
-    "brief" : writeDescription(c.briefdescription),
+    "summary" : "\"" + writeDescription(c.briefdescription) + "\"",
     "author" : "Generated from Doxygen",
     "category" : "C++ API@9",
-    "subcategory" : top_ns.compoundname + (c == top_ns ? "@0" : ""),
-    "toc" : c.kind == 'namespace' && (c == top_ns || c.parentNamespace == top_ns),
+    "subcategory" : top_ns.compoundname,
+    "show_in_toc" : c.kind == 'namespace' && (c == top_ns || c.parentNamespace == top_ns),
   };
+  
+  if(c == top_ns)
+    header["order"] = 0;
   
   var content = "---\n";
   foreach(header as var key, var value) {
@@ -174,17 +260,53 @@ T.writeCompound ::= fn(c) {
   }
   content += "---\n";
   
+  if(c.location) {
+    content += "<sub>Defined in header `<" + c.location.file + ">`</sub>\n \n";
+  }
+  
+  foreach(breadcrumps as var ns) {
+    content += mdLink(ns.id,ns.shortname) + "::";
+  }
+  content += mdLink(c.id,c.shortname) + "\n\n";
+    
   content += writeDescription(c.detaileddescription);
   
   if(!c.innernamespace.empty()) {
-    content += "## Namespaces\n\n";
+    content += "\n## Namespaces\n\n";
     foreach(c.innernamespace as var nsref) {
       var ns = nsref.ref;
-      content += "* " + mdLink(ns.id, ns.compoundname) + "\n";
+      var descr = writeDescription(ns.briefdescription).trim();
+      content += "* " + mdLink(ns.id, ns.compoundname) + "  \n";
+      if(!descr.empty())
+        content += "  " + descr + "\n";
+    }
+  }
+  
+  if(!c.innerclass.empty()) {
+    content += "\n## Classes\n\n";
+    foreach(c.innerclass as var cref) {
+      if(cref.isSet($ref)) {
+        var cl = cref.ref;
+        var descr = writeDescription(cl.briefdescription).trim();
+        content += "* " + mdLink(cl.id, cl.compoundname) + "  \n";
+        if(!descr.empty())
+          content += "  " + descr + "\n";
+      } else {
+        content += "* " + cref.text + "\n";
+      }
+    }
+  }
+  
+  foreach(c.sectiondef as var s) {
+    var sec = writeSection(s);
+    if(sec) {
+      content += sec + "\n\n";
     }
   }
   return content;
 };
+
+//----------------------
 
 T.writeMarkdown ::= fn(path) {
   if(!IO.isDir(path)) {
@@ -200,5 +322,7 @@ T.writeMarkdown ::= fn(path) {
       IO.saveTextFile(path + id + ".md", md);
   }
 };
+
+//----------------------
 
 return T;

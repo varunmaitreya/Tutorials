@@ -194,19 +194,23 @@ var rootFolder = void;
 var tocFile = void;
 var timestampFile = void;
 
-for(var i = 2; i < args.size(); i++){
-	if(args[i] == "-t")
+args.popFront(); // escript
+args.popFront(); // MarkDownTool.escript
+
+while(!args.empty()) {
+	var arg = args.popFront();
+	if(arg == "-t")
 		buildTOC = true;
-	else if(args[i] == "-c")
+	else if(arg == "-c")
 		buildCodeSections = true;
-	else if(IO.isDir(args[i]))
-		rootFolder = args[i];
-	else if(args[i].beginsWith("-o="))
-		tocFile = args[i].substr(3).trim();
-	else if(args[i].beginsWith("-s="))
-		timestampFile = args[i].substr(3).trim();
+	else if(arg == "-o")
+		tocFile = args.popFront();
+	else if(arg == "-s")
+		timestampFile = args.popFront();
+	else if(IO.isDir(arg))
+		rootFolder = arg;
 	else{
-		outln("ERROR: Unkown argument " + args[i]);
+		outln("ERROR: Unkown argument " + arg);
 		return;
 	}
 }

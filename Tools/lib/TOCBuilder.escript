@@ -62,9 +62,11 @@ T.parseFrontmatter @(private) ::= fn(String input) {
   // simple yaml parsing. Only supports "key: value" entries.
   foreach(lines as var line) {
     line = line.trim();
-    if(line.empty() || !line.contains(":"))
+    var splitPos = line.find(":");
+    if(!splitPos)
       continue;
-    [var key, var value] = line.split(":");
+    var key = line.substr(0, splitPos);
+    var value = line.substr(splitPos+1);
     frontmatter[key.trim()] = value.trim();
   }
   return frontmatter;
@@ -87,10 +89,10 @@ T.checkFields @(private) ::= fn(entry) {
     entry.published := true;
   else
     entry.published := entry.published.toLower() == "true";
-  if(!entry.isSet($toc))
-    entry.toc := true;
+  if(!entry.isSet($show_in_toc))
+    entry.show_in_toc := true;
   else
-    entry.toc := entry.toc.toLower() == "true";
+    entry.show_in_toc := entry.show_in_toc.toLower() == "true";
   return true;
 };
 
@@ -103,7 +105,7 @@ T.buildTOC ::= fn() {
     if(!checkFields(entry))
       continue;
     
-    if(!entry.published || !entry.toc)
+    if(!entry.published || !entry.show_in_toc)
       continue;
     
     var catOrder = 10000;

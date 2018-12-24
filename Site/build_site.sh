@@ -75,7 +75,7 @@ echo "done"
 
 # build table of contents & update code sections
 echo "Building TOC..."
-./escript/EScript/escript ../../Tools/MarkDownTool.escript -t -c -o=../_data/sidebars/home_sidebar.yml -s=timestamps.json ../Tutorials
+./escript/EScript/escript ../../Tools/MarkDownTool.escript -t -c -o ../_data/sidebars/home_sidebar.yml -s timestamps.json ../Tutorials
 echo "done"
 
 # cleanup
