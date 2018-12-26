@@ -93,10 +93,12 @@ T.checkFields @(private) ::= fn(entry) {
     entry.show_in_toc := true;
   else
     entry.show_in_toc := entry.show_in_toc.toLower() == "true";
+  if(!entry.isSet($sidebar))
+    entry.sidebar := "home_sidebar";
   return true;
 };
 
-T.buildTOC ::= fn() {
+T.buildTOC ::= fn(sidebar="home_sidebar") {
   var toc = [];
   var categories = new Map;
   var subcategories = new Map;
@@ -106,6 +108,9 @@ T.buildTOC ::= fn() {
       continue;
     
     if(!entry.published || !entry.show_in_toc)
+      continue;
+      
+    if(entry.sidebar != sidebar)
       continue;
     
     var catOrder = 10000;
@@ -163,8 +168,8 @@ T.buildTOC ::= fn() {
   return toc;
 };
 
-T.toYAML ::= fn(toc) {
-  var yaml = "entries:\n- product: PADrend Tutorials\n  levels: one\n  folders:\n";
+T.toYAML ::= fn(toc, product="PADrend Tutorials") {
+  var yaml = "entries:\n- product: " + product + "\n  levels: one\n  folders:\n";
   foreach(toc as var cat) {
     yaml += "  - title: " + cat.title + "\n";
     yaml += "    output: web\n";

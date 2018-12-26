@@ -25,6 +25,4 @@ defaults:
       
 sidebars:
 - home_sidebar
-- installation
-- user_guide
-- dev_guide
+- api_sidebar

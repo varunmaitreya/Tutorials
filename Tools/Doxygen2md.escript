@@ -10,6 +10,12 @@
 * with this library; see the file LICENSE. If not, you can obtain one at
 * http://mozilla.org/MPL/2.0/.
 */
+
+if(!loadLibrary("libE_XML"))
+  return false;
+GLOBALS.XML := SGLOBALS.XML;
+load(__DIR__ + "/lib/Utils.escript");
+  
 args.popFront(); // escript
 args.popFront(); // Doxygen2md.escript
 
@@ -40,26 +46,37 @@ if(!IO.isDir(inDir)) {
 }
 
 static DoxygenParser = load(__DIR__ + "/lib/DoxygenConverter.escript");
+if(!DoxygenParser) {
+  outln("Failed to load DoxygenConverter.");
+  return;
+}
 
 var parser = new DoxygenParser;
 
+var compounds = [
+  "namespace",
+  "class",
+  "struct",
+  "union",
+];
 
-
+// parse XML
+out("Parsing XML...");
+parser.initSchema(inDir + "/compound.xsd");
 var files = IO.dir(inDir, IO.DIR_FILES | IO.DIR_RECURSIVE);
-
-// convert xml to json
-out("Converting xml to json...");
 foreach(files as var file) {
-  if(!file.endsWith(".xml") || file.endsWith("index.xml") || file.endsWith("_8h.xml"))
+  if(!file.endsWith(".xml"))
     continue;
-  system("xml2js -ns " + file + " > " + file.replaceAll("xml","json"));
+  var fileName = file.split("/").back().split("\\").back().replace(".xml","");
+  var valid = false;
+  foreach(compounds as var c) {
+    if(fileName.beginsWith(c))
+      valid = true;
+  }
+  if(!valid)
+    continue;
+  parser.parseFile(file);
 }
-outln("done");
-
-// parse & collect compounds
-out("Parsing compounds...");
-files = IO.dir(inDir.replaceAll("xml","json"), IO.DIR_FILES | IO.DIR_RECURSIVE);
-parser.parseFiles(files);
 outln("done");
 
 out("generating Markdown...");

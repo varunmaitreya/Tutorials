@@ -12,38 +12,20 @@
 */
 static T = new Type;
 
-//----------------------
-
-static objToJSON = fn(obj, var d=0) {
-  if(!obj) {
-    return "void";
-  } else if(obj.isA(Number)) {
-    return obj;
-  } else if(obj.isA(String)) {
-    return "\"" + obj + "\"";
-  } else if(obj.isA(Array)) {
-    var s = "[\n";
-    foreach(obj as var v) {
-      s += " " * (d+2) + thisFn(v, d+2) + ",\n";
-    }
-    s += " " * d + "]";
-    return s;
-  } else if(obj._getAttributes().empty()) {
-    return obj;
-  } 
-  var s = "{\n";
-  foreach(obj._getAttributes() as var n, var v) {
-    s += " " * (d+2) + "\"" + n + "\": " + thisFn(v, d+2) + ",\n";
-  }
-  s += " " * d + "}";
-  return s;
-};
+static SchemaUtil = load(__DIR__ + "/SchemaUtil.escript");
 
 //----------------------
 
 static mdLink = fn(link, name) {
   return "[" + name + "](" + link + ")";
 };
+
+//----------------------
+
+static quoted = fn(s) {
+  return "\"" + s + "\"";
+};
+
 
 //----------------------
 
@@ -59,6 +41,113 @@ static assureArrayAttr = fn(obj, name) {
 static assureAttr = fn(obj, name, def) {
   if(!obj.isSet(name))
     obj.setAttribute(name, def);
+};
+
+//----------------------
+
+static toMarkdown = fn(element, name) {
+  var s = '';
+  if(element.isA(String)) {
+    s = element;
+  } else if(element.isA(Array)) {
+    foreach(element as var value)
+      s += toMarkdown(value, name);
+  } else {    
+    // opening the element
+    switch (name) {
+      case 'ref': return s + element.text;
+      case 'emphasis': s = '*'; break;
+      case 'bold': s = '**'; break;
+      case 'parametername':
+      case 'computeroutput': s = '`'; break;
+      case 'parameterlist':
+        if (element.kind == 'exception') {
+          s = '\n#### Exceptions\n';
+        } else {
+          s = '\n#### Parameters\n';
+        }
+        break;
+      case 'parameteritem': s = '* '; break;
+      case 'programlisting': s = '\n```cpp\n'; break;
+      case 'itemizedlist': s = '\n\n'; break;
+      case 'listitem': s = '* '; break;
+      case 'sp': s = ' '; break;
+      case 'heading': s = '## '; break;
+      case 'xrefsect': s += '\n> '; break;
+      case 'simplesect':
+        if (element.kind == 'attention') {
+          s = '> ';
+        } else if (element.kind == 'return') {
+          s = '\n#### Returns\n';
+        } else if (element.kind == 'see') {
+          s = '\n**See also**: ';
+        } else {
+          Runtime.warn(element.kind + ' not supported.');
+        }
+        break;
+      case 'formula':
+        s = element.text;
+        if (s.beginsWith('$') && s.endsWith('$')) return s;
+        if (s.startsWith('\\[') && s.endsWith('\\]'))
+          s = s.substring(2, s.length() - 2).trim();
+        return '\n$$\n' + s + '\n$$\n';
+
+      case 'xreftitle':
+      case 'entry':
+      case 'row':
+      case 'ulink':
+      case 'codeline':
+      case 'highlight':
+      case 'table':
+      case 'para':
+      case 'parameterdescription':
+      case 'parameternamelist':
+      case 'xrefdescription':
+      case 'verbatim':
+      case 'hruler':
+      break;
+
+      default:
+        Runtime.warn(element.name + ' not supported.');
+    }
+
+    // recurse on children elements
+    foreach(element._getAttributes() as var key, var attr)
+      s += toMarkdown(attr, key);
+    /*if (element.$$) {
+    s += toMarkdown(element.$$, context);
+    }*/
+
+    // closing the element
+    switch (name) {
+      case 'parameterlist':
+      case 'para': s += '\n\n'; break;
+      case 'emphasis': s += '*'; break;
+      case 'bold': s += '**'; break;
+      case 'parameteritem': s += '\n'; break;
+      case "computeroutput": s += '`'; break;
+      case 'parametername': s += '` '; break;
+      case 'entry': s = s + '|'; break;
+      case 'programlisting': s += '```\n'; break;
+      case 'codeline': s += '\n'; break;
+      case 'ulink': s = mdLink(element.url, s); break;
+      case 'itemizedlist': s += '\n'; break;
+      case 'listitem': s += '\n'; break;
+      case 'entry': s = ' | '; break;
+      case 'xreftitle': s += ': '; break;
+      case 'row':
+        s = '\n' + s;
+        /*if (element.$$ && element.$$[0].$.thead == "yes") {
+        element.$$.forEach(function (th, i) {
+        s += (i ? ' | ' : '\n') + '---------';
+        });
+        }*/
+      break;
+    }
+
+      
+  }
+  return s;
 };
 
 //----------------------
@@ -86,78 +175,82 @@ T.classes @(init) := Map;
 T.structs @(init) := Map;
 T.unions @(init) := Map;
 
+T.schema @(init) := SchemaUtil;
+
 //----------------------
 
-T.parseFiles ::= fn(files) {  
-  foreach(files as var file) {
-    parseFile(file);
+T.initSchema ::= fn(file) {
+  try {
+    schema.parseSchema(file);
+  } catch(e) {
+    Runtime.warn("Could not parse schema '" + file + "': " + e);
+    return false;
   }
-  setupHierarchy();
 };
 
 //----------------------
 
 T.parseFile ::= fn(file) {
-  var json = false;
+  var reader = new XML.MicroXMLReader;
+  static rootObj;
+  var objStack = [];
+  
+  reader.enter = [objStack] => this->fn(stack, tag) {
+    var parentObj = stack.empty() ? void : stack.back();
+    schema.pushType();
+    var obj = schema.createFromSchema(tag.name, tag.attributes);
+    if(parentObj)
+      parentObj += obj;
+    else
+      rootObj = obj;
+    stack.pushBack(obj);
+    return true;
+  };
+  
+  reader.data = [objStack] => this->fn(stack, tagname, data) {
+    var obj = stack.back();
+    obj += data;
+    return true;
+  };
+  
+  reader.leave = [objStack] => this->fn(stack, tagname) {
+    stack.popBack();
+    schema.popType();
+    return true;
+  };
+  
   try {
-    json = IO.loadTextFile(file);
-    json = parseJSON(json.replaceAll("@_",""));
+    reader.parse(file);
   } catch(e) {
     Runtime.warn("Could not parse file '" + file + "': " + e);
     return false;
   }
-  if(!json.isA(Map) || !json['doxygen']) {
-    Runtime.warn("Could not parse file '" + file + "'.");
+  
+  if(!rootObj.type() == "doxygen")
     return false;
+  
+  var compound = rootObj.compounddef;
+  switch(compound.kind) {
+    case "namespace":
+      namespaces[compound.id] = compound; break;
+    case "class":
+      classes[compound.id] = compound; break;
+    case "struct":
+      structs[compound.id] = compound; break;
+    case "union":
+      unions[compound.id] = compound; break;
+    default:
+      return false;
   }
-  
-  var obj = buildObjTree(json["doxygen"]);
-  if(!obj)
-    return false;
-    
-  var compound = cleanupCompound(obj.compounddef);
-  
-  if(compound.kind == 'namespace')
-    namespaces[compound.id] = compound;
-  else if(compound.kind == 'class')
-    classes[compound.id] = compound;
-  else if(compound.kind == 'struct')
-    structs[compound.id] = compound;
-  else if(compound.kind == 'union')
-    unions[compound.id] = compound;
-  else
-    return false;
-    
   compounds[compound.id] = compound;
+  IO.saveTextFile(file.replaceAll("xml","json"), objToJSON(compound));
   return compound;
 };
 
 //----------------------
 
-T.buildObjTree ::= fn(json) {
-  if(json.isA(Map)) {
-    var tmp = new Map;
-    foreach(json as var name, var value) {
-      if(name.beginsWith("#"))
-        name = name.substr(1);        
-      tmp[name] = thisFn(value);
-    }
-    return new ExtObject(tmp);
-  } else if(json.isA(Array)) {
-    var tmp = [];
-    foreach(json as var value) {
-      tmp += thisFn(value);
-    }
-    return tmp;
-  } else {
-    return json;
-  }
-};
-
-//----------------------
-
-T.setupHierarchy ::= fn() {
-  foreach(namespaces as var id, var ns) {
+T.updateHierarchy ::= fn() {
+  /*foreach(namespaces as var id, var ns) {
     foreach(ns.innernamespace as var e) {
       e.ref := compounds[e.refid];
       if(e.ref)
@@ -175,7 +268,7 @@ T.setupHierarchy ::= fn() {
       if(e.ref)
         e.ref.parentNamespace = c;
     }
-  }
+  }*/
 };
 
 //----------------------
@@ -221,7 +314,17 @@ T.writeSection ::= fn(obj) {
   foreach(obj.memberdef as var m) {
     assureAttr(m, $argsstring, "");
     assureAttr(m, $type, "");
-    s += "### *" + m.type + "* **" + m.name + "** " + m.argsstring + "\n\n";
+    assureAttr(m, $definition, "");
+    
+    s += "### ";
+    /*if(!m.type.isA(String)) {
+      s += "*" + mdLink(m.type.ref.refid, m.type.ref.text) + "* ";
+      //s += toMarkdown(m.type);
+    } else if(!m.type.empty()) {
+      s += "*" + m.type + "* ";
+    }
+    s += "**" + m.name + "** " + m.argsstring + "{#" + m.name + "}" + "\n\n";*/
+    s += m.definition + m.argsstring + "\n\n";
     s += writeDescription(m.detaileddescription);
     s += "\n";
   }
@@ -236,38 +339,46 @@ T.writeCompound ::= fn(c) {
     return false;
   
   var top_ns = c;
-  var breadcrumps = [];
+  var sec_ns = false;
+  var breadcrumbs = [];
   while(top_ns.parentNamespace) {
+    sec_ns = top_ns;
     top_ns = top_ns.parentNamespace;
-    breadcrumps.pushFront(top_ns);
+    breadcrumbs.pushFront(top_ns.shortname + ":" + top_ns.id);
   }
+  var show_in_toc = c.kind == 'namespace';// && (c == top_ns || c.parentNamespace == top_ns || c.parentNamespace == sec_ns);
   var header = {
-    "title": "\"" + c.shortname + "\"",
-    "permalink": c.id,
-    "summary" : "\"" + writeDescription(c.briefdescription) + "\"",
+    "title" : quoted(c.shortname),
+    "permalink" : c.id,
+    "summary" : quoted(writeDescription(c.briefdescription)),
     "author" : "Generated from Doxygen",
-    "category" : "C++ API@9",
-    "subcategory" : top_ns.compoundname,
-    "show_in_toc" : c.kind == 'namespace' && (c == top_ns || c.parentNamespace == top_ns),
+    "category" : quoted(top_ns.shortname),
+    "show_in_toc" : show_in_toc,
+    "sidebar" : "api_sidebar",
+    "layout" : "api",
+    "api_type" : c.kind,
+    "breadcrumbs" : quoted(breadcrumbs.implode("|")),
   };
   
+  if(sec_ns)
+    header["subcategory"] = quoted(sec_ns.shortname);
+    
   if(c == top_ns)
     header["order"] = 0;
+  
+  if(c.location)
+    header["api_location"] = quoted(c.location.file);
   
   var content = "---\n";
   foreach(header as var key, var value) {
     content += key + ": " + value + "\n";
   }
   content += "---\n";
-  
-  if(c.location) {
-    content += "<sub>Defined in header `<" + c.location.file + ">`</sub>\n \n";
-  }
-  
-  foreach(breadcrumps as var ns) {
+    
+  /*foreach(breadcrumbs as var ns) {
     content += mdLink(ns.id,ns.shortname) + "::";
   }
-  content += mdLink(c.id,c.shortname) + "\n\n";
+  content += mdLink(c.id,c.shortname) + "\n\n";*/
     
   content += writeDescription(c.detaileddescription);
   
@@ -315,12 +426,12 @@ T.writeMarkdown ::= fn(path) {
   }
   if(!path.endsWith("/"))
     path += "/";
-  
-  foreach(compounds as var id, var c) {
+  updateHierarchy();
+  /*foreach(compounds as var id, var c) {
     var md = writeCompound(c);
     if(md)
       IO.saveTextFile(path + id + ".md", md);
-  }
+  }*/
 };
 
 //----------------------

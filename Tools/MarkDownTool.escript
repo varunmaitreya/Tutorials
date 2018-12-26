@@ -52,125 +52,9 @@ if(!CodeSectionParser) {
   return;
 }
 
-static parseFolder = fn(rootFolder, buildTOC, buildCodeSections, tocFile, timestampFile) {
-  if(!rootFolder || rootFolder.empty()) {
-  	outln("ERROR: invalid root folder");
-    return;
-  }
-  
-  var files = collectMarkdownFiles(rootFolder);  
-  var tocBuilder = new TOCBuilder;
-	var codeSectionParser = new CodeSectionParser;
-	var headerUpdater = new HeaderUpdater;
-  
-  outln("Parsing...");
-	
-	var timestamps = void;
-	var updateHeader = false;
-	if(timestampFile) {
-		timestamps = parseJSON(IO.loadTextFile(timestampFile));
-		headerUpdater.setTimestamps(timestamps);
-		updateHeader = true;
-	}
-	
-  foreach(files as var file) {
-		if(updateHeader)
-			headerUpdater.update(file);
-		
-    if(buildTOC)
-      tocBuilder.addToTOC(file);
-			
-		if(buildCodeSections)
-			codeSectionParser.parseDocument(file);
-  }
-  
-  if(buildTOC && tocFile) {
-    var toc = tocBuilder.buildTOC();
-    var yaml = tocBuilder.toYAML(toc);
-		IO.saveTextFile(tocFile, yaml);
-  }
-  	
-  outln("done.");
-};
-  
-static createGUI = fn(gui) {
-  static rootFolder = Std.DataWrapper.createFromEntry( PADrend.configCache,'MarkdownParser.rootFolder', __DIR__);
-  static buildTOC = Std.DataWrapper.createFromEntry( PADrend.configCache, 'MarkdownParser.buildTOC', true);
-  static buildCodeSections = Std.DataWrapper.createFromEntry( PADrend.configCache, 'MarkdownParser.buildCodeSections', true);
-  
-	static panel = gui.createPanel(400, 100, GUI.AUTO_LAYOUT);
-	panel.setMargin(0);
-
-	panel += [
-		{
-			GUI.TYPE : GUI.TYPE_TEXT,
-			GUI.LABEL : "Tutorial Folder:",
-			GUI.DATA_WRAPPER : rootFolder,
-			GUI.WIDTH : 300,
-		},
-		{
-		
-			GUI.TYPE : GUI.TYPE_BUTTON,
-			GUI.LABEL : "...",
-			GUI.TOOLTIP : "Choose Tutorial Root Folder",
-			GUI.ON_CLICK : fn(){	
-				gui.openDialog({
-					GUI.TYPE :		GUI.TYPE_FOLDER_DIALOG,
-					GUI.LABEL :		"Choose Root Folder",
-					GUI.FILENAME : 	rootFolder(),
-					GUI.ON_ACCEPT : [] => fn(folder){
-						rootFolder(folder);
-					}
-				});
-			},
-			GUI.WIDTH : 50,
-		},
-		{GUI.TYPE : GUI.TYPE_NEXT_ROW	},
-		{
-			GUI.TYPE : GUI.TYPE_BOOL,
-			GUI.LABEL : "Build TOC",
-			GUI.DATA_WRAPPER : buildTOC
-		},
-		{GUI.TYPE : GUI.TYPE_NEXT_ROW	},
-		{
-			GUI.TYPE : GUI.TYPE_BOOL,
-			GUI.LABEL : "Build code sections",
-			GUI.DATA_WRAPPER : buildCodeSections
-		},
-		{GUI.TYPE : GUI.TYPE_NEXT_ROW	},
-		{
-		
-			GUI.TYPE : GUI.TYPE_BUTTON,
-			GUI.LABEL : "Parse Documents",
-			GUI.TOOLTIP : "Parse Documents",
-			GUI.ON_CLICK : [rootFolder(), buildTOC(), buildCodeSections()] => parseFolder,
-			GUI.WIDTH : 355,
-		}
-	];
-	
-	gui.openDialog({
-		GUI.TYPE : GUI.TYPE_POPUP_DIALOG,
-		GUI.LABEL : "Markdown Parser",
-		GUI.SIZE : [400, 175],
-		GUI.ACTIONS : [
-			[ "Close",fn(){;}]
-		],
-		GUI.OPTIONS : panel
-	});	
-};
-
-if(GLOBALS.isSet($PADrend)) {
-  Std.module.on('PADrend/gui', createGUI);
-  return;
-};
 
 if(args.size() <= 2){ //std arguments, no file
 	outln("\nToo few arguments. Enter --help for more information\n");
-	return;
-}
-
-if(args.size() > 7){
-	outln("\nToo many arguments. Enter --help for more information\n");
 	return;
 }
 
@@ -188,25 +72,25 @@ if(args[2] == "--help" || args[2] == "-h") {
   return;
 }
 
-var buildTOC = false;
 var buildCodeSections = false;
 var rootFolder = void;
 var tocFile = void;
 var timestampFile = void;
+var product = "PADrend Tutorials";
 
 args.popFront(); // escript
 args.popFront(); // MarkDownTool.escript
 
 while(!args.empty()) {
 	var arg = args.popFront();
-	if(arg == "-t")
-		buildTOC = true;
-	else if(arg == "-c")
+	if(arg == "-c")
 		buildCodeSections = true;
-	else if(arg == "-o")
+	else if(arg == "-toc")
 		tocFile = args.popFront();
-	else if(arg == "-s")
+	else if(arg == "-t")
 		timestampFile = args.popFront();
+	else if(arg == "-p")
+		product = args.popFront();
 	else if(IO.isDir(arg))
 		rootFolder = arg;
 	else{
@@ -215,4 +99,42 @@ while(!args.empty()) {
 	}
 }
 
-parseFolder(rootFolder, buildTOC, buildCodeSections, tocFile, timestampFile);
+if(!rootFolder || rootFolder.empty()) {
+	outln("ERROR: invalid root folder");
+  return;
+}
+
+var files = collectMarkdownFiles(rootFolder);  
+var tocBuilder = new TOCBuilder;
+var codeSectionParser = new CodeSectionParser;
+var headerUpdater = new HeaderUpdater;
+
+outln("Parsing...");
+
+var timestamps = void;
+var updateHeader = false;
+if(timestampFile) {
+	timestamps = parseJSON(IO.loadTextFile(timestampFile));
+	headerUpdater.setTimestamps(timestamps);
+	updateHeader = true;
+}
+
+foreach(files as var file) {
+	if(updateHeader)
+		headerUpdater.update(file);
+	
+  if(tocFile)
+    tocBuilder.addToTOC(file);
+		
+	if(buildCodeSections)
+		codeSectionParser.parseDocument(file);
+}
+
+if(tocFile) {
+	var sidebar = tocFile.split("/").back().split("\\").back().replace(".yml","");
+  var toc = tocBuilder.buildTOC(sidebar);
+  var yaml = tocBuilder.toYAML(toc, product);
+	IO.saveTextFile(tocFile, yaml);
+}
+	
+outln("done.");

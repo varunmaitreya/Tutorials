@@ -12,7 +12,7 @@ cp ../index.md .
 # create directories
 mkdir -p ./_data/sidebars
 mkdir -p tmp
-mkdir -p Tutorials/API
+mkdir -p API
 cd tmp
 
 # --------------
@@ -21,11 +21,18 @@ cd tmp
 
 # clone & build escript
 echo "Building EScript..."
-git clone https://github.com/EScript/EScript.git escript &> /dev/null && cd escript
-cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_ESCRIPT_APPLICATION=ON -DBUILD_ESCRIPT_TEST=OFF . && make && cd ..
+git clone https://github.com/MeisterYeti/EScript.git EScript &> /dev/null
+cd EScript
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_ESCRIPT_APPLICATION=ON -DBUILD_ESCRIPT_TEST=OFF -DBUILD_SHARED_LIBS=ON . && make
+cd ..
+git clone https://github.com/MeisterYeti/E_XML.git E_XML &> /dev/null
+cd E_XML
+cmake -DCMAKE_BUILD_TYPE=Release . && make
+cd ..
+cp EScript/EScript/escript .
+cp EScript/libEScript.so .
+cp E_XML/libE_XML.so .
 echo "done"
-
-npm install fast-xml-parser -g
 
 # --------------
 # build api docs
@@ -57,7 +64,7 @@ echo "Building API doc..."
 cd API
 doxygen ../../../Tools/Doxyfile
 cd ..
-./escript/EScript/escript ../../Tools/Doxygen2md.escript -o ../Tutorials/API/ API/xml
+./escript ../../Tools/Doxygen2md.escript -o ../API/ API/xml
 echo "done"
 
 # --------------
@@ -75,7 +82,8 @@ echo "done"
 
 # build table of contents & update code sections
 echo "Building TOC..."
-./escript/EScript/escript ../../Tools/MarkDownTool.escript -t -c -o ../_data/sidebars/home_sidebar.yml -s timestamps.json ../Tutorials
+./escript ../../Tools/MarkDownTool.escript -c -toc ../_data/sidebars/home_sidebar.yml -t timestamps.json ../Tutorials
+./escript ../../Tools/MarkDownTool.escript -toc ../_data/sidebars/api_sidebar.yml -p "C++ API" ../API
 echo "done"
 
 # cleanup
