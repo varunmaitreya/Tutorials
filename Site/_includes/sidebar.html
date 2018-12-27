@@ -2,9 +2,12 @@
 
 {% assign breadcrumbs = page.breadcrumbs | replace: '|', ':' %}
 {% assign breadcrumbs = breadcrumbs | split: ':' %}
-{% assign namespace = breadcrumbs.last | prepend: '/' %}
+{% assign first_ns = breadcrumbs[1] | prepend: '/' %}
+{% assign second_ns = breadcrumbs[3] | prepend: '/' %}
+{% assign third_ns = breadcrumbs[5] | prepend: '/' %}
 
-<ul id="mysidebar" class="nav">  
+<a href="#" id="scroll" style="display: none;"><span></span></a>
+<ul id="mysidebar" class="nav">
   {% for sidebar in site.data.sidebars reversed %}
     <li class="sidebarTitle">{{sidebar.last.entries[0].product}} {{sidebar.last.entries[0].version}}</li>
     {% for entry in sidebar.last.entries %}
@@ -17,17 +20,17 @@
                   {% if folderitem.output contains "web" %}
                     {% if folderitem.external_url %}
                       <li><a href="{{folderitem.external_url}}" target="_blank">{{folderitem.title}}</a></li>
-                    {% elsif page.url == folderitem.url or namespace == folderitem.url %}
+                    {% elsif page.url == folderitem.url or second_ns == folderitem.url or first_ns == folderitem.url %}
                       <li class="active"><a href="{{folderitem.url | relative_url}}">{{folderitem.title}}</a></li>
                     {% elsif folderitem.subfolderitems %}
                       <li class="subfolders">
-                        <a href="{{folderitem.url | relative_url}}">{{folderitem.title}}</a>
+                        <a href="#">{{folderitem.title}}</a>
                         <ul>
                         {% for subfolderitem in folderitem.subfolderitems %}
                           {% if subfolderitem.output contains "web" %}
                             {% if subfolderitem.external_url %}
                             <li><a href="{{subfolderitem.external_url}}" target="_blank">{{subfolderitem.title}}</a></li>
-                            {% elsif page.url == subfolderitem.url or namespace == subfolderitem.url %}
+                            {% elsif page.url == subfolderitem.url or third_ns == subfolderitem.url or second_ns == folderitem.url %}
                             <li class="active"><a href="{{subfolderitem.url | relative_url}}">{{subfolderitem.title}}</a></li>
                             {% else %}
                             <li><a href="{{subfolderitem.url | relative_url}}">{{subfolderitem.title}}</a></li>
@@ -48,7 +51,6 @@
     {% endfor %}
   {% endfor %}
 </ul>
-</div>
 
 <!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
 <script>$("li.active").parents('li').toggleClass("active");</script>

@@ -1,5 +1,5 @@
 os: linux
-dist: trusty
+dist: xenial
 compiler: gcc
 language: cpp
 addons:
@@ -7,7 +7,6 @@ addons:
     packages:
       - doxygen
       - graphviz
-      - npm
 before_script: cd Site
 script: bash build_site.sh
 deploy:

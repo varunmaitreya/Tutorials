@@ -17,7 +17,23 @@ static SchemaUtil = load(__DIR__ + "/SchemaUtil.escript");
 //----------------------
 
 static mdLink = fn(link, name) {
-  return "[" + name + "](" + link + ")";
+  if(!link)
+    return name;
+  return "[" + name + "](" + link.replaceAll("__","%5F%5F") + ")";
+};
+
+//----------------------
+
+static mdNote = fn(note) {
+  return "> **Note**: " + note;
+  //return "{% include note.html content=\"" + note + "\" %}";
+};
+
+//----------------------
+
+static mdWarn = fn(note) {
+  return "> **Warning**: " + note;
+  //return "{% include warning.html content=\"" + note + "\" %}";
 };
 
 //----------------------
@@ -26,6 +42,27 @@ static quoted = fn(s) {
   return "\"" + s + "\"";
 };
 
+//----------------------
+
+static unescape = fn(s) {
+  return s.replaceAll({
+    "&amp;" : "\&",
+    "&lt;" : "\<",
+    "&gt;" : "\>",
+    "&quot;" : "\"",
+    "&apos;" : "\'",
+  });
+};
+
+//----------------------
+
+static containsAny = fn(s, param...) {
+  foreach(param as var p) {
+    if(s.contains(p))
+      return true;
+  }
+  return false;
+};
 
 //----------------------
 
@@ -45,45 +82,90 @@ static assureAttr = fn(obj, name, def) {
 
 //----------------------
 
-static toMarkdown = fn(element, name) {
+T.compounds @(init) := Map;
+T.namespaces @(init) := Map;
+T.classes @(init) := Map;
+T.structs @(init) := Map;
+T.unions @(init) := Map;
+T.members @(init) := Map;
+T.schema @(init) := SchemaUtil;
+
+//----------------------
+
+T.resolveRef ::= fn(ref) {
+  if(ref.kindref == "compound")
+    return ref.refid;
+  var member = members[ref.refid];
+  if(!member)
+    return void;
+  // rebuild link
+  return member.id.substr(0, member.id.rFind("_")) + "#" + ref.refid;
+};
+
+//----------------------
+
+T.toMarkdown ::= fn(element) {
+  if(element === void)
+    return '';
   var s = '';
   if(element.isA(String)) {
-    s = element;
+    s = unescape(element);
   } else if(element.isA(Array)) {
     foreach(element as var value)
-      s += toMarkdown(value, name);
-  } else {    
+      s += toMarkdown(value);
+  } else if(element.isA(SchemaUtil.Element)) {
     // opening the element
-    switch (name) {
-      case 'ref': return s + element.text;
-      case 'emphasis': s = '*'; break;
-      case 'bold': s = '**'; break;
+    switch (element.name()) {
+      case 'ref': return " " + mdLink(resolveRef(element), toMarkdown(element.data())) + " ";
+      case 'emphasis': s = ' *'; break;
       case 'parametername':
-      case 'computeroutput': s = '`'; break;
+      case 'bold': s = ' **'; break;
+      case 'computeroutput': s = ' `'; break;
       case 'parameterlist':
         if (element.kind == 'exception') {
           s = '\n#### Exceptions\n';
         } else {
           s = '\n#### Parameters\n';
         }
+        return s + toMarkdown(element.parameteritem);
+      case 'parameteritem': 
+        s += toMarkdown(element.parameternamelist) + "\n:  ";
+        s += toMarkdown(element.parameterdescription) + "\n"; 
         break;
-      case 'parameteritem': s = '* '; break;
-      case 'programlisting': s = '\n```cpp\n'; break;
-      case 'itemizedlist': s = '\n\n'; break;
-      case 'listitem': s = '* '; break;
+      case 'parameternamelist': s = toMarkdown(element.parametername); break;
+      case 'programlisting': s = '\n\n```cpp\n' + toMarkdown(element.codeline); break;
+      case 'codeline': s = toMarkdown(element.highlight); break;
+      case 'verbatim': s = '\n\n```\n'; break;
+      case 'itemizedlist': s = '\n\n' + toMarkdown(element.listitem); break;
+      case 'listitem': s = '* ' + toMarkdown(element.para); break;
       case 'sp': s = ' '; break;
       case 'heading': s = '## '; break;
       case 'xrefsect': s += '\n> '; break;
       case 'simplesect':
-        if (element.kind == 'attention') {
-          s = '> ';
-        } else if (element.kind == 'return') {
-          s = '\n#### Returns\n';
-        } else if (element.kind == 'see') {
-          s = '\n**See also**: ';
-        } else {
-          Runtime.warn(element.kind + ' not supported.');
+        switch(element.kind) {
+          case "see": s = '\n\n*See also*: '; break;
+          case "return": s = '\n#### Returns\n'; break;
+          case "author": s = '\n\n**Author**: '; break;
+          case "authors": s = '\n\n**Authors**: '; break;
+          case "version": s = '\n\n**Version**: ';  break;
+          case "since": s = '\n\n**Since**: ';  break;
+          case "date": s = '\n\n**Date**: ';  break;
+          case "note":
+            return s + "\n" + mdNote(toMarkdown(element.para)) + "\n";
+            break;
+          case "warning": 
+            return s + "\n" + mdWarn(toMarkdown(element.para)) + "\n";
+            break;
+          case "pre": s = '\n\n**Pre**: '; break;
+          case "post": s = '\n\n**Post**: '; break;
+          case "copyright": s = '\n\n*(C)*: '; break;
+          case "invariant": break;
+          case "remark": s = "\n\n> "; break;
+          case "attention": s = "\n\n> "; break;
+          case "par": s = "\n\n"; break;
+          case "rcs": break;
         }
+        return s + toMarkdown(element.para);
         break;
       case 'formula':
         s = element.text;
@@ -91,49 +173,29 @@ static toMarkdown = fn(element, name) {
         if (s.startsWith('\\[') && s.endsWith('\\]'))
           s = s.substring(2, s.length() - 2).trim();
         return '\n$$\n' + s + '\n$$\n';
-
-      case 'xreftitle':
-      case 'entry':
-      case 'row':
-      case 'ulink':
-      case 'codeline':
-      case 'highlight':
-      case 'table':
-      case 'para':
-      case 'parameterdescription':
-      case 'parameternamelist':
-      case 'xrefdescription':
-      case 'verbatim':
-      case 'hruler':
-      break;
-
-      default:
-        Runtime.warn(element.name + ' not supported.');
+      case 'note':
+        s = "{% include note.html content=\""; break;
     }
 
-    // recurse on children elements
-    foreach(element._getAttributes() as var key, var attr)
-      s += toMarkdown(attr, key);
-    /*if (element.$$) {
-    s += toMarkdown(element.$$, context);
-    }*/
+    // recurse on children
+    foreach(element as var value)
+      s += toMarkdown(value);
 
     // closing the element
-    switch (name) {
-      case 'parameterlist':
+    switch (element.name()) {
       case 'para': s += '\n\n'; break;
-      case 'emphasis': s += '*'; break;
-      case 'bold': s += '**'; break;
+      case 'emphasis': s += '* '; break;
+      case 'parametername':
+      case 'bold': s += '** '; break;
       case 'parameteritem': s += '\n'; break;
-      case "computeroutput": s += '`'; break;
-      case 'parametername': s += '` '; break;
-      case 'entry': s = s + '|'; break;
-      case 'programlisting': s += '```\n'; break;
+      case "computeroutput": s += '` '; break;
+      case 'entry': s += ' | '; break;
+      case 'verbatim':
+      case 'programlisting': s += '\n```\n'; break;
       case 'codeline': s += '\n'; break;
       case 'ulink': s = mdLink(element.url, s); break;
       case 'itemizedlist': s += '\n'; break;
       case 'listitem': s += '\n'; break;
-      case 'entry': s = ' | '; break;
       case 'xreftitle': s += ': '; break;
       case 'row':
         s = '\n' + s;
@@ -142,40 +204,407 @@ static toMarkdown = fn(element, name) {
         s += (i ? ' | ' : '\n') + '---------';
         });
         }*/
+      case 'note':
+        s += "\" %}"; break;
       break;
     }
 
       
+  } else {
+    s = element.toString();
   }
   return s;
 };
 
 //----------------------
 
-static cleanupCompound = fn(c) {
-  assureArrayAttr(c, $innernamespace);
-  assureArrayAttr(c, $innerclass);
-  assureArrayAttr(c, $basecompoundref);
-  assureArrayAttr(c, $derivedcompoundref);
-  assureArrayAttr(c, $includes);
-  assureArrayAttr(c, $sectiondef);
-  assureAttr(c, $parentNamespace, false);
-  assureAttr(c, $briefdescription, "");
-  assureAttr(c, $detaileddescription, "");
-  assureAttr(c, $location, false);
-  c.shortname := c.compoundname.split("::").back();
-  return c;
+static sectionTitles = {
+  "public-type" : "Public Types",
+  "public-func" : "Public Functions",
+  "public-attrib" : "Public Attributes",
+  "public-static-func" : "Public Static Functions",
+  "public-static-attrib" : "Public Static Attributes",
+  "protected-type" : "Protected Types",
+  "protected-func" : "Protected Functions",
+  "protected-attrib" : "Protected Attributes",
+  "protected-static-func" : "Protected Static Functions",
+  "protected-static-attrib" : "Protected Static Attributes",
+  //"define" : "",
+  "typedef" : "Typedefs",
+  "enum" : "Enumerations",
+  "func" : "Functions",
+  "var" : "Variables",
+};
+
+T.writeSection ::= fn(obj) {
+  var title = sectionTitles[obj.kind];
+  if(!title) {
+    if(obj.kind == "user-defined")
+      title = obj.header;
+    else
+      return false;
+  }
+  
+  if(obj.memberdef.empty())
+    return false;
+  
+  var s = "## " + title + "\n\n";
+  
+  s += "|\n";
+  s += "| ------: | ----------------- |\n";
+  foreach(obj.memberdef as var m) {
+    switch(m.prot) {
+      case "public":
+      case "protected":
+        break;
+      default:
+        continue;
+    }
+    switch(m.kind) {
+      case "function":
+      case "enum":
+      case "typedef":
+      case "variable":
+        break;
+      default:
+        s += "| |\n";
+        continue;
+    }
+    
+    // template parameter line
+    s += "| ";
+    if(m.templateparamlist) {
+      s += "template\< ";
+      var params = [];
+      foreach(m.templateparamlist.param as var p)
+        params += toMarkdown(p.type) + " " + toMarkdown(p.declname);
+      s += params.implode(", ") + " \> ";
+    }
+    s += " | |\n";
+    
+    // member line  
+    var type = toMarkdown(m.type).trim();
+    switch(m.kind) {
+      case "function":
+        s += "| " + type + " | **" + mdLink("#" + m.id, m.name) + "**";
+        var params = [];
+        foreach(m.param as var p)
+          params += toMarkdown(p.type) + " " + p.declname;
+        s += "(" + params.implode(", ") + ")";
+        if(m.const == "yes") s += " const";
+        break;
+      case "enum":
+        s += "| enum | **" + mdLink("#" + m.id, m.name) + "**";        
+        if(!type.empty()) s += " : " + type;        
+        var enums = [];
+        foreach(m.enumvalue as var enum)
+          enums += toMarkdown(enum.getData('name')).trim();
+        s += " {" + enums.implode(", ") + "}";
+        break;
+      case "typedef":
+        s += "| typedef " + type + " | **" + mdLink("#" + m.id, m.name) + "** ";
+        break;
+      case "variable":
+        s += "| " + type + " | **" + mdLink("#" + m.id, m.name) + "** ";
+        break;
+    }
+            
+    // description line
+    var brief = toMarkdown(m.briefdescription).trim();
+    if(!brief.empty())
+      s += " <br/> " + toMarkdown(brief);
+    s += " |\n";
+  }
+  s += "{: .nohead .nowrap1 .api_section }\n";
+  
+  return s;
+};
+
+//----------------------
+  
+T.writeDocumentation ::= fn(m) {
+  switch(m.kind) {
+    case "function":
+    case "enum":
+    case "typedef":
+    case "variable":
+      break;
+    default:
+      return false;
+  }
+  switch(m.prot) {
+    case "public":
+    case "protected":
+      break;
+    default:
+      return false;
+  }
+  
+  var s = "### <small>" + m.kind + "</small><br/> " + m.name + " {#" + m.id + "}\n\n";
+    
+  // labels
+  s += "| " + m.prot + " |";
+  if(m.getAttribute("static") == "yes") s += " static |";
+  if(m.const == "yes") s += " const |";
+  if(m.inline == "yes") s += " inline |";
+  if(m.explicit == "yes") s += " explicit |";
+  if(m.virt == "virtual" || m.virt == "pure-virtual") s += " virtual |";
+  s += "\n{:.api_label}\n\n";
+  
+  s += "|\n";
+  s += "| ------: | ----------------- |\n";
+  
+  // template parameter line
+  s += "| ";
+  if(m.templateparamlist) {
+    s += "template\< ";
+    var params = [];
+    foreach(m.templateparamlist.param as var p)
+      params += toMarkdown(p.type) + " " + toMarkdown(p.declname) + (p.defval ? " = " + toMarkdown(p.defval) : "");
+    s += params.implode(", ") + " \>";
+  }
+  s += " |\n";
+  
+  // member definition
+  s += "| ";
+  var type = toMarkdown(m.type).trim();
+  switch(m.kind) {
+    case "function": {      
+      s += type + " **" + mdLink("#" + m.id, m.name) + "**";
+      var params = [];
+      foreach(m.param as var p)
+        params += toMarkdown(p.type) + " | **" + p.declname + "**";
+      s += "( | ";
+      s += params.implode(", |\n| | ");
+      if(params.count() > 1) s += " |\n|  ";
+      s += " )";
+      if(m.const == "yes") s += " const";
+      break;
+    }
+    case "enum": {
+      s += "enum **" + mdLink("#" + m.id, m.name) + "**";
+      if(!type.empty()) s += " : " + type + " ";
+      break;
+    }
+    case "typedef": {
+      s += "typedef " + type + " **" + mdLink("#" + m.id, m.name) + "** ";
+      break;
+    }
+    case "variable": {
+      s += type + " **" + mdLink("#" + m.id, m.name) + "** ";
+      break;
+    }
+  }
+  s += " |\n";
+  s += "{: .nohead .nowrap1 .api_doc }\n\n";
+  
+  // enum table
+  if(m.kind == "enum") {
+    s += "| Enumerator |    | Description |\n";
+    s += "| ---------- | -- | ----------- |\n";
+    foreach(m.enumvalue as var enum) {
+      s += toMarkdown(enum.getData('name')).trim() + " | " + toMarkdown(enum.getData('initializer')) + " | " + toMarkdown(enum.getData('briefdescription')).trim() + " |\n";
+    }
+    s += "\n\n";
+  }
+          
+  // description line
+  s += toMarkdown(m.briefdescription) + "\n\n";
+  s += toMarkdown(m.detaileddescription) + "\n\n";
+  
+  if(m.location)
+    s += "<sub>Defined in `" + m.location.file + ":" + m.location.line + "`</sub>{:style=\"float: right\"}\n\n";
+  
+  s += "-------------------------------------------------------------------";
+  
+  return s;
 };
 
 //----------------------
 
-T.compounds @(init) := Map;
-T.namespaces @(init) := Map;
-T.classes @(init) := Map;
-T.structs @(init) := Map;
-T.unions @(init) := Map;
+T.collectKeywords ::= fn(c) {
+  var keywords = [];
+  if(!containsAny(c.compoundname, "*", "[", "]", "<", ">", "&", "=", "!", "+", "-", "/", "^"))
+    keywords += c.compoundname.split(":").back().trim();
+  foreach(c.sectiondef as var s) {
+    foreach(s.memberdef as var m) {
+      if(!containsAny(m.name, "*", "[", "]", "<", ">", "&", "=", "!", "+", "-", "/", "^"))
+        keywords += m.name.split(":").back().trim();
+    }
+  }
+  return keywords;
+};
 
-T.schema @(init) := SchemaUtil;
+//----------------------
+
+T.writeCompound ::= fn(c) {
+  if(c.compoundname.beginsWith("std"))
+    return false;
+  
+  var brief = toMarkdown(c.briefdescription).trim();
+  var keywords = collectKeywords(c);
+  
+  var top_ns = c;
+  var sec_ns = false;
+  var breadcrumbs = [];
+  while(top_ns.parentNamespace) {
+    sec_ns = top_ns;
+    top_ns = top_ns.parentNamespace;
+    breadcrumbs.pushFront(top_ns.shortname + ":" + top_ns.id);
+  }
+  var show_in_toc = c.kind == 'namespace';
+  var header = {
+    "title" : quoted(c.shortname),
+    "permalink" : c.id,
+    //"summary" : brief.empty() ? false : quoted(brief),
+    "author" : "Generated from Doxygen",
+    "category" : quoted(top_ns.shortname),
+    "show_in_toc" : show_in_toc,
+    "sidebar" : "api_sidebar",
+    "layout" : "api",
+    "api_type" : c.kind,
+    "breadcrumbs" : quoted(breadcrumbs.implode("|")),
+    "toc" : false,
+    "keywords" : "[" + keywords.implode(",") + "]",
+  };
+  
+  if(sec_ns && (sec_ns != c || !sec_ns.innernamespace.empty()))
+    header["subcategory"] = quoted(sec_ns.shortname);
+    
+  if(c == top_ns)
+    header["order"] = 0;
+  
+  if(c.location && c.kind != 'namespace')
+    header["api_location"] = quoted(c.location.file);
+      
+  if(c.templateparamlist) {
+    var template = "template\< ";
+    var params = [];
+    foreach(c.templateparamlist.param as var p)
+      params += toMarkdown(p.type) + " " + toMarkdown(p.declname);
+    template += params.implode(", ") + " \> ";
+    header["template"] = quoted(template);
+  }  
+    
+  var content = "---\n";
+  foreach(header as var key, var value) {
+    content += key + ": " + value + "\n";
+  }
+  content += "---\n\n";
+    
+  // labels
+  if(c.kind != "namespace") {
+    content += "| " + c.prot + " |";
+    if(c.abstract == "yes") content += " abstract |";
+    content += "\n{:.api_label}\n\n";
+  }
+
+  if(!c.basecompoundref.empty()) {
+    content += "#### Inherited\n\n";
+    foreach(c.basecompoundref as var ref) {
+      var base = compounds[ref.refid];
+      if(base)
+        content += "* " + mdLink(ref.refid, base.compoundname) + "\n";
+    }
+    content += "\n\n";
+  }
+  
+  if(!c.derivedcompoundref.empty()) {
+    content += "#### Derived\n\n";
+    foreach(c.derivedcompoundref as var ref) {
+      var derived = compounds[ref.refid];
+      if(derived)
+        content += "* " + mdLink(ref.refid, derived.compoundname) + "\n";
+    }
+    content += "\n\n";
+  }
+  
+  content += "## Description\n\n";
+  content += brief + "\n\n";
+  content += toMarkdown(c.detaileddescription);
+  
+  content += "\n\n";
+  
+  if(!c.innernamespace.empty()) {
+    var s = "## Namespaces\n\n";
+    s += "|\n| ------- | ----------------- |\n";
+    foreach(c.innernamespace as var nsref) {
+      var ns = nsref.ref;
+      s += "| namespace | " + mdLink(ns.id, ns.compoundname) + " <br/> " + toMarkdown(ns.briefdescription).trim() + " |\n";
+    }
+    s += "{: .nohead }\n";
+    content += s + "\n\n";
+  }
+  
+  if(!c.innerclass.empty()) {
+    var s = "## Classes\n\n";
+    s += "|\n| ------- | ----------------- |\n";
+    foreach(c.innerclass as var cref) {
+      var cl = cref.ref;
+      s += "| " + cl.kind + " | " + mdLink(cl.id, cl.compoundname) + " <br/> " + toMarkdown(cl.briefdescription).trim() + " |\n";
+    }
+    s += "{: .nohead }\n";
+    content += s + "\n\n";
+  }
+  
+  foreach(c.sectiondef as var s) {
+    var sec = writeSection(s);
+    if(sec) {
+      content += sec + "\n\n";
+    }
+  }
+  
+  content += "-------------------------------------------------------------------\n\n";
+  
+  if(!c.sectiondef.empty()) {
+    content += "## Documentation\n\n";
+    foreach(c.sectiondef as var s) {
+      foreach(s.memberdef as var m) {
+        var doc = writeDocumentation(m);
+        if(doc) {
+          content += doc + "\n\n";
+        }
+      }
+    }
+}
+  
+  return content;
+};
+
+//----------------------
+
+T.updateHierarchy ::= fn() {
+  foreach(compounds as var id, var ns) {
+    foreach(ns.innernamespace as var e) {
+      e.ref := compounds[e.refid];
+      if(e.ref)
+        e.ref.parentNamespace = ns;
+    }
+    foreach(ns.innerclass as var e) {
+      e.ref := compounds[e.refid];
+      if(e.ref)
+        e.ref.parentNamespace = ns;
+    }
+  }
+};
+
+//----------------------
+
+T.writeMarkdown ::= fn(path) {
+  if(!IO.isDir(path)) {
+    Runtime.warn("Invalid path: " + path);
+    return false;
+  }
+  if(!path.endsWith("/"))
+    path += "/";
+  updateHierarchy();
+  foreach(compounds as var id, var c) {
+    var md = writeCompound(c);
+    if(md)
+      IO.saveTextFile(path + id + ".md", md);
+  }
+};
+
 
 //----------------------
 
@@ -196,13 +625,8 @@ T.parseFile ::= fn(file) {
   var objStack = [];
   
   reader.enter = [objStack] => this->fn(stack, tag) {
-    var parentObj = stack.empty() ? void : stack.back();
     schema.pushType();
     var obj = schema.createFromSchema(tag.name, tag.attributes);
-    if(parentObj)
-      parentObj += obj;
-    else
-      rootObj = obj;
     stack.pushBack(obj);
     return true;
   };
@@ -214,8 +638,17 @@ T.parseFile ::= fn(file) {
   };
   
   reader.leave = [objStack] => this->fn(stack, tagname) {
-    stack.popBack();
+    var obj = stack.popBack();
     schema.popType();
+    
+    if(tagname == "memberdef")
+      members[obj.id] = obj;
+    
+    if(stack.empty()) {
+      rootObj = obj;
+    } else {
+      stack.back() += obj;
+    }
     return true;
   };
   
@@ -243,195 +676,12 @@ T.parseFile ::= fn(file) {
       return false;
   }
   compounds[compound.id] = compound;
-  IO.saveTextFile(file.replaceAll("xml","json"), objToJSON(compound));
+
+  assureAttr(compound, $parentNamespace, false);
+  compound.shortname := compound.compoundname.split("::").back();
+  
+  //IO.saveTextFile(file.replaceAll("xml","json"), objToJSON(compound));
   return compound;
-};
-
-//----------------------
-
-T.updateHierarchy ::= fn() {
-  /*foreach(namespaces as var id, var ns) {
-    foreach(ns.innernamespace as var e) {
-      e.ref := compounds[e.refid];
-      if(e.ref)
-        e.ref.parentNamespace = ns;
-    }
-    foreach(ns.innerclass as var e) {
-      e.ref := compounds[e.refid];
-      if(e.ref)
-        e.ref.parentNamespace = ns;
-    }
-  }
-  foreach(classes as var id, var c) {
-    foreach(c.innerclass as var e) {
-      e.ref := compounds[e.refid];
-      if(e.ref)
-        e.ref.parentNamespace = c;
-    }
-  }*/
-};
-
-//----------------------
-
-T.writeDescription ::= fn(obj) {
-  var s = "";
-  if(obj.isA(String)) {
-    s = obj;
-  } else if(obj.isA(Array)) {
-    foreach(obj as var o)
-      s += writeDescription(o) + "\n";
-  } else if(obj.isSet($para)) {
-    s += writeDescription(obj.para);
-  }
-  return s;
-};
-
-//----------------------
-
-static sectionTitles = {
-  "public-func" : "Public Functions",
-  "public-static-func" : "Public Static Functions",
-  "public-type" : "Public Types",
-  "public-static-attrib" : "Public Static Attributes",
-  "public-attrib" : "Public Attributes",
-  "protected-func" : "Protected Functions",
-  "protected-static-func" : "Protected Static Functions",
-  "protected-type" : "Protected Types",
-  "protected-static-attrib" : "Protected Static Attributes",
-  "protected-attrib" : "Protected Attributes",
-};
-
-T.writeSection ::= fn(obj) {
-  var title = sectionTitles[obj.kind];
-  if(!title) {
-    if(obj.kind == "user-defined")
-      title = obj.header;
-    else
-      return false;
-  }
-  assureArrayAttr(obj, $memberdef);
-  var s = "## " + title + "\n\n";
-  foreach(obj.memberdef as var m) {
-    assureAttr(m, $argsstring, "");
-    assureAttr(m, $type, "");
-    assureAttr(m, $definition, "");
-    
-    s += "### ";
-    /*if(!m.type.isA(String)) {
-      s += "*" + mdLink(m.type.ref.refid, m.type.ref.text) + "* ";
-      //s += toMarkdown(m.type);
-    } else if(!m.type.empty()) {
-      s += "*" + m.type + "* ";
-    }
-    s += "**" + m.name + "** " + m.argsstring + "{#" + m.name + "}" + "\n\n";*/
-    s += m.definition + m.argsstring + "\n\n";
-    s += writeDescription(m.detaileddescription);
-    s += "\n";
-  }
-  
-  return s;
-};
-
-//----------------------
-
-T.writeCompound ::= fn(c) {
-  if(c.compoundname.beginsWith("std"))
-    return false;
-  
-  var top_ns = c;
-  var sec_ns = false;
-  var breadcrumbs = [];
-  while(top_ns.parentNamespace) {
-    sec_ns = top_ns;
-    top_ns = top_ns.parentNamespace;
-    breadcrumbs.pushFront(top_ns.shortname + ":" + top_ns.id);
-  }
-  var show_in_toc = c.kind == 'namespace';// && (c == top_ns || c.parentNamespace == top_ns || c.parentNamespace == sec_ns);
-  var header = {
-    "title" : quoted(c.shortname),
-    "permalink" : c.id,
-    "summary" : quoted(writeDescription(c.briefdescription)),
-    "author" : "Generated from Doxygen",
-    "category" : quoted(top_ns.shortname),
-    "show_in_toc" : show_in_toc,
-    "sidebar" : "api_sidebar",
-    "layout" : "api",
-    "api_type" : c.kind,
-    "breadcrumbs" : quoted(breadcrumbs.implode("|")),
-  };
-  
-  if(sec_ns)
-    header["subcategory"] = quoted(sec_ns.shortname);
-    
-  if(c == top_ns)
-    header["order"] = 0;
-  
-  if(c.location)
-    header["api_location"] = quoted(c.location.file);
-  
-  var content = "---\n";
-  foreach(header as var key, var value) {
-    content += key + ": " + value + "\n";
-  }
-  content += "---\n";
-    
-  /*foreach(breadcrumbs as var ns) {
-    content += mdLink(ns.id,ns.shortname) + "::";
-  }
-  content += mdLink(c.id,c.shortname) + "\n\n";*/
-    
-  content += writeDescription(c.detaileddescription);
-  
-  if(!c.innernamespace.empty()) {
-    content += "\n## Namespaces\n\n";
-    foreach(c.innernamespace as var nsref) {
-      var ns = nsref.ref;
-      var descr = writeDescription(ns.briefdescription).trim();
-      content += "* " + mdLink(ns.id, ns.compoundname) + "  \n";
-      if(!descr.empty())
-        content += "  " + descr + "\n";
-    }
-  }
-  
-  if(!c.innerclass.empty()) {
-    content += "\n## Classes\n\n";
-    foreach(c.innerclass as var cref) {
-      if(cref.isSet($ref)) {
-        var cl = cref.ref;
-        var descr = writeDescription(cl.briefdescription).trim();
-        content += "* " + mdLink(cl.id, cl.compoundname) + "  \n";
-        if(!descr.empty())
-          content += "  " + descr + "\n";
-      } else {
-        content += "* " + cref.text + "\n";
-      }
-    }
-  }
-  
-  foreach(c.sectiondef as var s) {
-    var sec = writeSection(s);
-    if(sec) {
-      content += sec + "\n\n";
-    }
-  }
-  return content;
-};
-
-//----------------------
-
-T.writeMarkdown ::= fn(path) {
-  if(!IO.isDir(path)) {
-    Runtime.warn("Invalid path: " + path);
-    return false;
-  }
-  if(!path.endsWith("/"))
-    path += "/";
-  updateHierarchy();
-  /*foreach(compounds as var id, var c) {
-    var md = writeCompound(c);
-    if(md)
-      IO.saveTextFile(path + id + ".md", md);
-  }*/
 };
 
 //----------------------

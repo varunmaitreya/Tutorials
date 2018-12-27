@@ -44,22 +44,45 @@ Element._constructor ::= fn(name, attr=new Map) {
 Element._get ::= fn(Number key) { return _data[key]; };
 Element._set ::= fn(Number key, value) { _data[key] = value; };
 Element."+=" ::= fn(data) {
-  if(_mixed || data.isA(String) || !data.isSet($_name) || !isSet(data._name)) {
+  if(data.isA(String) || !data.isA(Element) || _mixed) { 
     _data += data;
-  } else if(this.getAttribute(data._name).isA(Array)) {
-    this.getAttribute(data._name) += data;
+    return;
+  }
+  var name = data._name;
+  if(data._type == "xsd:string")
+    data = data._data.implode("");
+    
+  if(this.getAttribute(name).isA(Array)) {
+    this.getAttribute(name) += data;
   } else {
-    this.setAttribute(data._name, data);
+    this.setAttribute(name, data);
   }
 };
 Element.type ::= fn() { return _type; };
 Element.name ::= fn() { return _name; };
+Element.data ::= fn() { return _data; };
+Element.getData ::= fn(key) {
+  //if(isSet(key))
+  //  return getAttribute(key);
+  foreach(_data as var elt) {
+    if(elt.isA(Element) && elt._name == key)
+      return elt;
+  }
+  return void;
+};
 Element.getIterator ::= fn() { return _data.getIterator(); };
+Element.toString ::= fn() {
+  var s = "";
+  foreach(_data as var v)
+    s += v.toString();
+  return s;
+};
 
 //----------------------
 
 static SchemaUtil = new Type;
 
+SchemaUtil.Element := Element;
 SchemaUtil.types @(init) := Map;
 SchemaUtil.root := void;
 SchemaUtil.activeType := void;

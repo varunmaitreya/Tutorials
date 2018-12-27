@@ -1,4 +1,4 @@
-remote_theme: elrayle/documentation-theme-jekyll@gh-pages
+remote_theme: tomjoht/documentation-theme-jekyll@gh-pages
 
 topnav_title: PADrend Tutorials
 site_title: PADrend Tutorials
@@ -20,8 +20,19 @@ defaults:
     values:
       layout: "page"
       comments: false
-      search: false
+      search: true
       sidebar: home_sidebar
+      topnav: topnav
+  -
+    scope:
+      path: ""
+      type: "API"
+    values:
+      layout: "api"
+      comments: false
+      search: true
+      sidebar: api_sidebar
+      topnav: topnav
       
 sidebars:
 - home_sidebar

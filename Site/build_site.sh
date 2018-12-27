@@ -41,7 +41,6 @@ echo "done"
 echo "Checking out source..."
 git clone --recursive https://github.com/PADrend/PADrendComplete.git src &> /dev/null
 mkdir API
-mkdir API/json
 mv src/modules/Geometry API
 mv src/modules/GUI API
 mv src/modules/Rendering API
@@ -49,7 +48,6 @@ mv src/modules/MinSG API
 mv src/modules/Util API
 mv src/modules/Sound API
 mkdir E_API
-mkdir E_API/json
 mv src/modules/EScript E_API
 mv src/modules/E_Geometry E_API
 mv src/modules/E_GUI E_API
@@ -59,7 +57,6 @@ mv src/modules/E_Util E_API
 mv src/modules/E_Sound E_API
 echo "done"
 
-# Geometry
 echo "Building API doc..."
 cd API
 doxygen ../../../Tools/Doxyfile
@@ -88,4 +85,4 @@ echo "done"
 
 # cleanup
 cd ..
-#rm -rf tmp
+rm -rf tmp
