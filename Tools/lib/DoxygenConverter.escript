@@ -115,12 +115,12 @@ T.toMarkdown ::= fn(element) {
       s += toMarkdown(value);
   } else if(element.isA(SchemaUtil.Element)) {
     // opening the element
-    switch (element.name()) {
-      case 'ref': return " " + mdLink(resolveRef(element), toMarkdown(element.data())) + " ";
-      case 'emphasis': s = ' *'; break;
+    switch (element.getName()) {
+      case 'ref': return ' ' + mdLink(resolveRef(element), toMarkdown(element.data())) + ' ';
+      case 'emphasis': s = '*'; break;
       case 'parametername':
-      case 'bold': s = ' **'; break;
-      case 'computeroutput': s = ' `'; break;
+      case 'bold': s = '**'; break;
+      case 'computeroutput': s = '`'; break;
       case 'parameterlist':
         if (element.kind == 'exception') {
           s = '\n#### Exceptions\n';
@@ -182,13 +182,13 @@ T.toMarkdown ::= fn(element) {
       s += toMarkdown(value);
 
     // closing the element
-    switch (element.name()) {
+    switch (element.getName()) {
       case 'para': s += '\n\n'; break;
-      case 'emphasis': s += '* '; break;
+      case 'emphasis': s += '*'; break;
       case 'parametername':
-      case 'bold': s += '** '; break;
+      case 'bold': s += '**'; break;
       case 'parameteritem': s += '\n'; break;
-      case "computeroutput": s += '` '; break;
+      case "computeroutput": s += '`'; break;
       case 'entry': s += ' | '; break;
       case 'verbatim':
       case 'programlisting': s += '\n```\n'; break;
@@ -367,7 +367,7 @@ T.writeDocumentation ::= fn(m) {
   
   // member definition
   s += "| ";
-  var type = toMarkdown(m.type).trim();
+  var type = toMarkdown(m.isSet($type) ? m.type : "").trim();
   switch(m.kind) {
     case "function": {      
       s += type + " **" + mdLink("#" + m.id, m.name) + "**";
@@ -403,7 +403,10 @@ T.writeDocumentation ::= fn(m) {
     s += "| Enumerator |    | Description |\n";
     s += "| ---------- | -- | ----------- |\n";
     foreach(m.enumvalue as var enum) {
-      s += toMarkdown(enum.getData('name')).trim() + " | " + toMarkdown(enum.getData('initializer')) + " | " + toMarkdown(enum.getData('briefdescription')).trim() + " |\n";
+      var descr = toMarkdown(enum.getData('detaileddescription')).trim();
+      if(descr.empty())
+        descr = toMarkdown(enum.getData('briefdescription')).trim();
+      s += toMarkdown(enum.getData('name')).trim() + " | " + toMarkdown(enum.getData('initializer')) + " | " + descr + " |\n";
     }
     s += "\n\n";
   }
@@ -659,7 +662,7 @@ T.parseFile ::= fn(file) {
     return false;
   }
   
-  if(!rootObj.type() == "doxygen")
+  if(!rootObj.getType() == "doxygen")
     return false;
   
   var compound = rootObj.compounddef;

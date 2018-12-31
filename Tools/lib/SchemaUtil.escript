@@ -58,8 +58,8 @@ Element."+=" ::= fn(data) {
     this.setAttribute(name, data);
   }
 };
-Element.type ::= fn() { return _type; };
-Element.name ::= fn() { return _name; };
+Element.getType ::= fn() { return _type; };
+Element.getName ::= fn() { return _name; };
 Element.data ::= fn() { return _data; };
 Element.getData ::= fn(key) {
   //if(isSet(key))

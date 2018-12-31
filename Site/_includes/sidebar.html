@@ -8,7 +8,7 @@
 
 <a href="#" id="scroll" style="display: none;"><span></span></a>
 <ul id="mysidebar" class="nav">
-  {% for sidebar in site.data.sidebars reversed %}
+  {% for sidebar in site.data.sidebars %}
     <li class="sidebarTitle">{{sidebar.last.entries[0].product}} {{sidebar.last.entries[0].version}}</li>
     {% for entry in sidebar.last.entries %}
       {% for folder in entry.folders %}
