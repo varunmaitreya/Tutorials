@@ -12,51 +12,51 @@
 */
 
 if(!loadLibrary("libE_XML"))
-  return false;
+	return false;
 load(__DIR__ + "/lib/Utils.escript");
 
 args.popFront(); // escript
 args.popFront(); // Doxygen2md.escript
 
 if(args.count() == 0) {
-  outln("Usage: escript Doxygen2md.escript [options] <path/to/doxygen/xml>");
-  return;
+	outln("Usage: escript Doxygen2md.escript [options] <path/to/doxygen/xml>");
+	return;
 }
 
 var outDir = "md";
 var inDir = void;
 while(!args.empty()) {
-  var arg = args.popFront();
-  if(arg.beginsWith("-")) {
-    if(arg == "-o") {
-      outDir = args.popFront();
-    } else {
-      outln("Unknown option: ", arg);
-      return;
-    }
-  } else {
-    inDir = arg;
-  }
+	var arg = args.popFront();
+	if(arg.beginsWith("-")) {
+		if(arg == "-o") {
+			outDir = args.popFront();
+		} else {
+			outln("Unknown option: ", arg);
+			return;
+		}
+	} else {
+		inDir = arg;
+	}
 }
 
 if(!IO.isDir(inDir)) {
-  outln("invalid input dir: ", inDir);
-  return;
+	outln("invalid input dir: ", inDir);
+	return;
 }
 
 static DoxygenParser = load(__DIR__ + "/lib/DoxygenConverter.escript");
 if(!DoxygenParser) {
-  outln("Failed to load DoxygenConverter.");
-  return;
+	outln("Failed to load DoxygenConverter.");
+	return;
 }
 
 var parser = new DoxygenParser;
 
 var compounds = [
-  "namespace",
-  "class",
-  "struct",
-  "union",
+	"namespace",
+	"class",
+	"struct",
+	"union",
 ];
 
 // parse XML
@@ -64,17 +64,17 @@ out("Parsing XML...");
 parser.initSchema(inDir + "/compound.xsd");
 var files = IO.dir(inDir, IO.DIR_FILES | IO.DIR_RECURSIVE);
 foreach(files as var file) {
-  if(!file.endsWith(".xml"))
-    continue;
-  var fileName = file.split("/").back().split("\\").back().replace(".xml","");
-  var valid = false;
-  foreach(compounds as var c) {
-    if(fileName.beginsWith(c))
-      valid = true;
-  }
-  if(!valid)
-    continue;
-  parser.parseFile(file);
+	if(!file.endsWith(".xml"))
+		continue;
+	var fileName = file.split("/").back().split("\\").back().replace(".xml","");
+	var valid = false;
+	foreach(compounds as var c) {
+		if(fileName.beginsWith(c))
+			valid = true;
+	}
+	if(!valid)
+		continue;
+	parser.parseFile(file);
 }
 outln("done");
 

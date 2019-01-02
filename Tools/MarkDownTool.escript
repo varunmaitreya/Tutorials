@@ -14,7 +14,7 @@
 
 static collectMarkdownFiles = fn(rootFolder) {
 	var stack = [rootFolder];
-  var result = [];
+	var result = [];
 	
 	while(!stack.empty()){
 		var currentFolder = stack.popBack();
@@ -23,33 +23,33 @@ static collectMarkdownFiles = fn(rootFolder) {
 			var folderContent = IO.dir(currentFolder, IO.DIR_BOTH);
 			foreach(folderContent as var file){
 				if(IO.isFile(file) && file.endsWith(".md")) {
-          result += file;
+					result += file;
 				}
 				else if(IO.isDir(file))
 					stack.pushBack(file);
 			}
 		}
 	}
-  
-  return result;
+	
+	return result;
 };
 
 static TOCBuilder = load(__DIR__ + "/lib/TOCBuilder.escript");
 if(!TOCBuilder) {
-  outln("ERROR: Could not find 'BuildTOC.escript' at " + __DIR__ + "/lib");
-  return;
+	outln("ERROR: Could not find 'BuildTOC.escript' at " + __DIR__ + "/lib");
+	return;
 }
 
 static HeaderUpdater = load(__DIR__ + "/lib/HeaderUpdater.escript");
 if(!HeaderUpdater) {
-  outln("ERROR: Could not find 'HeaderUpdater.escript' at " + __DIR__ + "/lib");
-  return;
+	outln("ERROR: Could not find 'HeaderUpdater.escript' at " + __DIR__ + "/lib");
+	return;
 }
 
 static CodeSectionParser = load(__DIR__ + "/lib/CodeSectionParser.escript");
 if(!CodeSectionParser) {
-  outln("ERROR: Could not find 'CodeSectionParser.escript' at " + __DIR__ + "/lib");
-  return;
+	outln("ERROR: Could not find 'CodeSectionParser.escript' at " + __DIR__ + "/lib");
+	return;
 }
 
 
@@ -69,7 +69,7 @@ if(args[2] == "--help" || args[2] == "-h") {
 		"\t-h\tshow this information.\n" +
 		"\t-s=<file>\tinput timestamp file (.json)\n" +
 	);
-  return;
+	return;
 }
 
 var buildCodeSections = false;
@@ -101,7 +101,7 @@ while(!args.empty()) {
 
 if(!rootFolder || rootFolder.empty()) {
 	outln("ERROR: invalid root folder");
-  return;
+	return;
 }
 
 var files = collectMarkdownFiles(rootFolder);  
@@ -123,8 +123,8 @@ foreach(files as var file) {
 	if(updateHeader)
 		headerUpdater.update(file);
 	
-  if(tocFile)
-    tocBuilder.addToTOC(file);
+	if(tocFile)
+		tocBuilder.addToTOC(file);
 		
 	if(buildCodeSections)
 		codeSectionParser.parseDocument(file);
@@ -132,8 +132,8 @@ foreach(files as var file) {
 
 if(tocFile) {
 	var sidebar = tocFile.split("/").back().split("\\").back().replace(".yml","");
-  var toc = tocBuilder.buildTOC(sidebar);
-  var yaml = tocBuilder.toYAML(toc, product);
+	var toc = tocBuilder.buildTOC(sidebar);
+	var yaml = tocBuilder.toYAML(toc, product);
 	IO.saveTextFile(tocFile, yaml);
 }
 	

@@ -1,7 +1,6 @@
 ---
 title: PADrend Tutorials
 author: Sascha Brandt
-last_updated: November 7, 2018
 ---
 
 This site is a collection of tutorials, guides, and documentations for the *Platform for Algorithm Development and Rendering* ([PADrend](https://www.padrend.de/)).
@@ -19,6 +18,9 @@ Contains tutorials & guides for how to navigate in PADrend and how to work with 
 
 In-depth guides on how PADrend works internally and tutorials for how to extend it using its plugin system.
 Also contains guides for the scripting language EScript, that most of PADrend is built upon.
+
+You should already have a basic understanding of computer graphics and related concepts to understand these tutorials.
+You can find a great introduction [here](https://cglearn.eu/pub/computer-graphics).
 
 ### API Reference
 

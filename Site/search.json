@@ -19,7 +19,6 @@ search: exclude
 {% endfor %}
 
 {% for post in site.posts %}
-
 {
 "title": "{{ post.title | escape }}",
 "tags": "{{ post.tags }}",
@@ -31,7 +30,6 @@ search: exclude
 {% endfor %}
 
 {% for post in site.API %}
-
 {
 "title": "{{ post.title | escape }}",
 "tags": "{{ post.tags }}",
