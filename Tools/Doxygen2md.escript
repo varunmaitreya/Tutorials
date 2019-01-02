@@ -13,9 +13,8 @@
 
 if(!loadLibrary("libE_XML"))
   return false;
-GLOBALS.XML := SGLOBALS.XML;
 load(__DIR__ + "/lib/Utils.escript");
-  
+
 args.popFront(); // escript
 args.popFront(); // Doxygen2md.escript
 

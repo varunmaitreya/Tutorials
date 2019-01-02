@@ -3,7 +3,7 @@
 # cleanup
 rm -rf Tutorials
 rm -rf API
-#rm index.md
+rm index.md
 
 # copy folders & files
 cp -r ../Tutorials .
