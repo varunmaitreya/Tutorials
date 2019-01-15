@@ -88,6 +88,7 @@ T.classes @(init) := Map;
 T.structs @(init) := Map;
 T.unions @(init) := Map;
 T.members @(init) := Map;
+T.groups @(init) := Map;
 T.schema @(init) := SchemaUtil;
 
 //----------------------
@@ -441,19 +442,25 @@ T.collectKeywords ::= fn(c) {
 T.writeCompound ::= fn(c) {
 	if(c.compoundname.beginsWith("std"))
 		return false;
+		
+	if(c.kind == "group" && c.innerclass.empty())
+		return false;
 	
 	var brief = toMarkdown(c.briefdescription).trim();
 	var keywords = collectKeywords(c);
 	
 	var top_ns = c;
 	var sec_ns = false;
+	var group = c.group;
 	var breadcrumbs = [];
 	while(top_ns.parentNamespace) {
 		sec_ns = top_ns;
 		top_ns = top_ns.parentNamespace;
 		breadcrumbs.pushFront(top_ns.shortname + ":" + top_ns.id);
+		if(!group)
+			group = top_ns.group;
 	}
-	var show_in_toc = c.kind == 'namespace';
+	var show_in_toc = c.kind == 'namespace' || c.kind == 'group';
 	var header = {
 		"title" : quoted(c.shortname),
 		"permalink" : c.id,
@@ -469,11 +476,17 @@ T.writeCompound ::= fn(c) {
 		"keywords" : keywords.implode(", "),
 	};
 	
-	if(sec_ns && (sec_ns != c || !sec_ns.innernamespace.empty()))
+	if(group)
+		header["subcategory"] = quoted(group.title);
+	else if(sec_ns && (sec_ns != c || !sec_ns.innernamespace.empty()))
 		header["subcategory"] = quoted(sec_ns.shortname);
 		
-	if(c == top_ns)
+	if(c.kind == "group")
 		header["order"] = 0;
+	else if(c == top_ns)
+		header["order"] = 1;
+	else if(c == sec_ns)
+		header["order"] = 2;
 	
 	if(c.location && c.kind != 'namespace')
 		header["api_location"] = quoted(c.location.file);
@@ -567,7 +580,7 @@ T.writeCompound ::= fn(c) {
 				}
 			}
 		}
-}
+	}
 	
 	return content;
 };
@@ -575,17 +588,33 @@ T.writeCompound ::= fn(c) {
 //----------------------
 
 T.updateHierarchy ::= fn() {
-	foreach(compounds as var id, var ns) {
-		foreach(ns.innernamespace as var e) {
+	foreach(compounds as var id, var c) {
+		foreach(c.innernamespace as var e) {
 			e.ref := compounds[e.refid];
 			if(e.ref)
-				e.ref.parentNamespace = ns;
+				e.ref.parentNamespace = c;
 		}
-		foreach(ns.innerclass as var e) {
+		foreach(c.innerclass as var e) {
 			e.ref := compounds[e.refid];
 			if(e.ref)
-				e.ref.parentNamespace = ns;
+				e.ref.parentNamespace = c;
 		}
+		c.group := false;
+	}
+	
+	foreach(groups as var id, var g) {
+		g.group = g;
+		foreach(g.innernamespace as var nsref) {
+			nsref.ref.group = g;
+			if(!g.parentNamespace) {
+				var top_ns = nsref.ref;
+				while(top_ns.parentNamespace)
+					top_ns = top_ns.parentNamespace;
+				g.parentNamespace = top_ns;
+			}
+		}
+		foreach(g.innerclass as var cref)
+			cref.ref.group = g;
 	}
 };
 
@@ -620,7 +649,7 @@ T.initSchema ::= fn(file) {
 
 //----------------------
 
-T.parseFile ::= fn(file) {
+T.parseFile ::= fn(file, outJSON=false) {
 	var reader = new XML.MicroXMLReader;
 	static rootObj;
 	var objStack = [];
@@ -673,6 +702,8 @@ T.parseFile ::= fn(file) {
 			structs[compound.id] = compound; break;
 		case "union":
 			unions[compound.id] = compound; break;
+		case "group":
+			groups[compound.id] = compound; break;
 		default:
 			return false;
 	}
@@ -680,8 +711,13 @@ T.parseFile ::= fn(file) {
 
 	assureAttr(compound, $parentNamespace, false);
 	compound.shortname := compound.compoundname.split("::").back();
+	if(compound.title)
+		compound.shortname := compound.title.split("::").back();
 	
-	//IO.saveTextFile(file.replaceAll("xml","json"), objToJSON(compound));
+	if(outJSON) {
+		var filename = outJSON + "/" + compound.id + ".json";
+		IO.saveTextFile(filename, objToJSON(compound));
+	}
 	return compound;
 };
 

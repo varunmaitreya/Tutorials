@@ -25,11 +25,14 @@ if(args.count() == 0) {
 
 var outDir = "md";
 var inDir = void;
+var outJSON = false;
 while(!args.empty()) {
-	var arg = args.popFront();
+	var arg = args.popFront().trim();
 	if(arg.beginsWith("-")) {
 		if(arg == "-o") {
 			outDir = args.popFront();
+		} else if(arg == "-json") {
+			outJSON = args.popFront();
 		} else {
 			outln("Unknown option: ", arg);
 			return;
@@ -41,6 +44,11 @@ while(!args.empty()) {
 
 if(!IO.isDir(inDir)) {
 	outln("invalid input dir: ", inDir);
+	return;
+}
+
+if(outJSON && !IO.isDir(outJSON)) {
+	outln("invalid json dir: ", outJSON);
 	return;
 }
 
@@ -57,6 +65,7 @@ var compounds = [
 	"class",
 	"struct",
 	"union",
+	"group",
 ];
 
 // parse XML
@@ -74,7 +83,7 @@ foreach(files as var file) {
 	}
 	if(!valid)
 		continue;
-	parser.parseFile(file);
+	parser.parseFile(file, outJSON);
 }
 outln("done");
 

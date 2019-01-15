@@ -9,6 +9,8 @@ exclude:
 - .gitignore
 - Tools/
 - tmp
+- build_site.sh
+- build_test.sh
 
 feedback_disable: true
 

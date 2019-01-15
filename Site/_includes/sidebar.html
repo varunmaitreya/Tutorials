@@ -2,7 +2,6 @@
 {% assign breadcrumbs = breadcrumbs | split: ':' %}
 {% assign first_ns = breadcrumbs[1] | prepend: '/' %}
 {% assign second_ns = breadcrumbs[3] | prepend: '/' %}
-{% assign third_ns = breadcrumbs[5] | prepend: '/' %}
 
 <a href="#" id="scroll" style="display: none;"><span></span></a>
 <ul id="mysidebar" class="nav">
@@ -19,8 +18,6 @@
                   {% if folderitem.output contains "web" %}
                     {% if folderitem.external_url %}
                       <li><a href="{{folderitem.external_url}}" target="_blank">{{folderitem.title}}</a></li>
-                    {% elsif page.url == folderitem.url or second_ns == folderitem.url or first_ns == folderitem.url %}
-                      <li class="active"><a href="{{folderitem.url | relative_url}}">{{folderitem.title}}</a></li>
                     {% elsif folderitem.subfolderitems %}
                       <li class="subfolders">
                         <a href="#">{{folderitem.title}}</a>
@@ -29,7 +26,7 @@
                           {% if subfolderitem.output contains "web" %}
                             {% if subfolderitem.external_url %}
                             <li><a href="{{subfolderitem.external_url}}" target="_blank">{{subfolderitem.title}}</a></li>
-                            {% elsif page.url == subfolderitem.url or third_ns == subfolderitem.url or second_ns == folderitem.url %}
+                            {% elsif page.url == subfolderitem.url or second_ns == subfolderitem.url or first_ns == folderitem.url %}
                             <li class="active"><a href="{{subfolderitem.url | relative_url}}">{{subfolderitem.title}}</a></li>
                             {% else %}
                             <li><a href="{{subfolderitem.url | relative_url}}">{{subfolderitem.title}}</a></li>
@@ -38,6 +35,8 @@
                         {% endfor %}
                         </ul>
                       </li>
+                    {% elsif page.url == folderitem.url or first_ns == folderitem.url %}
+                      <li class="active"><a href="{{folderitem.url | relative_url}}">{{folderitem.title}}</a></li>
                     {% else %}
                       <li><a href="{{folderitem.url | relative_url}}">{{folderitem.title}}</a></li>
                     {% endif %}
