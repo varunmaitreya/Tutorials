@@ -448,6 +448,7 @@ T.writeCompound ::= fn(c) {
 	
 	var brief = toMarkdown(c.briefdescription).trim();
 	var keywords = collectKeywords(c);
+	var show_in_toc = c.kind == 'namespace' || c.kind == 'group' || c.group;	
 	
 	var top_ns = c;
 	var sec_ns = false;
@@ -460,7 +461,6 @@ T.writeCompound ::= fn(c) {
 		if(!group)
 			group = top_ns.group;
 	}
-	var show_in_toc = c.kind == 'namespace' || c.kind == 'group';
 	var header = {
 		"title" : quoted(c.shortname),
 		"permalink" : c.id,
@@ -485,7 +485,7 @@ T.writeCompound ::= fn(c) {
 		header["order"] = 0;
 	else if(c == top_ns)
 		header["order"] = 1;
-	else if(c == sec_ns)
+	else if(c == sec_ns && !c.innernamespace.empty())
 		header["order"] = 2;
 	
 	if(c.location && c.kind != 'namespace')
@@ -613,8 +613,15 @@ T.updateHierarchy ::= fn() {
 				g.parentNamespace = top_ns;
 			}
 		}
-		foreach(g.innerclass as var cref)
+		foreach(g.innerclass as var cref) {
 			cref.ref.group = g;
+			if(!g.parentNamespace) {
+				var top_ns = cref.ref;
+				while(top_ns.parentNamespace)
+					top_ns = top_ns.parentNamespace;
+				g.parentNamespace = top_ns;
+			}
+		}
 	}
 };
 
