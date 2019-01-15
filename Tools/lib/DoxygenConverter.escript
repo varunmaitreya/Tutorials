@@ -442,9 +442,6 @@ T.collectKeywords ::= fn(c) {
 T.writeCompound ::= fn(c) {
 	if(c.compoundname.beginsWith("std"))
 		return false;
-		
-	if(c.kind == "group" && c.innerclass.empty())
-		return false;
 	
 	var brief = toMarkdown(c.briefdescription).trim();
 	var keywords = collectKeywords(c);
