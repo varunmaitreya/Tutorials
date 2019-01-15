@@ -445,7 +445,7 @@ T.writeCompound ::= fn(c) {
 	
 	var brief = toMarkdown(c.briefdescription).trim();
 	var keywords = collectKeywords(c);
-	var show_in_toc = c.kind == 'namespace' || c.kind == 'group' || c.group;	
+	var show_in_toc = c.kind == 'namespace' || c.kind == 'group' || c.group;
 	
 	var top_ns = c;
 	var sec_ns = false;
@@ -458,6 +458,7 @@ T.writeCompound ::= fn(c) {
 		if(!group)
 			group = top_ns.group;
 	}
+		
 	var header = {
 		"title" : quoted(c.shortname),
 		"permalink" : c.id,
