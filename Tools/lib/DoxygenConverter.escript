@@ -440,7 +440,7 @@ T.collectKeywords ::= fn(c) {
 //----------------------
 
 T.writeCompound ::= fn(c) {
-	if(c.compoundname.beginsWith("std"))
+	if(c.compoundname.beginsWith("std") || (c.kind == 'group' && !c.parentNamespace))
 		return false;
 	
 	var brief = toMarkdown(c.briefdescription).trim();
@@ -602,15 +602,8 @@ T.updateHierarchy ::= fn() {
 	
 	foreach(groups as var id, var g) {
 		g.group = g;
-		foreach(g.innernamespace as var nsref) {
+		foreach(g.innernamespace as var nsref)
 			nsref.ref.group = g;
-			if(!g.parentNamespace) {
-				var top_ns = nsref.ref;
-				while(top_ns.parentNamespace)
-					top_ns = top_ns.parentNamespace;
-				g.parentNamespace = top_ns;
-			}
-		}
 		foreach(g.innerclass as var cref) {
 			cref.ref.group = g;
 			if(!g.parentNamespace) {
@@ -618,6 +611,38 @@ T.updateHierarchy ::= fn() {
 				while(top_ns.parentNamespace)
 					top_ns = top_ns.parentNamespace;
 				g.parentNamespace = top_ns;
+			}
+		}
+		// try to guess group's namespace
+		if(!g.parentNamespace && !g.innernamespace.empty()) {
+			var top_ns = g.innernamespace.front().ref;
+			while(top_ns.parentNamespace)
+				top_ns = top_ns.parentNamespace;
+			g.parentNamespace = top_ns;
+		}
+		if(!g.parentNamespace && !g.innerclass.empty()) {
+			var top_ns = g.innerclass.front().ref;
+			while(top_ns.parentNamespace)
+				top_ns = top_ns.parentNamespace;
+			g.parentNamespace = top_ns;
+		}
+		if(!g.parentNamespace && !g.sectiondef.empty()) {
+			// try to guess namespace from member functions
+			var m = false;
+			foreach(g.sectiondef as var s) {
+				if(!s.memberdef.empty()) {
+					m = s.memberdef.front();
+					break;
+				}
+			}
+			if(m) {
+				var ns = m.location.file.split("/").front();		
+				foreach(namespaces as var id, var n) {
+					if(n.compoundname == ns) {
+						g.parentNamespace = n;
+						break;
+					}
+				}
 			}
 		}
 	}

@@ -80,7 +80,9 @@ T.checkFields @(private) ::= fn(entry) {
 			return false;
 		}
 	}
-	// update optional fields  
+	// update optional fields	
+	if(!entry.isSet($entries))
+		entry.entries := [];
 	if(entry.isSet($order))
 		entry.order = entry.order.toNumber();
 	else
@@ -134,7 +136,8 @@ T.buildTOC ::= fn(sidebar="home_sidebar") {
 			catEntry = new ExtObject({
 				$title : category,
 				$order : catOrder,
-				$entries : []
+				$entries : [],
+				$permalink : void,
 			});
 			categories[category] = catEntry;
 			toc += catEntry;
@@ -147,7 +150,8 @@ T.buildTOC ::= fn(sidebar="home_sidebar") {
 				subCatEntry = new ExtObject({
 					$title : subcategory,
 					$order : subCatOrder,
-					$entries : []
+					$entries : [],
+					$permalink : void,
 				});
 				subcategories[category+subcategory] = subCatEntry;
 				catEntry.entries += subCatEntry;
@@ -158,12 +162,21 @@ T.buildTOC ::= fn(sidebar="home_sidebar") {
 			catEntry.entries += entry;
 		}
 	}
+	
 	toc.sort(fn(a,b) { return a.order < b.order || (a.order == b.order && a.title < b.title); });
 	foreach(toc as var cat) {
 		cat.entries.sort(fn(a,b) { return a.order < b.order || (a.order == b.order && a.title < b.title); });
+		if(cat.entries.front().title == cat.title)
+			cat.entries.front().title = '"<b>Overview</b>"';
 		foreach(cat.entries as var entry) {
-			if(entry.isSet($entries)) {
+			if(entry.entries.count() > 0) {
 				entry.entries.sort(fn(a,b) { return a.order < b.order || (a.order == b.order && a.title < b.title); });
+				if(entry.entries.count() == 1) {
+					entry.permalink = entry.entries.front().permalink;
+					entry.entries.clear();
+				} else if(entry.entries.front().title == entry.title) {
+					entry.entries.front().title = '"<b>Overview</b>"';
+				}
 			}
 		}
 	}
@@ -180,7 +193,7 @@ T.toYAML ::= fn(toc, product="PADrend Tutorials") {
 		foreach(cat.entries as var subcat) {
 			yaml += "    - title: " + subcat.title + "\n";
 			yaml += "      output: web\n";
-			if(subcat.isSet($entries)) {
+			if(subcat.entries.count() > 0) {
 				yaml += "      subfolderitems:\n";
 				foreach(subcat.entries as var entry) {
 					yaml += "      - title: " + entry.title + "\n";
