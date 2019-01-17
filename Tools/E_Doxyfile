@@ -1,0 +1,47 @@
+# Doxyfile 1.8.14
+
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = "PADrend"
+PROJECT_BRIEF          =
+OUTPUT_DIRECTORY       =
+CREATE_SUBDIRS         = NO
+OUTPUT_LANGUAGE        = English
+INLINE_INHERITED_MEMB  = NO
+FULL_PATH_NAMES        = YES
+GENERATE_TODOLIST      = NO
+GENERATE_TESTLIST      = NO
+GENERATE_BUGLIST       = NO
+GENERATE_DEPRECATEDLIST= NO
+QUIET                  = YES
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = NO
+WARN_LOGFILE           = doxygen.log
+INPUT                  =
+FILE_PATTERNS          = ELibUtil.h ELibUtil.cpp
+FILTER_PATTERNS        = *.cpp="../escript ../../../Tools/PreprocessEClass.escript"
+EXTENSION_MAPPING      = 
+RECURSIVE              = YES
+EXCLUDE_PATTERNS       = */tests/*
+EXCLUDE_SYMBOLS        = 
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+GENERATE_XML           = NO
+XML_PROGRAMLISTING     = NO
+CLASS_DIAGRAMS         = YES
+EXTRACT_ALL            = YES
+BUILTIN_STL_SUPPORT    = YES
+SHOW_FILES             = NO
+ALPHABETICAL_INDEX     = NO
+TYPEDEF_HIDES_STRUCT   = YES
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = YES
+EXPAND_AS_DEFINED      = ES_PROVIDES_TYPE_NAME
+PREDEFINED             = MINSG_EXT_BLUE_SURFELS MINSG_EXT_ADAPTIVEGLOBALVISIBILITYSAMPLING MINSG_EXT_COLORCUBES MINSG_EXT_EVALUATORS MINSG_EXT_IMAGECOMPARE MINSG_EXT_MIXED_EXTERN_VISIBILITY MINSG_EXT_MULTIALGORENDERING MINSG_EXT_OUTOFCORE MINSG_EXT_PARTICLE MINSG_EXT_PATHTRACING MINSG_EXT_PHYSICS MINSG_EXT_PIPELINESTATISTICS MINSG_EXT_RAYCASTING MINSG_EXT_RTREE MINSG_EXT_SAMPLING_ANALYSIS MINSG_EXT_SKELETAL_ANIMATION MINSG_EXT_SVS MINSG_EXT_TREE_SYNC MINSG_EXT_TRIANGLETREES MINSG_EXT_TRIANGULATION MINSG_EXT_TWIN_PARTITIONS MINSG_EXT_VISIBILITYMERGE MINSG_EXT_VISIBILITY_SUBDIVISION MINSG_EXT_VOXEL_WORLD MINSG_EXT_WAYPOINTS UTIL_HAVE_LIB_ARCHIVE UTIL_HAVE_LIB_ZIP UTIL_HAVE_LIB_SERIAL UTIL_HAVE_LIB_CURL UTIL_HAVE_LIB_SQLITE UTIL_HAVE_LIB_SDL2 \
+"declareConstant(t,n,v)=/*! [CONST] {\"typeObj\" : \"t\", \"name\" : n, \"value\" : \"v\"}*/" \
+"ES_CTOR(t,mn,mx,b)=/*! [CTOR] {\"typeObj\" : \"t\", \"min\" : mn, \"max\" : mx}*/" \
+"ES_CONSTRUCTOR(t,mn,mx,b)=/*! [CTOR] {\"typeObj\" : \"t\", \"min\" : mn, \"max\" : mx}*/" \
+"ES_FUNCTION(t,fn,mn,mx,b)=/*! [FUN] {\"typeObj\" : \"t\", \"name\" : fn, \"min\" : mn, \"max\" : mx}*/" \
+"ES_FUN(t,fn,mn,mx,b)=/*! [FUN] {\"typeObj\" : \"t\", \"name\" : fn, \"min\" : mn, \"max\" : mx}*/" \
+"ES_MFUNCTION(t,cl,fn,mn,mx,b)=/*! [FUN] {\"typeObj\" : \"t\", \"type\" : \"cl\", \"name\" : fn, \"min\" : mn, \"max\" : mx}*/" \
+"ES_MFUN(t,cl,fn,mn,mx,b)=/*! [FUN] {\"typeObj\" : \"t\", \"type\" : \"cl\", \"name\" : fn, \"min\" : mn, \"max\" : mx}*/"
