@@ -2,7 +2,7 @@
 * This file is part of the open source part of the
 * Platform for Algorithm Development and Rendering (PADrend).
 * Web page: http://www.padrend.de/
-* Copyright (C) 2018 Sascha Brandt <sascha@brandt.graphics>
+* Copyright (C) 2018-2019 Sascha Brandt <sascha@brandt.graphics>
 * 
 * PADrend consists of an open source part and a proprietary part.
 * The open source part of PADrend is subject to the terms of the Mozilla
@@ -12,7 +12,8 @@
 */
 
 if(!loadLibrary("libE_XML"))
-	return false;
+	return false;	
+//GLOBALS.Std := load("EScript/Std/complete.escript");
 load(__DIR__ + "/lib/Utils.escript");
 
 args.popFront(); // escript
@@ -25,8 +26,8 @@ if(args.count() == 0) {
 
 var outDir = "md";
 var inDir = void;
+var refFile = false;
 var outJSON = false;
-var outRef = false;
 while(!args.empty()) {
 	var arg = args.popFront().trim();
 	if(arg.beginsWith("-")) {
@@ -34,8 +35,8 @@ while(!args.empty()) {
 			outDir = args.popFront();
 		} else if(arg == "-json") {
 			outJSON = args.popFront();
-		} else if(arg == "-a") {
-			outRef = args.popFront();
+		} else if(arg == "-ref") {
+			refFile = args.popFront();
 		} else {
 			outln("Unknown option: ", arg);
 			return;
@@ -55,21 +56,32 @@ if(outJSON && !IO.isDir(outJSON)) {
 	return;
 }
 
-static DoxygenParser = load(__DIR__ + "/lib/DoxygenConverter.escript");
-if(!DoxygenParser) {
-	outln("Failed to load DoxygenConverter.");
+var refs = void;
+if(refFile) {
+	try {
+		refs = parseJSON(IO.loadTextFile(refFile));
+	} catch(e) {
+		Runtime.warn("Could not read file '" + refFile + "': " + e);
+		return false;
+	}
+}
+
+static EClassParser = load(__DIR__ + "/lib/EClassParser.escript");
+if(!EClassParser) {
+	outln("Failed to load EClassParser.");
 	return;
 }
 
-var parser = new DoxygenParser;
+var parser = new EClassParser;
 
 var compounds = [
 	"namespace",
 	"class",
 	"struct",
-	"union",
-	"group",
 ];
+
+if(refs)
+	parser.setRefs(refs);
 
 // parse XML
 out("Parsing XML...");
@@ -87,9 +99,6 @@ foreach(files as var file) {
 	if(!valid)
 		continue;
 	parser.parseFile(file, outJSON);
-}
-if(outRef) {
-	parser.writeRefs(outRef);
 }
 outln("done");
 

@@ -512,7 +512,7 @@ T.writeCompound ::= fn(c) {
 	}
 
 	if(!c.basecompoundref.empty()) {
-		content += "#### Inherited\n\n";
+		content += "#### Inherits\n\n";
 		foreach(c.basecompoundref as var ref) {
 			var base = compounds[ref.refid];
 			if(base)
@@ -522,7 +522,7 @@ T.writeCompound ::= fn(c) {
 	}
 	
 	if(!c.derivedcompoundref.empty()) {
-		content += "#### Derived\n\n";
+		content += "#### Inherited\n\n";
 		foreach(c.derivedcompoundref as var ref) {
 			var derived = compounds[ref.refid];
 			if(derived)
@@ -737,7 +737,12 @@ T.parseFile ::= fn(file, outJSON=false) {
 		default:
 			return false;
 	}
-	compounds[compound.id] = compound;
+	compounds[compound.id] = compound;	
+	foreach(compound.sectiondef as var s) {
+		foreach(s.memberdef as var m) {
+			m.compound := compound;
+		}
+	}
 
 	assureAttr(compound, $parentNamespace, false);
 	compound.shortname := compound.compoundname.split("::").back();
@@ -749,6 +754,17 @@ T.parseFile ::= fn(file, outJSON=false) {
 		IO.saveTextFile(filename, objToJSON(compound));
 	}
 	return compound;
+};
+
+//----------------------
+
+T.writeRefs ::= fn(fileName) {
+	var refs = new Map;
+	foreach(compounds as var id, var c)
+		refs[c.compoundname.replaceAll("::",".")] = c.id;
+	foreach(members as var id, var m)
+		refs[m.compound.compoundname.replaceAll("::",".") + "." + m.name] = m.compound.id + "#" + m.id;
+	IO.saveTextFile(fileName, toJSON(refs));
 };
 
 //----------------------

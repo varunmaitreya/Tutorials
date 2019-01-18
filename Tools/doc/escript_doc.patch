@@ -1,0 +1,50 @@
+diff --git a/EScript/Objects/Object.cpp b/EScript/Objects/Object.cpp
+index c236f18..73cee92 100644
+--- a/EScript/Objects/Object.cpp
++++ b/EScript/Objects/Object.cpp
+@@ -124,7 +124,7 @@ void Object::init(EScript::Namespace & globals) {
+ 	})
+ 
+ 	//! Bool Object._checkConstraint( obj )
+-	ES_FUNCTION(typeObject,Consts::IDENTIFIER_fn_checkConstraint,1,1,{
++	ES_FUNCTION(typeObject,"_checkConstraint",1,1,{
+ 		const auto* thisType = thisEObj.castTo<const Type>();
+ 		if( thisType ){
+ 			return parameter[0]->isA(thisType);
+diff --git a/EScript/Objects/Object.h b/EScript/Objects/Object.h
+index e4972cc..f2d538e 100644
+--- a/EScript/Objects/Object.h
++++ b/EScript/Objects/Object.h
+@@ -127,6 +127,7 @@ class Object:public EReferenceCounter<Object,ObjectReleaseHandler>  {
+ 			\code
+ 				const Attribute & attr = obj->getLocalAttribute("attrName");
+ 				if(attr.isNull()) ...
++			\endcode
+ 		*/
+ 		const Attribute & getLocalAttribute(const StringId & id)const;
+ 
+@@ -135,6 +136,7 @@ class Object:public EReferenceCounter<Object,ObjectReleaseHandler>  {
+ 			\code
+ 				const Attribute & attr = obj->getAttribute("doesNotExist");
+ 				if(attr.isNull()) ...
++			\endcode
+ 		*/
+ 		const Attribute & getAttribute(const StringId & id)const;
+ 		const Attribute & getAttribute(const char * c_str)const					{	return getAttribute(StringId(c_str));	}
+diff --git a/EScript/Objects/Values/Number.cpp b/EScript/Objects/Values/Number.cpp
+index 954e2b9..7b9d5b2 100644
+--- a/EScript/Objects/Values/Number.cpp
++++ b/EScript/Objects/Values/Number.cpp
+@@ -228,10 +228,11 @@ void Number::init(EScript::Namespace & globals) {
+ 
+ 	/*! [ESMF] Number Number.round( [reference = 1.0] )
+ 		@param reference Reference value to which should be rounded:  x.round(reference) ^== reference * round(x/reference)
+-		@example (123.456).round(0.1) == 123.5
++		Example: @code (123.456).round(0.1) == 123.5
+ 				(123.456).round(5) == 125
+ 				(123.456).round(10) == 120 
+ 				(-0.456).round() == 0
++		@endcode
+ 				*/
+ 	ES_FUNCTION(typeObject,"round",0,1,{
+ 		if(parameter.count()==0){
