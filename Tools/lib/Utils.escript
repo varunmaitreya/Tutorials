@@ -45,3 +45,20 @@ GLOBALS.objToJSON := fn(obj, var d=0) {
   s += " " * d + "}";
   return s;
 };
+
+GLOBALS.mapToObj := fn(obj) {
+  if(obj.isA(Array)) {
+    var tmp = [];
+    foreach(obj as var v) {
+      tmp += thisFn(v);
+    }
+    return tmp;
+  } else if(obj.isA(Map)) {
+    var tmp = new Map;
+    foreach(obj as var n, var v) {
+      tmp[n] = thisFn(v);
+    }
+    return new ExtObject(tmp);
+  }
+  return obj;
+};

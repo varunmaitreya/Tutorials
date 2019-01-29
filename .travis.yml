@@ -1,12 +1,15 @@
 os: linux
 dist: xenial
-compiler: gcc
+compiler: clang
 language: cpp
 addons:
   apt:
+    sources:
+      - llvm-toolchain-xenial-7
     packages:
       - doxygen
       - graphviz
+      - libclang-7-dev
 before_script: cd Site
 script: bash build_site.sh
 deploy:

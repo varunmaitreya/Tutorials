@@ -22,6 +22,13 @@ Also contains guides for the scripting language EScript, that most of PADrend is
 You should already have a basic understanding of computer graphics and related concepts to understand these tutorials.
 You can find a great introduction [here](https://cglearn.eu/pub/computer-graphics).
 
-### API Reference
+### C++ API Reference
 
 The automatically generated API documentations of the C++ libraries that PADrend uses.
+
+### EScript API Reference
+
+The automatically generated API documentations of the EScript libraries that PADrend uses.
+This only contains the API coming form the c++ "E_"-Libraries.
+PADrend extends these libraries using its plugin system which is currently not documented.
+Therefore, some available functions might be missing from the API reference.

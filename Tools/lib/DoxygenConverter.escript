@@ -463,7 +463,7 @@ T.writeCompound ::= fn(c) {
 		"title" : quoted(c.shortname),
 		"permalink" : c.id,
 		//"summary" : brief.empty() ? false : quoted(brief),
-		"author" : "Generated from Doxygen",
+		"author" : "Generated using <a href=\"http://www.doxygen.nl/\">Doxygen</a>",
 		"category" : quoted(top_ns.shortname),
 		"show_in_toc" : show_in_toc,
 		"sidebar" : "api_sidebar",
@@ -761,9 +761,9 @@ T.parseFile ::= fn(file, outJSON=false) {
 T.writeRefs ::= fn(fileName) {
 	var refs = new Map;
 	foreach(compounds as var id, var c)
-		refs[c.compoundname.replaceAll("::",".")] = c.id;
+		refs[c.compoundname] = c.id;
 	foreach(members as var id, var m)
-		refs[m.compound.compoundname.replaceAll("::",".") + "." + m.name] = m.compound.id + "#" + m.id;
+		refs[m.compound.compoundname + "::" + m.name] = m.compound.id + "#" + m.id;
 	IO.saveTextFile(fileName, toJSON(refs));
 };
 
