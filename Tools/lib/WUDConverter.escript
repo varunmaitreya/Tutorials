@@ -198,15 +198,32 @@ T.writeCompound ::= fn(c) {
 		}
 		content += "\n\n";
 	}*/
-		
-	if(!c.children.empty()) {
-		content += "## Types & Namespaces\n\n";
-		content += "|\n| ------- | ----------------- |\n";
-		foreach(c.children as var ref) {
-			var child = compounds[ref.ref];
-			if(child)
-				content += "| " + child.kind + " | " + mdLink(child.permalink, child.name) + " |\n";
+	
+	var namespaces = [];
+	var types = [];
+	foreach(c.children as var ref) {
+		var child = compounds[ref.ref];
+		if(child) {
+			if(child.kind == "namespace")
+				namespaces += child;
+			else if(child.kind == "type")
+				types += child;
 		}
+	}
+	
+	if(!namespaces.empty()) {
+		content += "## Namespaces\n\n";
+		content += "|\n| ------- | ----------------- |\n";
+		foreach(namespaces as var ns)
+			content += "| " + ns.kind + " | " + mdLink(ns.permalink, ns.name) + " |\n";
+		content += "{: .nohead }\n\n";
+	}
+	
+	if(!types.empty()) {
+		content += "## Types\n\n";
+		content += "|\n| ------- | ----------------- |\n";
+		foreach(types as var t)
+			content += "| " + t.kind + " | " + mdLink(t.permalink, t.name) + " |\n";
 		content += "{: .nohead }\n\n";
 	}
 	

@@ -96,4 +96,4 @@ echo "done"
 
 # cleanup
 cd ..
-#rm -rf tmp
+rm -rf tmp
