@@ -1,0 +1,15 @@
+---
+api_location: "API/E_MinSG/Ext/ParticleSystem/E_ParticleStates.cpp:96:27"
+api_type: type
+author: Generated using <a href="https://github.com/MeisterYeti/WhatsUpDoc">WhatsUpDoc</a>
+breadcrumbs: "MinSG:escript_namespace_MinSG"
+category: "MinSG"
+keywords: 
+layout: e_api
+permalink: escript_type_MinSG_ParticleAffector
+show_in_toc: true
+sidebar: e_api_sidebar
+title: "ParticleAffector"
+toc: false
+---
+
