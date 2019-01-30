@@ -26,7 +26,7 @@ To finish this tutorial you need a working installation of PADrend.
 For installation hints follow the [Building PADrend from Source](../../Installation Guide/InstallationGuide) guide.
 
 # Setting up PADrend
-Lets start PADrend.
+Let's start PADrend.
 
 * Linux: Open a terminal and navigate to the PADrend folder.
   Type _./build/PADrend/PADrend_ to start PADrend.
@@ -57,9 +57,9 @@ Before you can load a scene you should copy it to a common folder.
 Therefore first navigate to the _data_ folder, which you find in the PADrend's main directory.
 Create a folder _scene_ and copy the file _szene_1.minsg_ to it (see [szene_1.minsg](../models/szene_1.minsg)).
 
-## Finding the coorect folder for a scene having a seperate mesh file
+## Finding the correct folder for a scene having a separate mesh file
 For scenes made from multiple files it is important to place the files in the correct folder.
-Otherwise the file conatining the meshes may not be found.
+Otherwise the file containing the meshes may not be found.
 This part shows you how to find the correct folder.
 Note that the used scene is not included in the repository.   
 To find the correct folder open the scenes _.minsg_ file in a text-editor.
@@ -74,7 +74,7 @@ Copy both, the .minsg and the .zip file, to the directory.
 ![Scene file location](figures/content_data_folder.png)
 
 ## Load the scene
-Lets load the scene.
+Let's load the scene.
 Open PADrend.
 Go to the _file_ menu and choose _Load Scene..._.
 Select szene_1.minsg and hit _Confirm_.
