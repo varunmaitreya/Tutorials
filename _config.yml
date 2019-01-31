@@ -40,3 +40,5 @@ sidebars:
 - home_sidebar
 - api_sidebar
 - e_api_sidebar
+
+theme: jekyll-theme-architect
